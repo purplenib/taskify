@@ -1,9 +1,9 @@
 import Pagination from './UI/Paigination';
 
-export default function AllDashBoards() {
+export default function JoinedDashBoardList() {
   return (
-    <section>
-      <div className="grid grid-cols-3 grid-rows-2">
+    <section className="flex flex-col gap-3">
+      <div className="grid grid-cols-3 grid-rows-2 gap-3">
         <button type="button">새로운 대시보드 +</button>
         <button type="button">대시보드 title1</button>
         <button type="button">대시보드 title2</button>

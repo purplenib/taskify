@@ -1,20 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import searchIcon from '@/app/favicon.ico';
+import searchIcon from '@/public/icons/search.png';
 import Image from 'next/image';
 
 interface SearchFormProps {
-  divClassName?: string;
-  inputClassName?: string;
   onSearch: (searchTerm: string) => void;
 }
 
-function SearchForm({
-  divClassName,
-  inputClassName,
-  onSearch,
-}: SearchFormProps) {
+function SearchForm({ onSearch }: SearchFormProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const handleSearch = () => {
@@ -22,17 +16,17 @@ function SearchForm({
   };
 
   return (
-    <div className={`${divClassName} relative`}>
+    <div className="relative mx-auto mt-8 w-[966px]">
       <Image
         src={searchIcon}
         alt="돋보기 아이콘"
-        className="absolute left-6 top-1/2 -translate-y-1/2 transform cursor-pointer"
+        className="absolute left-3 top-1/2 -translate-y-1/2 transform cursor-pointer"
         onClick={handleSearch}
         width={16}
         height={16}
       />
       <input
-        className={`${inputClassName} flex h-full rounded-xl bg-gray-100 py-[9px] pl-14 pr-5 text-gray-400 outline-none`}
+        className="flex h-full w-full rounded-md bg-white px-4 py-[6px] pl-8 text-gray-300 outline-none outline-1 outline-gray-200"
         placeholder="검색"
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
