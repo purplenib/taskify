@@ -37,7 +37,170 @@ const config: Config = {
   },
   plugins: [
     ({ addUtilities }: PluginAPI) => {
-      addUtilities({});
+      addUtilities({
+        '.font-xs-12px-regular': {
+          fontSize: '12px',
+          fontWeight: '400',
+          lineHeight: '18px',
+          textAlign: 'left',
+        },
+        '.font-xs-12px-medium': {
+          fontSize: '12px',
+          fontWeight: '500',
+          lineHeight: '18px',
+          textAlign: 'left',
+        },
+        '.font-xs-12px-semibold': {
+          fontSize: '12px',
+          fontWeight: '600',
+          lineHeight: '20px',
+          textAlign: 'left',
+        },
+        '.font-sm-13px-medium': {
+          fontSize: '13px',
+          fontWeight: '500',
+          lineHeight: '22px',
+          textAlign: 'left',
+        },
+        '.font-sm-13px-semibold': {
+          fontSize: '13px',
+          fontWeight: '600',
+          lineHeight: '22px',
+          textAlign: 'left',
+        },
+        '.font-md-14px-regular': {
+          fontSize: '14px',
+          fontWeight: '400',
+          lineHeight: '24px',
+          textAlign: 'left',
+        },
+        '.font-md-14px-medium': {
+          fontSize: '14px',
+          fontWeight: '500',
+          lineHeight: '24px',
+          textAlign: 'left',
+        },
+        '.font-lg-14px-semibold': {
+          fontSize: '14px',
+          fontWeight: '600',
+          lineHeight: '24px',
+          textAlign: 'left',
+        },
+        '.font-lg-14px-bold': {
+          fontSize: '14px',
+          fontWeight: '700',
+          lineHeight: '24px',
+          textAlign: 'left',
+        },
+        '.font-lg-16px-regular': {
+          fontSize: '16px',
+          fontWeight: '400',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-lg-16px-medium': {
+          fontSize: '16px',
+          fontWeight: '500',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-lg-16px-semibold': {
+          fontSize: '16px',
+          fontWeight: '600',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-lg-16px-bold': {
+          fontSize: '16px',
+          fontWeight: '700',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-2lg-18px-regular': {
+          fontSize: '18px',
+          fontWeight: '400',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-2lg-18px-medium': {
+          fontSize: '18px',
+          fontWeight: '500',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-2lg-18px-semibold': {
+          fontSize: '18px',
+          fontWeight: '600',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-2lg-18px-bold': {
+          fontSize: '18px',
+          fontWeight: '700',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
+        '.font-xl-20px-regular': {
+          fontSize: '20px',
+          fontWeight: '400',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-xl-20px-medium': {
+          fontSize: '20px',
+          fontWeight: '500',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-xl-20px-semibold': {
+          fontSize: '20px',
+          fontWeight: '600',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-xl-20px-bold': {
+          fontSize: '20px',
+          fontWeight: '700',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-2xl-24px-regular': {
+          fontSize: '24px',
+          fontWeight: '400',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-2xl-24px-medium': {
+          fontSize: '24px',
+          fontWeight: '500',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-2xl-24px-semibold': {
+          fontSize: '24px',
+          fontWeight: '600',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-2xl-24px-bold': {
+          fontSize: '24px',
+          fontWeight: '700',
+          lineHeight: '32px',
+          textAlign: 'left',
+        },
+        '.font-3xl-32px-semibold': {
+          fontSize: '32px',
+          fontWeight: '600',
+          lineHeight: '42px',
+          textAlign: 'left',
+        },
+        '.font-3xl-32px-bold': {
+          fontSize: '32px',
+          fontWeight: '700',
+          lineHeight: '42px',
+          textAlign: 'left',
+        },
+      });
     },
   ],
 };
