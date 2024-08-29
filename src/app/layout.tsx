@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 import { PropsWithChildren } from 'react';
 
 const pretandard = localFont({
-  src: '../statics/fonts/PretendardVariable.woff2',
+  src: '../assets/fonts/PretendardVariable.woff2',
   display: 'swap',
   weight: '45 920',
   variable: '--font-pretendard',
