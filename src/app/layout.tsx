@@ -1,5 +1,7 @@
 import '@mantine/core/styles.css';
 import './globals.css';
+import { Metadata } from 'next';
+import RootProvider from '@/core/contexts/RootContexts';
 import localFont from 'next/font/local';
 
 const pretandard = localFont({
@@ -9,6 +11,11 @@ const pretandard = localFont({
   variable: '--font-pretendard',
 });
 
+export const metadata: Metadata = {
+  title: 'taskify',
+  description: '대시보드를 통해 일정을 공유해보세요.',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,9 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <RootLayout>
-        <body className={`${pretandard.variable}`}>{children}</body>
-      </RootLayout>
+      <body className={`${pretandard.variable}`}>
+        <RootProvider>{children}</RootProvider>
+      </body>
     </html>
   );
 }

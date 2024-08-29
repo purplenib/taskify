@@ -1,44 +1,49 @@
 'use client';
 
-import instance from '@/lib/api/instance';
 import {
-  createContext,
   PropsWithChildren,
+  createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from 'react';
+import useApi from '@/lib/hooks/useApi';
+import { LoginRequestDto, LoginResponseDto } from '../dtos/Auth/Login';
+import { UserType } from '../types/RootContext';
 
-const RootContext = createContext({
-  dashboards: {},
+export type Context = {
+  user: Partial<UserType>;
+  login: (body: LoginRequestDto) => Promise<void>;
+};
+
+const RootContext = createContext<Context>({
+  user: {},
+  login: async () => {},
 });
 
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDU0OCwidGVhbUlkIjoiOC0zIiwiaWF0IjoxNzI0OTE1NDA1LCJpc3MiOiJzcC10YXNraWZ5In0.2lD9BNxxWs-UzgrO606_5BRI3vasRuUl--GpuQaOEBs';
-
 export default function RootProvider({ children }: PropsWithChildren) {
-  const [dashboards, setDashboards] = useState({});
+  const { data, callApi } = useApi<LoginResponseDto>('/auth/login', 'POST');
+
+  const login = useCallback(
+    async (body: LoginRequestDto) => {
+      await callApi(body);
+    },
+    [callApi]
+  );
 
   useEffect(() => {
-    const fetchMyDashBoards = async () => {
-      const res = await instance.get('/dashboards', {
-        params: {
-          navigationMethod: 'infiniteScroll',
-        },
-      });
-      const { data } = res;
-      setDashboards(data);
-    };
-    localStorage.setItem('accessToken', token);
-    fetchMyDashBoards();
-  }, []);
+    if (data?.accessToken) {
+      localStorage.setItem('accessToken', data?.accessToken);
+    }
+  }, [data]);
 
   const value = useMemo(
     () => ({
-      dashboards,
+      user: data?.user,
+      login,
     }),
-    [dashboards]
+    [data, login]
   );
 
   return <RootContext.Provider value={value}>{children}</RootContext.Provider>;
