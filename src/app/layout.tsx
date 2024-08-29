@@ -1,5 +1,4 @@
-'use client';
-
+import '@mantine/core/styles.css';
 import './globals.css';
 import localFont from 'next/font/local';
 
