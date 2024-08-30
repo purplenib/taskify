@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import RootProvider from '@core/contexts/RootContexts';
 import { MantineProvider } from '@mantine/core';
+import DeviceProvider from '@core/contexts/DeviceContext';
 
 const pretandard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
@@ -26,7 +27,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${pretandard.variable}`}>
         <MantineProvider>
-          <RootProvider>{children}</RootProvider>
+          <DeviceProvider>
+            <RootProvider>{children}</RootProvider>
+          </DeviceProvider>
         </MantineProvider>
       </body>
     </html>

@@ -1,49 +1,116 @@
+'use client';
+
 import { useRoot } from '@core/contexts/RootContexts';
-import { Avatar, Button, Group } from '@mantine/core';
+import useDevice, { DEVICE } from '@lib/hooks/useDevice';
+import { Avatar, Button, Divider, Flex, Group, Text } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { usePathname } from 'next/navigation';
+import React, { PropsWithChildren } from 'react';
+
+const HeaderButton = ({ children }: PropsWithChildren) => {
+  return (
+    <Button className="rounded-lg border-gray-200 bg-transparent px-3 py-[3px] text-gray-400 hover:bg-gray-200 md:px-4 md:py-[6px]">
+      {children}
+    </Button>
+  );
+};
+
+function getMemberLengthByDevice(device: keyof typeof DEVICE) {
+  if (device === 'desktop') return 4;
+  return 2;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getMemberMoreLength(arr: any[] | undefined, ProfileCount: number) {
+  if (!arr) return 0;
+  const MoreLength = arr.length - ProfileCount;
+  if (MoreLength < 1) return 0;
+  return MoreLength;
+}
+
+function getTitleValue(pathname: string) {
+  if (pathname === '/mydashboard') return '내 대시보드';
+  if (pathname === '/mypage') return '계정 관리';
+  return null;
+}
 
 export default function AuthHeader() {
-  const { dashboard } = useRoot();
+  const pathname = usePathname();
+  const device = useDevice();
+  const { user, dashboard } = useRoot();
   const { title, createdByMe, members } = dashboard!;
 
+  const ProfileCount = getMemberLengthByDevice(device);
+  const ProfileMore = getMemberMoreLength(dashboard?.members, ProfileCount);
+  const isMyPages =
+    pathname.includes('mydashboard') || pathname.includes('mypage');
+  const titleValue = getTitleValue(pathname) || title;
+
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 flex h-[60px] items-center justify-between border-b-[1px] border-gray-200 bg-white px-6 md:h-[70px] md:px-10 xl:px-[70px]">
-      {dashboard && (
-        <>
-          <div>
-            <h1>{title}</h1>
-            {createdByMe && (
+    <Flex className="fixed left-0 right-0 top-0 z-50 h-[60px] items-center justify-end gap-3 border-b-[1px] border-border-gray bg-white pl-[84px] pr-3 md:h-[70px] md:gap-6 md:px-10 md:pl-[200px] md:pr-10 xl:gap-8 xl:px-[70px] xl:pl-[340px] xl:pr-20">
+      <div
+        className={`grow items-center font-xl-20px-bold xl:flex xl:gap-2 ${isMyPages ? 'flex' : 'hidden'}`}
+      >
+        <h1>{titleValue}</h1>
+        {createdByMe && (
+          <Image
+            width={20}
+            height={16}
+            src="/icons/crown.png"
+            alt="createByMe"
+          />
+        )}
+      </div>
+      <Group className="gap-[6px] font-md-14px-medium">
+        <HeaderButton>
+          <Image
+            className="hidden md:mr-2 md:inline"
+            width={20}
+            height={20}
+            src="/icons/settings.png"
+            alt="settings"
+          />
+          <Link href="/mypage">관리</Link>
+        </HeaderButton>
+        <HeaderButton>
+          <Image
+            className="hidden md:mr-2 md:inline"
+            width={20}
+            height={20}
+            src="/icons/add_box.png"
+            alt="settings"
+          />
+          초대하기
+        </HeaderButton>
+      </Group>
+      <Avatar.Group className="h-[38px]">
+        {members &&
+          members.slice(0, ProfileCount).map(member => (
+            <Avatar key={member.id}>
               <Image
-                width={20}
-                height={16}
-                src="/icons/crown.png"
-                alt="createByMe"
+                width={38}
+                height={38}
+                src={member.profileImageUrl ?? '/images/small_logo.png'}
+                alt="member profile"
               />
+            </Avatar>
+          ))}
+        {ProfileMore !== 0 && <Avatar>+{ProfileMore}</Avatar>}
+      </Avatar.Group>
+      <Divider className="bg-border-gray" my="sm" orientation="vertical" />
+      {user && (
+        <Flex className="items-center gap-3">
+          <Avatar>
+            {user.profileImageUrl && (
+              <Image src={user.profileImageUrl} alt="my profile" />
             )}
-          </div>
-          <Group>
-            <Button>
-              <Link href="/mypage">관리</Link>
-            </Button>
-            <Button>초대하기</Button>
-          </Group>
-          <Avatar.Group>
-            {members &&
-              members.map(member => (
-                <Avatar key={member.id}>
-                  <Image
-                    width={38}
-                    height={38}
-                    src={member.profileImageUrl ?? '/images/small_logo.png'}
-                    alt="member profile"
-                  />
-                </Avatar>
-              ))}
-          </Avatar.Group>
-        </>
+          </Avatar>
+          <Text className="hidden font-lg-16px-medium md:block">
+            {user.nickname}
+          </Text>
+        </Flex>
       )}
-    </header>
+    </Flex>
   );
 }
