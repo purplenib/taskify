@@ -3,7 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import RootProvider from '@core/contexts/RootContexts';
-import Layout from '@components/@shared/Layout/Layout';
+import { MantineProvider } from '@mantine/core';
 
 const pretandard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
@@ -25,9 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretandard.variable}`}>
-        <RootProvider>
-          <Layout>{children}</Layout>
-        </RootProvider>
+        <MantineProvider>
+          <RootProvider>{children}</RootProvider>
+        </MantineProvider>
       </body>
     </html>
   );

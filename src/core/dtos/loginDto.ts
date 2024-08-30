@@ -8,7 +8,6 @@ export interface UserServiceReponseDto {
   email: string;
   nickname: string;
   profileImageUrl: string | null;
-  nullable: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
