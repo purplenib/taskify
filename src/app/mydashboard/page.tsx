@@ -1,5 +1,5 @@
-import JoinedDashBoardList from '@/src/components/MyDashBoard/JoinedDashBoardList';
 import InvitedDashBoardList from '@/src/components/MyDashBoard/InvitedDashBoardList';
+import JoinedDashBoardList from '@/src/components/MyDashBoard/JoinedDashBoardList';
 
 export default function MyDashBoard() {
   return (
