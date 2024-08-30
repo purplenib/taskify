@@ -12,20 +12,14 @@ import {
   useState,
 } from 'react';
 import useApi from '@/src/lib/hooks/useApi';
-import type {
-  LoginRequestDto,
-  LoginResponseDto,
-  UserServiceReponseDto,
-} from '@/src/core/dtos/loginDto';
+import type { MembersResponseDto } from '@core/dtos/MembersDto';
+import type { LoginRequestDto, LoginResponseDto, UserServiceReponseDto } from '@core/dtos/AuthDto';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
 
-export type UserType = UserServiceReponseDto;
-export type LoginType = (body: LoginRequestDto) => Promise<void>;
+type ContextDashboard = MembersResponseDto & DashboardApplicationServiceResponseDto;
 
-export type ContextDashboard = MembersResponseDto &
-  DashboardApplicationServiceResponseDto;
-
-export interface ContextValue {
-  user: Partial<UserType> | undefined;
+interface ContextValue {
+  user: Partial<UserServiceReponseDto> | undefined;
   dashboard: Partial<ContextDashboard> | undefined;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
   login: (body: LoginRequestDto) => Promise<void>;
@@ -38,49 +32,15 @@ const RootContext = createContext<ContextValue>({
   login: async () => {},
 });
 
-export interface MemberApplicationServiceResponseDto {
-  id: number;
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  isOwner: boolean;
-}
-
-export interface MembersResponseDto {
-  members: MemberApplicationServiceResponseDto[];
-  totalCount: number;
-}
-
-export interface DashboardApplicationServiceResponseDto {
-  id: number;
-  title: string;
-  color: string;
-  createdAt: Date;
-  updatedAt: Date;
-  createdByMe: boolean;
-  userId: number;
-}
-
 export default function RootProvider({ children }: PropsWithChildren) {
   const [dashboardid, setDashboardid] = useState<string | undefined>(undefined);
-  const { data: dashBoardMembersData, callApi: getDashBoardMembers } =
-    useApi<MembersResponseDto>(`/members`, 'GET');
-  const { data: dashBoardDetailData, callApi: getDashBoardDetail } =
-    useApi<DashboardApplicationServiceResponseDto>(
-      `/dashboards/${dashboardid}`,
-      'GET'
-    );
-  const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>(
-    '/auth/login',
-    'POST'
-  );
-  const { data: user, callApi: getMe } = useApi<UserServiceReponseDto>(
-    '/users/me',
+  const { data: dashBoardMembersData, callApi: getDashBoardMembers } = useApi<MembersResponseDto>(`/members`, 'GET');
+  const { data: dashBoardDetailData, callApi: getDashBoardDetail } = useApi<DashboardApplicationServiceResponseDto>(
+    `/dashboards/${dashboardid}`,
     'GET'
   );
+  const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>('/auth/login', 'POST');
+  const { data: user, callApi: getMe } = useApi<UserServiceReponseDto>('/users/me', 'GET');
 
   const login = useCallback(
     async (body: LoginRequestDto) => {
@@ -136,9 +96,7 @@ export default function RootProvider({ children }: PropsWithChildren) {
 export function useRoot() {
   const context = useContext(RootContext);
   if (!context) {
-    throw new Error(
-      'useRoot는 RootProvider 하위 컴포넌트에서 사용해야 합니다.'
-    );
+    throw new Error('useRoot는 RootProvider 하위 컴포넌트에서 사용해야 합니다.');
   }
 
   return context;
