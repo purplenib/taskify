@@ -1,6 +1,6 @@
 'use client';
 
-import { useRoot } from '@/core/contexts/RootContexts';
+import { useRoot } from '@/src/core/contexts/RootContexts';
 import { useEffect } from 'react';
 
 export default function Home() {

@@ -8,16 +8,22 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import useApi from '@/lib/hooks/useApi';
-import { LoginRequestDto, LoginResponseDto } from '../dtos/Auth/Login';
-import { UserType } from '../types/RootContext';
+import useApi from '@/src/lib/hooks/useApi';
+import type {
+  LoginRequestDto,
+  LoginResponseDto,
+  UserServiceReponseDto,
+} from '@/src/core/dtos/loginDto';
 
-export type Context = {
-  user: Partial<UserType>;
+export type UserType = UserServiceReponseDto;
+export type LoginType = (body: LoginRequestDto) => Promise<void>;
+
+export interface ContextValue {
+  user: Partial<UserType> | undefined;
   login: (body: LoginRequestDto) => Promise<void>;
-};
+}
 
-const RootContext = createContext<Context>({
+const RootContext = createContext<ContextValue>({
   user: {},
   login: async () => {},
 });

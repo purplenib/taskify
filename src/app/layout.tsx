@@ -1,8 +1,9 @@
 import '@mantine/core/styles.css';
 import './globals.css';
-import { Metadata } from 'next';
-import RootProvider from '@/core/contexts/RootContexts';
+import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import RootProvider from '@core/contexts/RootContexts';
+import Layout from '@components/@shared/Layout/Layout';
 
 const pretandard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretandard.variable}`}>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <Layout>{children}</Layout>
+        </RootProvider>
       </body>
     </html>
   );
