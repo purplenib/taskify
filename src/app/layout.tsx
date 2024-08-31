@@ -1,10 +1,12 @@
 import '@mantine/core/styles.css';
 import './globals.css';
-import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import RootProvider from '@core/contexts/RootContexts';
 import { MantineProvider } from '@mantine/core';
+import localFont from 'next/font/local';
+
 import DeviceProvider from '@core/contexts/DeviceContext';
+import RootProvider from '@core/contexts/RootContexts';
+
+import type { Metadata } from 'next';
 
 const pretandard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
