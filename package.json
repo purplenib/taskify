@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --cache --write .",
+    "format": "prettier --cache --write ./src",
     "postinstall": "husky install",
     "prepare": "husky && husky install",
     "husky": "husky install"

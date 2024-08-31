@@ -11,14 +11,16 @@ import {
   useMemo,
   useState,
 } from 'react';
+
 import useApi from '@/src/lib/hooks/useApi';
-import type { MembersResponseDto } from '@core/dtos/MembersDto';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+
 import type {
   LoginRequestDto,
   LoginResponseDto,
   UserServiceReponseDto,
 } from '@core/dtos/AuthDto';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import type { MembersResponseDto } from '@core/dtos/MembersDto';
 
 type ContextDashboard = MembersResponseDto &
   DashboardApplicationServiceResponseDto;

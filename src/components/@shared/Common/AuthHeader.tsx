@@ -1,12 +1,14 @@
 'use client';
 
-import { useRoot } from '@core/contexts/RootContexts';
-import useDevice, { DEVICE } from '@lib/hooks/useDevice';
+import React, { PropsWithChildren } from 'react';
+
 import { Avatar, Button, Divider, Flex, Group, Text } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { PropsWithChildren } from 'react';
+
+import { useRoot } from '@core/contexts/RootContexts';
+import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 
 const HeaderButton = ({ children }: PropsWithChildren) => {
   return (

@@ -1,7 +1,8 @@
 'use client';
 
-import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import { createContext, PropsWithChildren } from 'react';
+
+import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 
 export const DeviceContext = createContext<keyof typeof DEVICE>(DEVICE.mobile);
 
