@@ -10,7 +10,8 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "prettier"
   ],
   "ignorePatterns": [".next"],
   "parser": "@typescript-eslint/parser",
@@ -38,6 +39,7 @@
     ],
     "consistent-return": "off",
     "react/require-default-props": "off",
-    "react-refresh/only-export-components": "off"
+    "react-refresh/only-export-components": "off",
+    "max-len": "off"
   }
 }

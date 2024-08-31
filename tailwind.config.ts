@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { PluginAPI } from 'tailwindcss/types/config';
 
+/** @type {import('tailwindcss').Config} */
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -32,6 +33,7 @@ const config: Config = {
         orange: '#FFA500',
         blue: '#76A5EA',
         pink: '#E876EA',
+        'border-gray': '#D9D9D9',
       },
     },
   },
