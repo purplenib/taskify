@@ -1,5 +1,5 @@
 import { getCards } from '@core/api/dashboardApi';
-import { CardServiceResponseDto } from '@core/dtos/dashboardDto';
+import { CardServiceResponseDto } from '@core/dtos/DashboardDto';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function useCards(columnId: number) {

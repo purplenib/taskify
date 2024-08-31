@@ -1,7 +1,7 @@
 import addPurple from '@icons/add_purple.png';
 import Image from 'next/image';
 import setting from '@icons/settings.png';
-import { ColumnServiceResponseDto } from '@core/dtos/dashboardDto';
+import { ColumnServiceResponseDto } from '@core/dtos/DashboardDto';
 import useCards from '@lib/hooks/useCards';
 import Card from './UI/Card';
 

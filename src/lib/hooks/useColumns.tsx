@@ -1,7 +1,7 @@
 import { getColumns } from '@core/api/dashboardApi';
 import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import type { ColumnServiceResponseDto } from '@core/dtos/dashboardDto';
+import type { ColumnServiceResponseDto } from '@core/dtos/DashboardDto';
 
 export default function useColumns() {
   const [columnList, setColumnList] = useState<

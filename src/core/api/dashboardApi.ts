@@ -1,7 +1,7 @@
 import type {
   GetColumnsResponseDto,
   GetCardsResponseDto,
-} from '@core/dtos/dashboardDto';
+} from '@core/dtos/DashboardDto';
 import axios from './instance';
 
 export const getColumns = async (dashboard: number) => {

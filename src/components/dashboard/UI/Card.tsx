@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import dayjs from 'dayjs';
 
-import { CardServiceResponseDto } from '@core/dtos/dashboardDto';
+import { CardServiceResponseDto } from '@core/dtos/DashboardDto';
 import convertStringToColorHex from '@lib/utils/convertStringToColorHex';
 import convertStringToRGBA from '@lib/utils/convertStringToRGBA';
 
