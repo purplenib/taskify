@@ -5,6 +5,7 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { useRoot } from '@core/contexts/RootContexts';
 
 import AuthHeader from '../Common/AuthHeader';
+import SideBar from '../Common/SideBar';
 import UnAuthHeader from '../Common/UnAuthHeader';
 
 export default function DashboardLayout({
@@ -25,6 +26,7 @@ export default function DashboardLayout({
   return (
     <>
       {user ? <AuthHeader /> : <UnAuthHeader />}
+      {user && <SideBar />}
       {children}
     </>
   );
