@@ -77,6 +77,7 @@
     "consistent-return": "off",
     "react/require-default-props": "off",
     "react-refresh/only-export-components": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "react/button-has-type": "off"
   }
 }
