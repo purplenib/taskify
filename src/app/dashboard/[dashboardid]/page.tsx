@@ -3,7 +3,12 @@
 import { useRoot } from '@/src/core/contexts/RootContexts';
 import { useEffect } from 'react';
 
-const AUTH_OBJECT = ['ex3222@gmail.com', 'ex32221@gmail.com', 'ex32222@gmail.com', 'ex32223@gmail.com'];
+const AUTH_OBJECT = [
+  'ex3222@gmail.com',
+  'ex32221@gmail.com',
+  'ex32222@gmail.com',
+  'ex32223@gmail.com',
+];
 
 export default function DashBoardPage() {
   const { login } = useRoot();

@@ -13,10 +13,15 @@ import {
 } from 'react';
 import useApi from '@/src/lib/hooks/useApi';
 import type { MembersResponseDto } from '@core/dtos/MembersDto';
-import type { LoginRequestDto, LoginResponseDto, UserServiceReponseDto } from '@core/dtos/AuthDto';
+import type {
+  LoginRequestDto,
+  LoginResponseDto,
+  UserServiceReponseDto,
+} from '@core/dtos/AuthDto';
 import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
 
-type ContextDashboard = MembersResponseDto & DashboardApplicationServiceResponseDto;
+type ContextDashboard = MembersResponseDto &
+  DashboardApplicationServiceResponseDto;
 
 interface ContextValue {
   user: Partial<UserServiceReponseDto> | undefined;
@@ -34,13 +39,21 @@ const RootContext = createContext<ContextValue>({
 
 export default function RootProvider({ children }: PropsWithChildren) {
   const [dashboardid, setDashboardid] = useState<string | undefined>(undefined);
-  const { data: dashBoardMembersData, callApi: getDashBoardMembers } = useApi<MembersResponseDto>(`/members`, 'GET');
-  const { data: dashBoardDetailData, callApi: getDashBoardDetail } = useApi<DashboardApplicationServiceResponseDto>(
-    `/dashboards/${dashboardid}`,
+  const { data: dashBoardMembersData, callApi: getDashBoardMembers } =
+    useApi<MembersResponseDto>(`/members`, 'GET');
+  const { data: dashBoardDetailData, callApi: getDashBoardDetail } =
+    useApi<DashboardApplicationServiceResponseDto>(
+      `/dashboards/${dashboardid}`,
+      'GET'
+    );
+  const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>(
+    '/auth/login',
+    'POST'
+  );
+  const { data: user, callApi: getMe } = useApi<UserServiceReponseDto>(
+    '/users/me',
     'GET'
   );
-  const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>('/auth/login', 'POST');
-  const { data: user, callApi: getMe } = useApi<UserServiceReponseDto>('/users/me', 'GET');
 
   const login = useCallback(
     async (body: LoginRequestDto) => {
@@ -96,7 +109,9 @@ export default function RootProvider({ children }: PropsWithChildren) {
 export function useRoot() {
   const context = useContext(RootContext);
   if (!context) {
-    throw new Error('useRoot는 RootProvider 하위 컴포넌트에서 사용해야 합니다.');
+    throw new Error(
+      'useRoot는 RootProvider 하위 컴포넌트에서 사용해야 합니다.'
+    );
   }
 
   return context;
