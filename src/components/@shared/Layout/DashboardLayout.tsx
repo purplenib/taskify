@@ -13,14 +13,16 @@ export default function DashboardLayout({
   params,
 }: PropsWithChildren<{
   params: {
-    dashboardid: string;
+    dashboardid: string | null;
   };
 }>) {
   const { dashboardid } = params;
   const { user, setDashboardid } = useRoot();
 
   useEffect(() => {
-    setDashboardid(dashboardid);
+    if (dashboardid) {
+      setDashboardid(dashboardid);
+    }
   }, [dashboardid, setDashboardid]);
 
   return (

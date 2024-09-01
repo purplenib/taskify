@@ -1,5 +1,3 @@
-'use client';
-
 import React, { PropsWithChildren } from 'react';
 
 import { Avatar, Button, Divider, Flex, Group, Text } from '@mantine/core';
@@ -45,17 +43,17 @@ export default function AuthHeader() {
 
   const ProfileCount = getMemberLengthByDevice(device);
   const ProfileMore = getMemberMoreLength(dashboard?.members, ProfileCount);
-  const isMyPages =
+  const isManagedPage =
     pathname.includes('mydashboard') || pathname.includes('mypage');
   const titleValue = getTitleValue(pathname) || title;
 
   return (
     <Flex className="fixed left-0 right-0 top-0 z-50 h-[60px] items-center justify-end gap-3 border-b-[1px] border-border-gray bg-white pl-[84px] pr-3 md:h-[70px] md:gap-6 md:px-10 md:pl-[200px] md:pr-10 xl:gap-8 xl:px-[70px] xl:pl-[340px] xl:pr-20">
       <div
-        className={`grow items-center font-xl-20px-bold xl:flex xl:gap-2 ${isMyPages ? 'flex' : 'hidden'}`}
+        className={`grow items-center font-xl-20px-bold xl:flex xl:gap-2 ${isManagedPage ? 'flex' : 'hidden'}`}
       >
         <h1>{titleValue}</h1>
-        {createdByMe && (
+        {!isManagedPage && createdByMe && (
           <Image
             width={20}
             height={16}

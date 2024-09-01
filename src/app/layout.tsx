@@ -2,7 +2,9 @@ import '@mantine/core/styles.css';
 import './globals.css';
 import { MantineProvider } from '@mantine/core';
 import localFont from 'next/font/local';
+import { headers } from 'next/headers';
 
+import DashboardLayout from '@components/@shared/Layout/DashboardLayout';
 import DeviceProvider from '@core/contexts/DeviceContext';
 import RootProvider from '@core/contexts/RootContexts';
 
@@ -25,12 +27,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const responseHeader = headers();
+  const dashboardid = responseHeader.get('x-dashboardid');
+
   return (
     <html lang="en">
       <body className={`${pretandard.variable}`}>
         <MantineProvider>
           <DeviceProvider>
-            <RootProvider>{children}</RootProvider>
+            <RootProvider>
+              <DashboardLayout
+                params={{
+                  dashboardid,
+                }}
+              >
+                {children}
+              </DashboardLayout>
+            </RootProvider>
           </DeviceProvider>
         </MantineProvider>
       </body>
