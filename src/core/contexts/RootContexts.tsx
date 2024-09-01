@@ -18,7 +18,7 @@ import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto'
 import type {
   LoginRequestDto,
   LoginResponseDto,
-  UserServiceReponseDto,
+  UserServiceResponseDto,
 } from '@core/dtos/AuthDto';
 import type { MembersResponseDto } from '@core/dtos/MembersDto';
 
@@ -26,7 +26,7 @@ type ContextDashboard = MembersResponseDto &
   DashboardApplicationServiceResponseDto;
 
 interface ContextValue {
-  user: Partial<UserServiceReponseDto> | undefined;
+  user: Partial<UserServiceResponseDto> | undefined;
   dashboard: Partial<ContextDashboard> | undefined;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
   login: (body: LoginRequestDto) => Promise<void>;
@@ -52,7 +52,7 @@ export default function RootProvider({ children }: PropsWithChildren) {
     '/auth/login',
     'POST'
   );
-  const { data: user, callApi: getMe } = useApi<UserServiceReponseDto>(
+  const { data: user, callApi: getMe } = useApi<UserServiceResponseDto>(
     '/users/me',
     'GET'
   );
