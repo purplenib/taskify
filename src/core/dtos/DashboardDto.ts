@@ -7,3 +7,9 @@ export interface DashboardApplicationServiceResponseDto {
   createdByMe: boolean;
   userId: number;
 }
+
+export interface DashboardsResponseDto {
+  cursorId: number | null;
+  totalCount: number;
+  dashboards: DashboardApplicationServiceResponseDto[];
+}

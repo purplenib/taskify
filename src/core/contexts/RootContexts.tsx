@@ -13,7 +13,10 @@ import {
 } from 'react';
 
 import useApi from '@/src/lib/hooks/useApi';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import {
+  DashboardApplicationServiceResponseDto,
+  DashboardsResponseDto,
+} from '@core/dtos/DashboardDto';
 
 import type {
   LoginRequestDto,
@@ -22,28 +25,29 @@ import type {
 } from '@core/dtos/AuthDto';
 import type { MembersResponseDto } from '@core/dtos/MembersDto';
 
-type ContextDashboard = MembersResponseDto &
-  DashboardApplicationServiceResponseDto;
-
 interface ContextValue {
-  user: Partial<UserServiceResponseDto> | undefined;
-  dashboard: Partial<ContextDashboard> | undefined;
+  user: UserServiceResponseDto | undefined;
+  dashBoardList: DashboardsResponseDto | undefined;
+  dashBoardMembers: MembersResponseDto | undefined;
+  dashBoardDetail: DashboardApplicationServiceResponseDto | undefined;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
   login: (body: LoginRequestDto) => Promise<void>;
 }
 
 const RootContext = createContext<ContextValue>({
-  user: {},
-  dashboard: {},
+  user: undefined,
+  dashBoardList: undefined,
+  dashBoardMembers: undefined,
+  dashBoardDetail: undefined,
   setDashboardid: () => {},
   login: async () => {},
 });
 
 export default function RootProvider({ children }: PropsWithChildren) {
   const [dashboardid, setDashboardid] = useState<string | undefined>(undefined);
-  const { data: dashBoardMembersData, callApi: getDashBoardMembers } =
+  const { data: dashBoardMembers, callApi: getDashBoardMembers } =
     useApi<MembersResponseDto>(`/members`, 'GET');
-  const { data: dashBoardDetailData, callApi: getDashBoardDetail } =
+  const { data: dashBoardDetail, callApi: getDashBoardDetail } =
     useApi<DashboardApplicationServiceResponseDto>(
       `/dashboards/${dashboardid}`,
       'GET'
@@ -56,6 +60,8 @@ export default function RootProvider({ children }: PropsWithChildren) {
     '/users/me',
     'GET'
   );
+  const { data: dashBoardList, callApi: getDashBoardList } =
+    useApi<DashboardsResponseDto>('/dashboards', 'GET');
 
   const login = useCallback(
     async (body: LoginRequestDto) => {
@@ -90,19 +96,25 @@ export default function RootProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     getMe(undefined);
-  }, [getMe]);
+    getDashBoardList(undefined, {
+      params: {
+        navigationMethod: 'infiniteScroll',
+        page: 1,
+        size: 10,
+      },
+    });
+  }, [getMe, getDashBoardList]);
 
   const value = useMemo(
     () => ({
       user,
-      dashboard: {
-        ...dashBoardMembersData,
-        ...dashBoardDetailData,
-      },
+      dashBoardMembers,
+      dashBoardDetail,
+      dashBoardList,
       setDashboardid,
       login,
     }),
-    [user, login, dashBoardMembersData, dashBoardDetailData]
+    [user, login, dashBoardMembers, dashBoardDetail, dashBoardList]
   );
 
   return <RootContext.Provider value={value}>{children}</RootContext.Provider>;

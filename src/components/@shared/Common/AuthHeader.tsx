@@ -38,14 +38,16 @@ function getTitleValue(pathname: string) {
 export default function AuthHeader() {
   const pathname = usePathname();
   const device = useDevice();
-  const { user, dashboard } = useRoot();
-  const { title, createdByMe, members } = dashboard!;
+  const { user, dashBoardMembers, dashBoardDetail } = useRoot()!;
 
   const ProfileCount = getMemberLengthByDevice(device);
-  const ProfileMore = getMemberMoreLength(dashboard?.members, ProfileCount);
+  const ProfileMore = getMemberMoreLength(
+    dashBoardMembers?.members,
+    ProfileCount
+  );
   const isManagedPage =
     pathname.includes('mydashboard') || pathname.includes('mypage');
-  const titleValue = getTitleValue(pathname) || title;
+  const titleValue = getTitleValue(pathname) || dashBoardDetail?.title;
 
   return (
     <Flex className="fixed left-0 right-0 top-0 z-50 h-[60px] items-center justify-end gap-3 border-b-[1px] border-border-gray bg-white pl-[84px] pr-3 md:h-[70px] md:gap-6 md:px-10 md:pl-[200px] md:pr-10 xl:gap-8 xl:px-[70px] xl:pl-[340px] xl:pr-20">
@@ -53,7 +55,7 @@ export default function AuthHeader() {
         className={`grow items-center font-xl-20px-bold xl:flex xl:gap-2 ${isManagedPage ? 'flex' : 'hidden'}`}
       >
         <h1>{titleValue}</h1>
-        {!isManagedPage && createdByMe && (
+        {!isManagedPage && dashBoardDetail?.createdByMe && (
           <Image
             width={20}
             height={16}
@@ -84,10 +86,10 @@ export default function AuthHeader() {
           초대하기
         </HeaderButton>
       </Group>
-      {members && members.length !== 0 && (
+      {dashBoardMembers?.members && dashBoardMembers?.members.length !== 0 && (
         <Avatar.Group className="h-[38px]">
-          {members &&
-            members.slice(0, ProfileCount).map(member => (
+          {dashBoardMembers?.members &&
+            dashBoardMembers?.members.slice(0, ProfileCount).map(member => (
               <Avatar key={member.id}>
                 <Image
                   width={38}

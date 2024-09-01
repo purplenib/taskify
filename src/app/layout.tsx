@@ -1,5 +1,6 @@
 import '@mantine/core/styles.css';
 import './globals.css';
+
 import { MantineProvider } from '@mantine/core';
 import localFont from 'next/font/local';
 import { headers } from 'next/headers';
