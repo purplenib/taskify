@@ -12,7 +12,7 @@ const ACCESS_TOKEN =
 // GET, 공통 apiCall 함수
 export const getFromApi = async <T>(
   endpoint: string,
-  params?: Record<string, any>
+  params?: Record<string, string | number | boolean>
 ): Promise<T> => {
   const url = `${BASE_URL}/${endpoint}`;
 
