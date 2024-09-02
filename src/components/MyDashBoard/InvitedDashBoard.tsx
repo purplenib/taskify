@@ -5,10 +5,11 @@ import type {
   InvitationsResponseDto,
 } from '@core/dtos/invitationsDto';
 import { useState } from 'react';
+import { useSearch } from '@lib/hooks/useSearch';
+import InviteHeader from './UI/InviteHeader';
 import NoDashBoard from './UI/NoDashBoard';
 import ReturnButton from './UI/ReturnButton';
 import SearchForm from './UI/SearchForm';
-import { useSearch } from '@lib/hooks/useSearch';
 
 interface InvitedDashBoardProps {
   invitationsData: InvitationsResponseDto;
@@ -34,11 +35,7 @@ export default function InvitedDashBoard({
   return (
     <>
       <SearchForm onSearch={handleSearch} />
-      <div className="m-auto flex w-full justify-around text-gray-300">
-        <h2>이름</h2>
-        <h2>초대자</h2>
-        <h2>수락 여부</h2>
-      </div>
+      <InviteHeader />
       {loading && <p>초대 목록을 불러오고 있습니다.</p>}
       {error && <p>{error}</p>}
       <ul className="flex flex-col gap-[20px]">
