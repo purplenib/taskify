@@ -1,3 +1,8 @@
+/**
+ * middleware 사용목적으로 만들었지만 현재는 사용하고 있지 않음
+ * 추후에 사용할 여지가 있으므로 그냥 놔둡니다. (김강우 올림)
+ */
+
 // middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { match } from 'path-to-regexp';

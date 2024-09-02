@@ -1,3 +1,5 @@
+'use client';
+
 import { MouseEvent, PropsWithChildren, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -6,7 +8,9 @@ import { useDisclosure } from '@mantine/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useRoot } from '@core/contexts/RootContexts';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
+import cn from '@lib/utils/cn';
 
 import PrimaryButton from '../UI/Button/PrimaryButton';
 import SecondaryButton from '../UI/Button/SecondaryButton';
@@ -131,10 +135,17 @@ const DashBoardAddModal = ({
 };
 
 export default function SideBar() {
+  const { dashboardid, dashBoardList, redirectDashboard } = useRoot();
   const device = useDevice();
   const [opened, { open, close }] = useDisclosure(false);
 
   const isMobile = device === 'mobile';
+
+  const { dashboards } = dashBoardList;
+
+  const handleDashboardClick = (id: number) => {
+    redirectDashboard(id);
+  };
 
   return (
     <Stack className="fixed bottom-0 left-0 top-0 z-50 w-[67px] items-center border-r border-border-gray bg-white pt-5">
@@ -164,6 +175,25 @@ export default function SideBar() {
           <Image fill src="/icons/add_box.png" alt="dashboard create" />
         </UnstyledButton>
       </DashBoardAddModal>
+      <Stack>
+        {dashboards &&
+          dashboards?.map(dashboard => (
+            <button
+              className={cn(
+                'flex h-10 w-10 items-center justify-center rounded hover:border-2 hover:border-blue',
+                dashboard.id === Number(dashboardid) && 'bg-violet-white'
+              )}
+              key={dashboard.id}
+              onClick={() => handleDashboardClick(dashboard.id)}
+            >
+              <div
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: dashboard.color }}
+                aria-label="link button"
+              />
+            </button>
+          ))}
+      </Stack>
       <Stack />
     </Stack>
   );
