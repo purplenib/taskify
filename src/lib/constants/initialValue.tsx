@@ -1,9 +1,9 @@
 // 초대받은 대시보드 목록 초기값
-export const INITIAL_INVITATIONS_REQUEST = {
+export const INIT_INVITATIONS_REQUEST = {
   size: 10,
 };
 
-export const INITIAL_INVITATIONS_RESPONSE = {
+export const INIT_INVITATIONS_RESPONSE = {
   cursorId: 0,
   invitations: [
     {
@@ -31,13 +31,13 @@ export const INITIAL_INVITATIONS_RESPONSE = {
 };
 
 // 나의 대시보드 목록 초기값
-export const INITIAL_DASHBOARDS_REQUEST = {
+export const INIT_DASHBOARDS_REQUEST = {
   navigationMethod: 'pagination',
   page: 1,
   size: 10,
 };
 
-export const INITIAL_DASHBOARDS_RESPONSE = {
+export const INIT_DASHBOARDS_RESPONSE = {
   dashboards: [],
   totalCount: 0,
   cursorId: null,
