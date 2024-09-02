@@ -1,3 +1,5 @@
+import { Button } from '@mantine/core';
+
 export default function CreateCardModal() {
-  return <div>CreateCardModal</div>;
+  return <Button>CreateCardModal</Button>;
 }

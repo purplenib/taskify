@@ -3,7 +3,7 @@ export interface LoginRequestDto {
   password: string;
 }
 
-export interface UserServiceReponseDto {
+export interface UserServiceResponseDto {
   id: number;
   email: string;
   nickname: string;
@@ -13,6 +13,6 @@ export interface UserServiceReponseDto {
 }
 
 export interface LoginResponseDto {
-  user: UserServiceReponseDto;
+  user: UserServiceResponseDto;
   accessToken: string;
 }

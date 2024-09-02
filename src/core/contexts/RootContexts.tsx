@@ -13,13 +13,13 @@ import {
 } from 'react';
 import useApi from '@/src/lib/hooks/useApi';
 import type { MembersResponseDto } from '@core/dtos/MembersDto';
-import type { LoginRequestDto, LoginResponseDto, UserServiceReponseDto } from '@core/dtos/AuthDto';
+import type { LoginRequestDto, LoginResponseDto, UserServiceResponseDto } from '@core/dtos/AuthDto';
 import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
 
 type ContextDashboard = MembersResponseDto & DashboardApplicationServiceResponseDto;
 
 interface ContextValue {
-  user: Partial<UserServiceReponseDto> | undefined;
+  user: Partial<UserServiceResponseDto> | undefined;
   dashboard: Partial<ContextDashboard> | undefined;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
   login: (body: LoginRequestDto) => Promise<void>;
@@ -40,7 +40,7 @@ export default function RootProvider({ children }: PropsWithChildren) {
     'GET'
   );
   const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>('/auth/login', 'POST');
-  const { data: user, callApi: getMe } = useApi<UserServiceReponseDto>('/users/me', 'GET');
+  const { data: user, callApi: getMe } = useApi<UserServiceResponseDto>('/users/me', 'GET');
 
   const login = useCallback(
     async (body: LoginRequestDto) => {
