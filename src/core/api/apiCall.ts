@@ -9,22 +9,33 @@ const ACCESS_TOKEN =
 // test용 엑세스 토큰2
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDU1NSwidGVhbUlkIjoiOC0zIiwiaWF0IjoxNzI1MDI4NjE4LCJpc3MiOiJzcC10YXNraWZ5In0.9e_o9phyoX7lk7xtDa4qFUmJTN6yCmUdtQ9sa9JKr2Y
 
-// GET, 공통 apiCall 함수
-export const getFromApi = async <T>(
+export const apiCall = async <ResponseType, RequestBodyType = undefined>(
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   endpoint: string,
+  data?: RequestBodyType,
   params?: Record<string, string | number | boolean>
-): Promise<T> => {
+): Promise<ResponseType> => {
   const url = `${BASE_URL}/${endpoint}`;
 
-  try {
-    const config = {
-      params,
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
-    };
+  const config = {
+    headers: {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+    },
+    params,
+  };
 
-    const response = await axios.get(url, config);
+  try {
+    const response = await axios({
+      method,
+      url,
+      data,
+      ...config,
+    });
+
+    if (!response.data) {
+      throw new Error('response failed');
+    }
+
     return response.data;
   } catch (error) {
     console.error('apiCall failed:', error);

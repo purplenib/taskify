@@ -1,5 +1,5 @@
-import type { InvitationsResponseDto } from '@core/dtos/invitationsDto';
-import { getFromApi } from './apiService';
+import type { InvitationsResponseDto } from '@core/dtos/InvitationsDto';
+import { apiCall } from './apiCall';
 
 export interface GetInvitationsParams {
   size?: number;
@@ -10,7 +10,7 @@ export interface GetInvitationsParams {
 const getInvitations = async (
   params: GetInvitationsParams
 ): Promise<InvitationsResponseDto> => {
-  return getFromApi<InvitationsResponseDto>('invitations', {
+  return apiCall<InvitationsResponseDto>('GET', 'invitations', undefined, {
     ...params,
   });
 };

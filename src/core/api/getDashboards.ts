@@ -1,5 +1,5 @@
-import type { DashboardsResponseDto } from '@core/dtos/dashboardsDto';
-import { getFromApi } from './apiService';
+import type { DashboardsResponseDto } from '@core/dtos/DashboardsDto';
+import { apiCall } from './apiCall';
 
 export interface GetDashboardsParams {
   navigationMethod: string;
@@ -10,7 +10,7 @@ export interface GetDashboardsParams {
 const getDashboards = async (
   params: GetDashboardsParams
 ): Promise<DashboardsResponseDto> => {
-  return getFromApi<DashboardsResponseDto>('dashboards', {
+  return apiCall<DashboardsResponseDto>('GET', 'dashboards', undefined, {
     ...params,
   });
 };
