@@ -1,11 +1,8 @@
+import { DashboardDto } from './DashboardsDto';
+
 export interface InviterDto {
   nickname: string;
   email: string;
-  id: number;
-}
-
-export interface DashboardDto {
-  title: string;
   id: number;
 }
 
