@@ -22,11 +22,11 @@ function getMemberLengthByDevice(device: keyof typeof DEVICE) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getMemberMoreLength(arr: any[] | undefined, ProfileCount: number) {
+function getMemberMoreLength(arr: any[] | undefined, profileCount: number) {
   if (!arr) return 0;
-  const MoreLength = arr.length - ProfileCount;
-  if (MoreLength < 1) return 0;
-  return MoreLength;
+  const moreLength = arr.length - profileCount;
+  if (moreLength < 1) return 0;
+  return moreLength;
 }
 
 function getTitleValue(pathname: string) {
@@ -40,10 +40,10 @@ export default function AuthHeader() {
   const device = useDevice();
   const { user, dashBoardMembers, dashBoardDetail } = useRoot()!;
 
-  const ProfileCount = getMemberLengthByDevice(device);
-  const ProfileMore = getMemberMoreLength(
+  const profileCount = getMemberLengthByDevice(device);
+  const profileMore = getMemberMoreLength(
     dashBoardMembers?.members,
-    ProfileCount
+    profileCount
   );
   const isManagedPage =
     pathname.includes('mydashboard') || pathname.includes('mypage');
@@ -89,7 +89,7 @@ export default function AuthHeader() {
       {dashBoardMembers?.members && dashBoardMembers?.members.length !== 0 && (
         <Avatar.Group className="h-[38px]">
           {dashBoardMembers?.members &&
-            dashBoardMembers?.members.slice(0, ProfileCount).map(member => (
+            dashBoardMembers?.members.slice(0, profileCount).map(member => (
               <Avatar key={member.id}>
                 <Image
                   width={38}
@@ -99,7 +99,7 @@ export default function AuthHeader() {
                 />
               </Avatar>
             ))}
-          {ProfileMore !== 0 && <Avatar>+{ProfileMore}</Avatar>}
+          {profileMore !== 0 && <Avatar>+{profileMore}</Avatar>}
         </Avatar.Group>
       )}
       <Divider className="bg-border-gray" my="sm" orientation="vertical" />
