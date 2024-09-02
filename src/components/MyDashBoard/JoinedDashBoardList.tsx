@@ -1,27 +1,23 @@
 'use client';
 
-import {
-  INITIAL_DASHBOARDS_REQUEST,
-  INITIAL_DASHBOARDS_RESPONSE,
-} from '@lib/constants/initialValue';
 import { useState } from 'react';
-import useApiGet from '@lib/hooks/useApiGet';
-import getDashboards from '@core/api/getDashboards';
+import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
 import Pagination from './UI/Paigination';
 
 export default function JoinedDashBoardList() {
-  const [currentPage, setCurrentPage] = useState<number>(
-    INITIAL_DASHBOARDS_REQUEST.page
-  );
+  const { joinedDashboards, loading, error, addDashboard } = useMyDashboard();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, loading, error } = useApiGet(
-    getDashboards,
-    INITIAL_DASHBOARDS_REQUEST,
-    INITIAL_DASHBOARDS_RESPONSE
-  );
-
-  const handlePageChange = (newPage: number): void => {
+  const handlePageChange = newPage => {
     setCurrentPage(newPage);
+  };
+
+  const handleAddDashboard = () => {
+    const newDashboard = {
+      id: Date.now(),
+      title: `대시보드 ${joinedDashboards.length + 1}`,
+    };
+    addDashboard(newDashboard); // Context에 대시보드 추가
   };
 
   return (
@@ -31,15 +27,17 @@ export default function JoinedDashBoardList() {
       {!loading && !error && (
         <>
           <div className="grid grid-cols-3 grid-rows-2 gap-3">
-            <button type="button">새로운 대시보드 +</button>
-            {data.dashboards.map(dashboard => (
+            <button type="button" onClick={handleAddDashboard}>
+              새로운 대시보드 +
+            </button>
+            {joinedDashboards.map(dashboard => (
               <button key={dashboard.id} type="button">
                 {dashboard.title}
               </button>
             ))}
           </div>
           <Pagination
-            totalCount={data.totalCount}
+            totalCount={joinedDashboards.length}
             currentPage={currentPage}
             onPageChange={handlePageChange}
           />

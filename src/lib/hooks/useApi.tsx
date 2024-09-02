@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-function useApiGet<T, U>(
+function useApi<T, U>(
   apiCall: (params: U) => Promise<T>,
   requestParams: U,
   initialValue: T
@@ -32,4 +32,4 @@ function useApiGet<T, U>(
   return { data, loading, error: fetchError };
 }
 
-export default useApiGet;
+export default useApi;
