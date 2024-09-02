@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 function useApi<T, U>(
   apiCall: (params: U, data?: any) => Promise<T>,
   requestParams: U,
-  initialValue: T
+  initialValue: T,
   requestData?: any // POST 요청 시 사용
 ) {
   const [data, setData] = useState<T>(initialValue);
