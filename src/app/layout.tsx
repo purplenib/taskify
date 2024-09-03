@@ -1,9 +1,10 @@
 import '@mantine/core/styles.css';
 import './globals.css';
+import { MantineProvider } from '@mantine/core';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-const pretandard = localFont({
+const pretendard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
   display: 'swap',
   weight: '45 920',
@@ -17,12 +18,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${pretandard.variable}`}>{children}</body>
+      <body className={pretendard.variable}>
+        <MantineProvider>{children}</MantineProvider>
+      </body>
     </html>
   );
 }

@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 // eslint-disable-next-line sort-imports
-import EditDashboard from '@/src/components/edit/EditDashboard';
-import InvitationList from '@/src/components/edit/InvitationList';
-import MemberList from '@/src/components/edit/MemberList';
+import EditDashboard from '@components/edit/EditDashboard';
+import InvitationList from '@components/edit/InvitationList';
+import MemberList from '@components/edit/MemberList';
 
 export default function DashBoardEditPage() {
   return (
@@ -13,7 +13,7 @@ export default function DashBoardEditPage() {
         헤더
       </header>
       <div className="flex flex-1">
-        <aside className="w-[67px] bg-gray-200 md:block md:w-[160px] xl:w-[300px]">
+        <aside className="w-[60px] bg-gray-200 md:block md:w-[160px] xl:w-[300px]">
           사이드바
         </aside>
 
