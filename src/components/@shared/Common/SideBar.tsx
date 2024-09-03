@@ -3,7 +3,7 @@
 import { MouseEvent, PropsWithChildren, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Flex, Modal, Stack, UnstyledButton } from '@mantine/core';
+import { Flex, Modal, Stack, Text, UnstyledButton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -150,7 +150,7 @@ export default function SideBar() {
   };
 
   return (
-    <Stack className="fixed bottom-0 left-0 top-0 z-50 w-[67px] items-center border-r border-border-gray bg-white pt-5">
+    <Stack className="fixed bottom-0 left-0 top-0 z-50 w-[67px] items-center border-r border-border-gray bg-white pt-5 text-gray-400 md:w-40 md:items-stretch md:px-[13px] xl:w-[300px]">
       <Link href="/">
         {isMobile && (
           <Image
@@ -170,30 +170,52 @@ export default function SideBar() {
         )}
       </Link>
       <DashBoardAddModal opened={opened} onClose={close}>
-        <UnstyledButton
-          className="relative mt-4 flex h-5 w-5 items-center justify-center"
-          onClick={open}
-        >
-          <Image fill src="/icons/add_box.png" alt="dashboard create" />
-        </UnstyledButton>
+        <Flex className="mt-4 items-center justify-between md:mt-10">
+          {!isMobile && (
+            <Text className="font-xs-12px-semibold">Dash Boards</Text>
+          )}
+          <UnstyledButton
+            className="relative flex h-5 w-5 items-center justify-center"
+            onClick={open}
+          >
+            <Image fill src="/icons/add_box.png" alt="dashboard create" />
+          </UnstyledButton>
+        </Flex>
       </DashBoardAddModal>
-      <Stack>
+      <Stack className="items-center gap-2 md:items-stretch">
         {dashboards &&
           dashboards?.map(dashboard => (
-            <button
+            <Flex
+              key={dashboard.id}
               className={cn(
-                'flex h-10 w-10 items-center justify-center rounded hover:border-2 hover:border-blue',
+                'h-[43px] items-center gap-2 rounded hover:border-2 hover:border-blue',
                 dashboard.id === Number(dashboardid) && 'bg-violet-white'
               )}
-              key={dashboard.id}
               onClick={() => handleDashboardClick(dashboard.id)}
             >
-              <div
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: dashboard.color }}
-                aria-label="link button"
-              />
-            </button>
+              <button className="flex h-10 w-10 items-center justify-center gap-2 md:w-4">
+                <div
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: dashboard.color }}
+                  aria-label="link button"
+                />
+              </button>
+              {!isMobile && (
+                <Flex className="items-center gap-2">
+                  <span className="h-[26px] max-w-[75px] overflow-hidden text-ellipsis whitespace-nowrap font-lg-16px-medium xl:max-w-[200px]">
+                    {dashboard.title}
+                  </span>
+                  {dashboard.createdByMe && (
+                    <Image
+                      width={16}
+                      height={12}
+                      src="/icons/crown.png"
+                      alt="createdByMe"
+                    />
+                  )}
+                </Flex>
+              )}
+            </Flex>
           ))}
       </Stack>
       <Stack />

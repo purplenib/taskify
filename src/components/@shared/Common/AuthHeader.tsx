@@ -107,7 +107,12 @@ export default function AuthHeader() {
         <Flex className="items-center gap-3">
           <Avatar>
             {user.profileImageUrl && (
-              <Image src={user.profileImageUrl} alt="my profile" />
+              <Image
+                width={38}
+                height={38}
+                src={user.profileImageUrl}
+                alt="my profile"
+              />
             )}
           </Avatar>
           <Text className="hidden font-lg-16px-medium md:block">
