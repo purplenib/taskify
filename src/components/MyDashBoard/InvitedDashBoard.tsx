@@ -25,6 +25,10 @@ export default function InvitedDashBoard({
   onAccept,
 }: InvitedDashBoardProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [invitations, setInvitations] = useState<InvitationsDto[]>(
+    invitationsData.invitations
+  );
+
   const { filteredResults, handleSearch, handleReset } = useSearch(
     {
       list: invitationsData.invitations,
@@ -33,6 +37,15 @@ export default function InvitedDashBoard({
     setCurrentPage,
     (invitation: InvitationsDto) => invitation.dashboard.title
   );
+
+  const handleAccept = (invitation: InvitationsDto) => {
+    onAccept(invitation);
+    setInvitations(prev => prev.filter(item => item.id !== invitation.id));
+  };
+
+  const handleReject = (invitation: InvitationsDto) => {
+    setInvitations(prev => prev.filter(item => item.id !== invitation.id));
+  };
 
   return (
     <>
@@ -47,7 +60,7 @@ export default function InvitedDashBoard({
             <ReturnButton buttonText="전체 목록 보기" onClick={handleReset} />
           </li>
         ) : (
-          filteredResults.map(invitation => (
+          filteredResults.map((invitation: InvitationsDto) => (
             <li
               key={invitation.id}
               className="flex w-full justify-around border-b border-gray-100 pb-[20px] text-center text-black-600"
@@ -58,13 +71,14 @@ export default function InvitedDashBoard({
                 <button
                   type="button"
                   className="w-[84px] rounded-[4px] bg-violet px-4 py-2 text-white"
-                  onClick={() => onAccept(invitation)}
+                  onClick={() => handleAccept(invitation)}
                 >
                   수락
                 </button>
                 <button
                   type="button"
                   className="border-1 ml-2 w-[84px] rounded-[4px] border border-gray-200 px-4 py-2 text-violet"
+                  onClick={() => handleReject(invitation)}
                 >
                   거절
                 </button>

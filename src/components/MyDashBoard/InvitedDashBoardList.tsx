@@ -9,7 +9,6 @@ import type {
   InvitationsDto,
 } from '@core/dtos/invitationsDto';
 import getInvitations from '@core/api/getInvitations';
-import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
 import NoDashBoard from './UI/NoDashBoard';
 import InvitedDashBoard from './InvitedDashBoard';
 import useApi from '@lib/hooks/useApi';
@@ -25,14 +24,9 @@ export default function InvitedDashBoardList() {
     INIT_INVITATIONS_RESPONSE
   );
 
-  const { addDashboard } = useMyDashboard();
-
-  const handleAccept = (invitation: InvitationsDto) => {
-    const newDashboard = {
-      id: invitation.dashboard.id,
-      title: invitation.dashboard.title,
-    };
-    addDashboard(newDashboard); // Context에 대시보드 추가
+  const onAccept = (invitation: InvitationsDto) => {
+    // putInvitaions 추가
+    console.log('Invitation accepted:', invitation);
   };
 
   return (
@@ -45,7 +39,7 @@ export default function InvitedDashBoardList() {
           invitationsData={invitationsData}
           loading={loading}
           error={error}
-          onAccept={handleAccept}
+          onAccept={onAccept}
         />
       )}
     </section>

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import searchIcon from '@/public/icons/search.png';
 import Image from 'next/image';
+import searchIcon from '@/public/icons/search.png';
 
 interface SearchFormProps {
   onSearch: (searchTerm: string) => void;
@@ -26,8 +26,8 @@ function SearchForm({ onSearch }: SearchFormProps) {
         height={16}
       />
       <input
-        className="flex h-full w-full rounded-md bg-white px-4 py-[6px] pl-8 text-gray-300 outline-none outline-1 outline-gray-200"
-        placeholder="검색"
+        className="flex h-full w-full rounded-md bg-white px-4 py-[6px] pl-9 text-gray-300 outline-none outline-1 outline-gray-200"
+        placeholder="대시보드 이름을 검색해보세요."
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         onKeyPress={e => e.key === 'Enter' && handleSearch()}

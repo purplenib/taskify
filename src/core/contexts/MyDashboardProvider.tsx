@@ -21,6 +21,7 @@ const INIT_MYDASHBOARD = {
   loading: true,
   error: null,
   addDashboard: () => {},
+  fetchDashboards: () => {},
 };
 
 const MyDashboardContext =
@@ -47,6 +48,12 @@ export const MyDashboardProvider = ({ children }) => {
     setJoinedDashboards(prev => [...prev, newDashboard]);
   };
 
+  // 대시보드 데이터 가져오기
+  const fetchDashboards = async () => {
+    const response = await getDashboards();
+    setJoinedDashboards(response.dashboards);
+  };
+
   // Context 값 메모이제이션
   const value = useMemo(
     () => ({
@@ -54,6 +61,7 @@ export const MyDashboardProvider = ({ children }) => {
       loading,
       error,
       addDashboard,
+      fetchDashboards,
     }),
     [joinedDashboards, loading, error]
   );
