@@ -21,7 +21,6 @@
   },
   "plugins": ["react", "@typescript-eslint", "react-refresh", "prettier"],
   "rules": {
-<<<<<<< HEAD
     "sort-imports": [
       "error",
       {
@@ -32,8 +31,6 @@
         "allowSeparatedGroups": false
       }
     ],
-=======
->>>>>>> decc019688b55116340a2e1a34ca20ebfd0f5c7a
     "react/function-component-definition": [
       2,
       {
