@@ -13,10 +13,10 @@ export default function Pagination({
   currentPage,
   onPageChange,
 }: PaginationProps) {
-  const size = 10; // 한 페이지에 표시할 아이템 수
+  const size = 10;
   const totalPages = Math.ceil(totalCount / size);
 
-  // 페이지 이동 함수
+  // 페이지 이동
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);

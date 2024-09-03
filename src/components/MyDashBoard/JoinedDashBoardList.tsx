@@ -1,24 +1,41 @@
 'use client';
 
-import { useState } from 'react';
 import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
-import Pagination from './UI/Paigination';
+import Pagination from './UI/Pagination';
+import usePagination from '@lib/hooks/usePagination';
 
 export default function JoinedDashBoardList() {
-  const { joinedDashboards, loading, error, addDashboard } = useMyDashboard();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { joinedDashboards, loading, error, addDashboard, fetchDashboards } =
+    useMyDashboard();
 
-  const handlePageChange = newPage => {
-    setCurrentPage(newPage);
-  };
+  const itemsPerPage = 6; // 페이지당 표시할 아이템 수
+  const {
+    currentPage: paginationCurrentPage,
+    totalPages,
+    handlePageChange,
+  } = usePagination({
+    totalItems: joinedDashboards.length,
+    itemsPerPage,
+  });
 
-  const handleAddDashboard = () => {
+  const handleAddDashboard = async () => {
     const newDashboard = {
       id: Date.now(),
       title: `대시보드 ${joinedDashboards.length + 1}`,
     };
-    addDashboard(newDashboard); // Context에 대시보드 추가
+
+    if (newDashboard) {
+      addDashboard(newDashboard);
+      await fetchDashboards();
+    }
   };
+
+  // 현재 페이지에 해당하는 대시보드 항목 계산
+  const startIndex = (paginationCurrentPage - 1) * itemsPerPage;
+  const currentDashboards = joinedDashboards.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <section className="flex flex-col gap-3">
@@ -30,7 +47,7 @@ export default function JoinedDashBoardList() {
             <button type="button" onClick={handleAddDashboard}>
               새로운 대시보드 +
             </button>
-            {joinedDashboards.map(dashboard => (
+            {currentDashboards.map(dashboard => (
               <button key={dashboard.id} type="button">
                 {dashboard.title}
               </button>
@@ -38,7 +55,8 @@ export default function JoinedDashBoardList() {
           </div>
           <Pagination
             totalCount={joinedDashboards.length}
-            currentPage={currentPage}
+            currentPage={paginationCurrentPage}
+            totalPages={totalPages}
             onPageChange={handlePageChange}
           />
         </>
