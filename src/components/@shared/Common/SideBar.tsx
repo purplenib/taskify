@@ -8,7 +8,9 @@ import { useDisclosure } from '@mantine/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import postCreateDashboard from '@core/api/postDashboard';
 import { useRoot } from '@core/contexts/RootContexts';
+import COLORS from '@lib/constants/themeConst';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import cn from '@lib/utils/cn';
 
@@ -16,16 +18,6 @@ import PrimaryButton from '../UI/Button/PrimaryButton';
 import SecondaryButton from '../UI/Button/SecondaryButton';
 
 import Input from './Input';
-
-const COLORS: {
-  [key: string]: string;
-} = {
-  green: '#7AC555',
-  purple: '#760DDE',
-  orange: '#FFA500',
-  blue: '#76A5EA',
-  pink: '#E876EA',
-} as const;
 
 type ColorType = keyof typeof COLORS;
 
@@ -66,16 +58,26 @@ const DashBoardAddModal = ({
       title: '',
     },
   });
+  const { redirectDashboard } = useRoot();
   const device = useDevice();
   const [color, setColor] = useState<ColorType>(COLORS.green);
 
-  const onSubmit: SubmitHandler<Inputs> = () => {};
+  const onSubmit: SubmitHandler<Inputs> = async ({ title }) => {
+    let res;
+    try {
+      res = await postCreateDashboard({ title, color });
+      redirectDashboard(res.data.id);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.log('네트워크 에러가 발생하였습니다. 잠시 후 다시 시도해주세요');
+    }
+  };
 
   const handleColorClick = (e: MouseEvent<HTMLButtonElement>) => {
     const { target } = e;
     if (!(target instanceof HTMLElement)) return;
-    const colorset = target.dataset.color as ColorType;
-    setColor(colorset);
+    const { color: colorSet } = target.dataset;
+    setColor(colorSet as ColorType);
   };
 
   return (
@@ -124,8 +126,8 @@ const DashBoardAddModal = ({
             ))}
           </Flex>
           <Flex className="mt-4 gap-2">
-            <SecondaryButton onClick={() => {}}>취소</SecondaryButton>
-            <PrimaryButton onClick={() => {}}>확인</PrimaryButton>
+            <SecondaryButton onClick={onClose}>취소</SecondaryButton>
+            <PrimaryButton onClick={handleSubmit(onSubmit)}>확인</PrimaryButton>
           </Flex>
         </Stack>
       </Modal>

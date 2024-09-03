@@ -12,7 +12,7 @@ import {
   useState,
 } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import useApi from '@/src/lib/hooks/useApi';
 import {
@@ -71,6 +71,7 @@ const initialDashboard: Partial<DashboardsResponseDto> = {
 };
 
 export default function RootProvider({ children }: PropsWithChildren) {
+  const pathname = usePathname();
   const router = useRouter();
   const [dashboardid, setDashboardid] = useState<string | undefined>(undefined);
   const {
@@ -138,7 +139,7 @@ export default function RootProvider({ children }: PropsWithChildren) {
         size: 10,
       },
     });
-  }, [loginData, getMe, getDashBoardList]);
+  }, [loginData, getMe, getDashBoardList, router, pathname]);
 
   const value = useMemo(
     () => ({

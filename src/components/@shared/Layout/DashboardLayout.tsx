@@ -8,14 +8,19 @@ import AuthHeader from '../Common/AuthHeader';
 import SideBar from '../Common/SideBar';
 import UnAuthHeader from '../Common/UnAuthHeader';
 
-export default function DashboardLayout({ children }: PropsWithChildren) {
-  const { user, dashboardid, setDashboardid } = useRoot();
+export default function DashboardLayout({
+  children,
+  dashboardid,
+}: PropsWithChildren<{
+  dashboardid: string | null;
+}>) {
+  const { user, dashboardid: id, setDashboardid } = useRoot();
 
   useEffect(() => {
-    if (dashboardid) {
+    if (!id && dashboardid) {
       setDashboardid(dashboardid);
     }
-  }, [dashboardid, setDashboardid]);
+  }, [dashboardid, setDashboardid, id]);
 
   return (
     <>
