@@ -1,26 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-export const usePagination = (
-  filteredResults: any[],
-  fetchedTotalCount: number,
-  listLength: number
-) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
+interface UsePaginationProps {
+  // 전체 아이템 수
+  totalItems: number;
+  // 한 페이지에 표시할 아이템 수
+  itemsPerPage: number;
+}
 
-  // 페이지 수 업데이트 및 현재 페이지 조정
-  useEffect(() => {
-    if (filteredResults.length === 0) {
-      setCurrentPage(1);
+export default function usePagination({
+  totalItems,
+  itemsPerPage,
+}: UsePaginationProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  // 전체 페이지 수 계산
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  // pageNumber : 변경될 페이지 번호
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
     }
-  }, [filteredResults]);
-
-  // 검색하지 않은 경우 fetchedTotalCount, 검색된 경우 filteredResults.length
-  const totalCount =
-    listLength === filteredResults.length
-      ? fetchedTotalCount
-      : filteredResults.length;
-
-  return { currentPage, setCurrentPage, totalCount };
-};
+  };
+  return {
+    currentPage,
+    totalPages,
+    handlePageChange,
+  };
+}
