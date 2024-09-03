@@ -10,7 +10,6 @@
   }
 }
 
-<<<<<<< HEAD
 @layer base {
   blockquote,
   dl,
@@ -83,25 +82,6 @@
       sans-serif;
     @apply bg-gray-50 text-black-600;
   }
-=======
-body {
-  font-family:
-    'Pretendard Variable',
-    Pretendard,
-    -apple-system,
-    BlinkMacSystemFont,
-    system-ui,
-    Roboto,
-    'Helvetica Neue',
-    'Segoe UI',
-    'Apple SD Gothic Neo',
-    'Noto Sans KR',
-    'Malgun Gothic',
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol',
-    sans-serif;
->>>>>>> decc019688b55116340a2e1a34ca20ebfd0f5c7a
 }
 
 @layer utilities {
