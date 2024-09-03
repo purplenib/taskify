@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import '@mantine/core/styles.css';
 import './globals.css';
 import type { Metadata } from 'next';
+=======
+import type { Metadata } from 'next';
+import './globals.css';
+>>>>>>> decc019688b55116340a2e1a34ca20ebfd0f5c7a
 import localFont from 'next/font/local';
 
 const pretandard = localFont({
