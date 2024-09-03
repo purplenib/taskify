@@ -1,15 +1,27 @@
-import addPurple from '@/public/icons/add_purple.png';
+import addPurple from '@icons/add_purple.png';
 import Image from 'next/image';
-import setting from '@/public/icons/settings.png';
-import Card from './Card';
+import setting from '@icons/settings.png';
+import { ColumnServiceResponseDto } from '@core/dtos/dashboardDto';
+import useCards from '@lib/hooks/useCards';
+import Card from './UI/Card';
 
-export default function Column() {
+interface ColumnProps {
+  column: ColumnServiceResponseDto;
+}
+
+export default function Column({ column }: ColumnProps) {
+  const { cardList } = useCards(column.id);
+
+  if (cardList === null) {
+    return;
+  }
+
   return (
-    <div className="mb-4 w-full min-w-[354px] border-b border-gray-100 px-3 pb-6 xl:mb-0 xl:h-full xl:max-h-[100vh] xl:overflow-scroll xl:border-b-0 xl:border-r">
+    <div className="no-scrollbar mb-4 w-full min-w-[354px] border-b border-gray-100 px-3 pb-6 md:px-5 xl:mb-0 xl:h-full xl:max-h-[100vh] xl:overflow-scroll xl:border-b-0 xl:border-r">
       <div className="mb-6 mt-4 flex h-[22px] justify-between">
         <div className="flex items-center gap-2 rounded-md">
-          <span>컬럼컬러</span>
-          <span className="pr-1 font-2lg-18px-bold">컬럼네임</span>
+          <span>대시보드칼라</span>
+          <span className="pr-1 font-2lg-18px-bold">{column.title}</span>
           <div className="flex h-5 w-5 items-center justify-center rounded bg-gray-100 text-gray-400 font-xs-12px-medium">
             2
           </div>
@@ -28,9 +40,8 @@ export default function Column() {
         </div>
       </div>
       {/* 배열랜더링 */}
-      <Card />
-      <Card />
-      <Card />
+      {cardList.length > 0 &&
+        cardList.map(card => <Card key={card.id} card={card} />)}
     </div>
   );
 }
