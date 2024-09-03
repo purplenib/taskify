@@ -10,7 +10,7 @@ const AUTH_OBJECT = [
   'ex32223@gmail.com',
 ];
 
-export default function Home() {
+export default function DashBoardPage() {
   const { login } = useRoot();
 
   useEffect(() => {
