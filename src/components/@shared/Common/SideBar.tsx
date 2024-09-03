@@ -188,12 +188,12 @@ export default function SideBar() {
             <Flex
               key={dashboard.id}
               className={cn(
-                'h-[43px] items-center gap-2 rounded hover:border-2 hover:border-blue',
+                'h-[43px] items-center rounded hover:border-2 hover:border-blue',
                 dashboard.id === Number(dashboardid) && 'bg-violet-white'
               )}
               onClick={() => handleDashboardClick(dashboard.id)}
             >
-              <button className="flex h-10 w-10 items-center justify-center gap-2 md:w-4">
+              <button className="flex h-10 w-10 items-center justify-center">
                 <div
                   className="h-2 w-2 rounded-full"
                   style={{ backgroundColor: dashboard.color }}
@@ -202,7 +202,7 @@ export default function SideBar() {
               </button>
               {!isMobile && (
                 <Flex className="items-center gap-2">
-                  <span className="h-[26px] max-w-[75px] overflow-hidden text-ellipsis whitespace-nowrap font-lg-16px-medium xl:max-w-[200px]">
+                  <span className="h-[26px] max-w-[75px] overflow-hidden text-ellipsis whitespace-nowrap font-lg-16px-medium xl:max-w-[200px] xl:font-2lg-18px-medium">
                     {dashboard.title}
                   </span>
                   {dashboard.createdByMe && (

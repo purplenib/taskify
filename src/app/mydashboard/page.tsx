@@ -16,7 +16,7 @@ export default function DashBoardPage() {
 
   useEffect(() => {
     const handleLogin = async () => {
-      await login({ email: AUTH_OBJECT[1], password: '123123123' });
+      await login({ email: AUTH_OBJECT[0], password: '123123123' });
     };
     handleLogin();
   }, [login]);
