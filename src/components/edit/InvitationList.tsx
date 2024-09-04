@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+
 import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePaginavigation';
 
