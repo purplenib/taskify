@@ -19,6 +19,7 @@ export default function SideBarList() {
 
   const isMobile = device === 'mobile';
 
+  /** useRoot의 setDashboardid를 업데이트해야 헤더에 상태 반영 가능 */
   const redirectDashboard = useCallback(
     (id: number) => {
       setDashboardid(String(id));

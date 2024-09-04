@@ -45,6 +45,7 @@ export default function RootProvider({ children }: PropsWithChildren) {
     'GET'
   );
 
+  /** 로그인 로직: 로그인 기능을 만들 때 가져가서 사용하세요 */
   const login = useCallback(
     async (body: LoginRequestDto) => {
       await postAuthLogin(body);
@@ -53,6 +54,7 @@ export default function RootProvider({ children }: PropsWithChildren) {
     [postAuthLogin, getMe]
   );
 
+  /** 유저 정보 유지: 새로고침하거나, url입력을 통해 이동할 때 유저정보가 유지되도록 구현 */
   useEffect(() => {
     if (loginData?.accessToken) {
       localStorage.setItem('accessToken', loginData?.accessToken);
