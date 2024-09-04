@@ -1,40 +1,52 @@
 'use client';
 
 import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
-import Pagination from './UI/Pagination';
+import postDashboard from '@core/api/postDashboards';
 import usePagination from '@lib/hooks/usePagination';
+import Pagination from './UI/Pagination';
 
-export default function JoinedDashBoardList() {
-  const { joinedDashboards, loading, error, addDashboard, fetchDashboards } =
+export default function JoinedDashboardList() {
+  const { myDashboards, loading, error, addDashboard, fetchDashboards } =
     useMyDashboard();
 
-  const itemsPerPage = 6; // 페이지당 표시할 아이템 수
+  const itemsPerPage = 6;
   const {
     currentPage: paginationCurrentPage,
     totalPages,
     handlePageChange,
   } = usePagination({
-    totalItems: joinedDashboards.length,
+    totalItems: myDashboards.length,
     itemsPerPage,
   });
 
-  const handleAddDashboard = async () => {
-    const newDashboard = {
-      id: Date.now(),
-      title: `대시보드 ${joinedDashboards.length + 1}`,
-    };
+  // 대시보드 생성 로직 구현 중입니다.
+  const handleCreateDashboard = async (title: string, color: string) => {
+    try {
+      const createdDashboard = await postDashboard(title, color);
 
-    if (newDashboard) {
-      addDashboard(newDashboard);
+      // 로컬 상태에 추가
+      addDashboard(createdDashboard);
+
+      // 대시보드 목록 재패칭
       await fetchDashboards();
+    } catch (err) {
+      console.error('handleCreateDashboard fialed:', err);
     }
   };
 
   // 현재 페이지에 해당하는 대시보드 항목 계산
   const startIndex = (paginationCurrentPage - 1) * itemsPerPage;
-  const currentDashboards = joinedDashboards.slice(
+  const currentDashboards = myDashboards.slice(
     startIndex,
     startIndex + itemsPerPage
+  );
+
+  // createdByMe가 true인 대시보드, false인 대시보드 분리
+  const createdByMeDashboards = currentDashboards.filter(
+    dashboard => dashboard.createdByMe
+  );
+  const notCreatedByMeDashboards = currentDashboards.filter(
+    dashboard => !dashboard.createdByMe
   );
 
   return (
@@ -44,17 +56,22 @@ export default function JoinedDashBoardList() {
       {!loading && !error && (
         <>
           <div className="grid grid-cols-3 grid-rows-2 gap-3">
-            <button type="button" onClick={handleAddDashboard}>
+            <button type="button" onClick={handleCreateDashboard}>
               새로운 대시보드 +
             </button>
-            {currentDashboards.map(dashboard => (
-              <button key={dashboard.id} type="button">
-                {dashboard.title}
+            {createdByMeDashboards.map(myDashboard => (
+              <button key={myDashboard.id} type="button">
+                {myDashboard.title}
+              </button>
+            ))}
+            {notCreatedByMeDashboards.map(notCreatedByMeDashboard => (
+              <button key={notCreatedByMeDashboard.id} type="button">
+                {notCreatedByMeDashboard.title}
               </button>
             ))}
           </div>
           <Pagination
-            totalCount={joinedDashboards.length}
+            totalCount={myDashboards.length}
             currentPage={paginationCurrentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
