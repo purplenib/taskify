@@ -1,4 +1,13 @@
-// 초대받은 대시보드 목록 초기값
+export const INIT_MYDASHBOARDS_CONTEXT = {
+  myDashboards: [],
+  localDashboards: [],
+  loading: true,
+  error: null,
+  addDashboard: () => {},
+  fetchDashboards: async () => {},
+};
+
+// 초대받은 대시보드 목록
 export const INIT_INVITATIONS_REQUEST = {
   size: 10,
 };
@@ -30,7 +39,7 @@ export const INIT_INVITATIONS_RESPONSE = {
   ],
 };
 
-// 나의 대시보드 목록 초기값
+// 나의 대시보드 목록
 export const INIT_DASHBOARDS_REQUEST = {
   navigationMethod: 'pagination',
   page: 1,
