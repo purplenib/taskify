@@ -1,7 +1,8 @@
 'use client';
 
-import { useRoot } from '@/src/core/contexts/RootContexts';
 import { useEffect } from 'react';
+
+import { useRoot } from '@/src/core/contexts/RootContexts';
 
 const AUTH_OBJECT = [
   'ex3222@gmail.com',

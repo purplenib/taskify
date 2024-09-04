@@ -1,5 +1,7 @@
-import { AxiosRequestConfig } from 'axios';
 import { useCallback, useState } from 'react';
+
+import { AxiosRequestConfig } from 'axios';
+
 import instance from '../api/instance';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';

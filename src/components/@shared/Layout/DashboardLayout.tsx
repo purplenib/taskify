@@ -1,28 +1,31 @@
 'use client';
 
 import React, { PropsWithChildren, useEffect } from 'react';
+
 import { useRoot } from '@core/contexts/RootContexts';
-import UnAuthHeader from '../Common/UnAuthHeader';
+
 import AuthHeader from '../Common/AuthHeader';
+import SideBar from '../Common/SideBar';
+import UnAuthHeader from '../Common/UnAuthHeader';
 
 export default function DashboardLayout({
   children,
-  params,
+  dashboardid,
 }: PropsWithChildren<{
-  params: {
-    dashboardid: string;
-  };
+  dashboardid: string | null;
 }>) {
-  const { dashboardid } = params;
-  const { user, setDashboardid } = useRoot();
+  const { user, dashboardid: id, setDashboardid } = useRoot();
 
   useEffect(() => {
-    setDashboardid(dashboardid);
-  }, [dashboardid, setDashboardid]);
+    if (!id && dashboardid) {
+      setDashboardid(dashboardid);
+    }
+  }, [dashboardid, setDashboardid, id]);
 
   return (
     <>
       {user ? <AuthHeader /> : <UnAuthHeader />}
+      {user && <SideBar />}
       {children}
     </>
   );
