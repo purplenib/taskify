@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
       "@app/*": ["src/app/*"],
@@ -29,6 +30,7 @@
       "@/*": ["*"]
     },
     "baseUrl": "."
+
   },
   "include": [
     "next-env.d.ts",
