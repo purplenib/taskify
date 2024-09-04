@@ -7,44 +7,41 @@ import UnAutherHeader from '@components/Common/UnAuthHeader';
 import LandingBottom from '@components/Home/LandingBottom';
 import LandingMain from '@components/Home/LandingMain';
 import LandingTop from '@components/Home/LandingTop';
-
 // import { useRoot } from '@core/contexts/RootContexts';
 
-const dashBoardList = {
-  dashboards: [
-    {
-      id: 0,
-      title: 'string',
-      color: 'string',
-      createdAt: '2024-09-04T19:24:44.143Z',
-      updatedAt: '2024-09-04T19:24:44.143Z',
-      createdByMe: true,
-      userId: 0,
-    },
-  ],
+// 최신 dev 문제가 생겨 useRoot 이용에 제한이 생겨서
+// 같은 형태의 데이터를 만들어서 사용했습니다.
+
+const { user, dashBoardList } = {
+  user: 1,
+  dashBoardList: {
+    dashboards: [
+      {
+        id: 0,
+      },
+    ],
+  },
 };
 
-const user = 1;
-
 export default function Home() {
-  // const { user, dashBoardList } = useRoot();
+  // const { user, dashBoardList} = useRoot();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
-      const { dashboards } = dashBoardList;
-      if (dashboards && dashboards.length > 0) {
-        const firstDashboardId = dashboards[0]?.id;
-        if (firstDashboardId) {
+    function handleUserDashboardRedirect() {
+      if (user && dashBoardList.dashboards?.length > 0) {
+        const firstDashboardId = dashBoardList.dashboards[0].id;
+        if (firstDashboardId !== undefined) {
           router.push(`/dashboard/${firstDashboardId}`);
         }
       }
     }
-  }, [router]);
 
-  // if (user) {
-  //   return null;
-  // }
+    handleUserDashboardRedirect();
+  }, [router]);
+  // useRoot 사용시 디펜던시 [user, dashBoardList, router]
+
+  if (user) return null;
 
   return (
     <>
