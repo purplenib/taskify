@@ -15,8 +15,10 @@ export interface DashboardsResponseDto {
 }
 
 export interface MyDashboardContextDto {
-  joinedDashboards: DashboardDto[];
+  myDashboards: DashboardDto[];
+  localDashboards: DashboardDto[];
   loading: boolean;
   error: string | null;
   addDashboard: (newDashboard: DashboardDto) => void;
+  fetchDashboards: () => Promise<void>;
 }
