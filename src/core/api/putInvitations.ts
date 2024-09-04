@@ -1,23 +1,23 @@
-import axios from 'axios';
 import { apiCall } from './apiCall';
 
-// 초대 수락 함수
-export const acceptInvitations = async (
-  teamId: string,
-  invitationId: number
+const putInvitations = async (
+  invitationId: number,
+  inviteAccepted: boolean
 ) => {
-  const url = `/${teamId}/invitations/${invitationId}`;
+  const endpoint = `invitations/${invitationId}`;
 
   const requestBody = {
-    inviteAccepted: true,
+    inviteAccepted: inviteAccepted,
   };
 
   try {
-    const response = await axios.put(url, requestBody);
-    console.log('초대 수락 성공:', response.data);
-    return response.data;
+    const response = await apiCall('PUT', endpoint, requestBody);
+    console.log('putInvitations succeed:', response);
+    return response;
   } catch (error) {
-    console.error('초대 수락 실패:', error.response?.data || error.message);
+    console.error('putInvitations failed:', error);
     throw error;
   }
 };
+
+export default putInvitations;
