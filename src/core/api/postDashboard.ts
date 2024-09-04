@@ -1,5 +1,4 @@
-import instance from '@lib/api/instance';
-
+import instance from '@core/api/instance';
 import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
 import COLORS from '@lib/constants/themeConst';
 

@@ -23,7 +23,7 @@ export default function DashBoardPage() {
   }, [login]);
 
   return (
-    <div className="ml-[67px] mt-[60px] flex flex-col pb-[49px] md:ml-[160px] md:mt-[70px] xl:ml-[300px] xl:flex-row">
+    <div className="ml-[67px] mt-[60px] flex flex-col overflow-hidden pb-[49px] md:ml-[160px] md:mt-[70px] xl:ml-[300px] xl:max-h-[92vh] xl:flex-row">
       <ColumnList />
     </div>
   );

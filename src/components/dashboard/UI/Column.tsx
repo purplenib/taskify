@@ -6,16 +6,20 @@ import useCards from '@lib/hooks/useCards';
 
 import Card from './Card';
 
-import type { ColumnServiceResponseDto } from '@core/dtos/DashboardDto';
+import type { ColumnServiceResponseDto } from '@core/dtos/ColumnsDto';
 
 interface ColumnProps {
   column: ColumnServiceResponseDto;
   dashboardColor: string;
+  onClickEditOpen: (id: number, defaultValue: string) => void;
 }
 
-export default function Column({ column, dashboardColor }: ColumnProps) {
+export default function Column({
+  column,
+  dashboardColor,
+  onClickEditOpen,
+}: ColumnProps) {
   const { cardList } = useCards(column.id);
-
   if (cardList === null) {
     return;
   }
@@ -30,10 +34,16 @@ export default function Column({ column, dashboardColor }: ColumnProps) {
           />
           <span className="pr-1 font-2lg-18px-bold">{column.title}</span>
           <div className="flex h-5 w-5 items-center justify-center rounded bg-gray-100 text-gray-400 font-xs-12px-medium">
-            2
+            {cardList.length}
           </div>
         </div>
-        <Image src={setting} width={22} height={22} alt="컬럼 수정 버튼" />
+        <button
+          onClick={() => {
+            onClickEditOpen(column.id, column.title);
+          }}
+        >
+          <Image src={setting} width={22} height={22} alt="컬럼 수정 버튼" />
+        </button>
       </div>
       <div className="flex h-8 w-full items-center justify-center border border-gray-200 bg-white md:h-10">
         <PurpleAddIcon />
