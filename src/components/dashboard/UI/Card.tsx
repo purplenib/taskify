@@ -1,10 +1,10 @@
-import Image from 'next/image';
 import dayjs from 'dayjs';
-
-import type { CardServiceResponseDto } from '@core/dtos/DashboardDto';
+import Image from 'next/image';
 
 import convertStringToColorHex from '@lib/utils/convertStringToColorHex';
 import convertStringToRGBA from '@lib/utils/convertStringToRGBA';
+
+import type { CardServiceResponseDto } from '@core/dtos/DashboardDto';
 
 interface CardProps {
   card: CardServiceResponseDto;
@@ -36,7 +36,9 @@ export default function Card({ card }: CardProps) {
               ))}
           </div>
           <div className="flex items-center justify-between md:grow">
-            <span className="text-gray-400 font-xs-12px-medium">{formattedDueDate}</span>
+            <span className="text-gray-400 font-xs-12px-medium">
+              {formattedDueDate}
+            </span>
             <span>작성자프로필</span>
           </div>
         </div>

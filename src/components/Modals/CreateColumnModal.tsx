@@ -1,5 +1,10 @@
+import {
+  FieldErrors,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from 'react-hook-form';
+
 import { Button, Input } from '@mantine/core';
-import { FieldErrors, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 
 interface FieldData {
   title: string;
@@ -37,7 +42,11 @@ export default function CreateColumnModal({
       />
       <p className="absolute top-[68px] text-red">{errors.title?.message}</p>
       <div className="flex h-[54px] justify-stretch gap-2 font-2lg-18px-medium">
-        <Button type="button" className="h-full grow border-gray-200 bg-white text-gray-400" onClick={onClose}>
+        <Button
+          type="button"
+          className="h-full grow border-gray-200 bg-white text-gray-400"
+          onClick={onClose}
+        >
           취소
         </Button>
         <Button type="submit" className="h-full grow bg-violet">

@@ -1,3 +1,5 @@
+import axios from './instance';
+
 import type {
   GetColumnsResponseDto,
   GetCardsResponseDto,
@@ -5,10 +7,11 @@ import type {
   ColumnServiceResponseDto,
   DashboardApplicationServiceResponseDto,
 } from '@core/dtos/DashboardDto';
-import axios from './instance';
 
 export const getColumns = async (dashboardId: number) => {
-  const res = await axios.get<GetColumnsResponseDto>(`/columns?dashboardId=${dashboardId}`);
+  const res = await axios.get<GetColumnsResponseDto>(
+    `/columns?dashboardId=${dashboardId}`
+  );
   const { data } = res;
   return data;
 };
@@ -24,13 +27,17 @@ export const postColumn = async (formData: CreateColumnRequestDto) => {
 };
 
 export const getCards = async (columnId: number) => {
-  const res = await axios.get<GetCardsResponseDto>(`/cards?size=10&columnId=${columnId}`);
+  const res = await axios.get<GetCardsResponseDto>(
+    `/cards?size=10&columnId=${columnId}`
+  );
   const { data } = res;
   return data;
 };
 
 export const getDashboardDetail = async (dashboardId: number) => {
-  const res = await axios.get<DashboardApplicationServiceResponseDto>(`/dashboards/${dashboardId}`);
+  const res = await axios.get<DashboardApplicationServiceResponseDto>(
+    `/dashboards/${dashboardId}`
+  );
   const { data } = res;
   return data;
 };

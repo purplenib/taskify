@@ -87,28 +87,9 @@ export interface DashboardApplicationServiceResponseDto {
   createdByMe: boolean;
   userId: number;
 }
-// Get dashboard response
-export interface GetDashboardsResponseDto {
-  cursorId: number;
+
+export interface DashboardsResponseDto {
+  cursorId: number | null;
   totalCount: number;
-  dashboards: DashboardApplicationServiceResponseDto;
-}
-
-export interface CreateDashboardRequestDto {
-  title: string;
-  color: string;
-}
-
-export type NavigationMethod = 'infiniteScroll' | 'pagination';
-
-export interface FindDashboardsRequestDto {
-  navigationMethod: NavigationMethod;
-  cursorId?: number;
-  page?: number;
-  size?: number;
-}
-
-export interface UpdateDashboardRequestDto {
-  title?: string;
-  color?: string;
+  dashboards: DashboardApplicationServiceResponseDto[];
 }

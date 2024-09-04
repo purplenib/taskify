@@ -20,8 +20,45 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["react", "@typescript-eslint", "react-refresh", "prettier"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-refresh",
+    "import",
+    "prettier"
+  ],
   "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react*",
+            "group": "builtin"
+          },
+          {
+            "pattern": "@/*",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": ["react*"],
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ],
     "react/function-component-definition": [
       2,
       {
@@ -40,6 +77,7 @@
     "consistent-return": "off",
     "react/require-default-props": "off",
     "react-refresh/only-export-components": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "react/button-has-type": "off"
   }
 }
