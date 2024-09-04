@@ -46,7 +46,9 @@ export default function AuthHeader() {
     profileCount
   );
   const isManagedPage =
-    pathname.includes('mydashboard') || pathname.includes('mypage');
+    pathname.includes('mydashboard') ||
+    pathname.includes('mypage') ||
+    pathname.includes('edit');
   const titleValue = getTitleValue(pathname) || dashBoardDetail?.title;
 
   return (
