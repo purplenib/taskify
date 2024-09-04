@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { getCards } from '@core/api/dashboardApi';
+import { getCards } from '@core/api/cardApis';
 import { CardServiceResponseDto } from '@core/dtos/CardsDto';
 
 export default function useCards(columnId: number) {
