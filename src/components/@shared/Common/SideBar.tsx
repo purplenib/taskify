@@ -1,16 +1,18 @@
 'use client';
 
-import { MouseEvent, PropsWithChildren, useState } from 'react';
+import { MouseEvent, PropsWithChildren, useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Flex, Modal, Stack, Text, UnstyledButton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import postCreateDashboard from '@core/api/postDashboard';
 import { useRoot } from '@core/contexts/RootContexts';
 import COLORS from '@lib/constants/themeConst';
+import useDashBoards from '@lib/hooks/useDashBoards';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import cn from '@lib/utils/cn';
 
@@ -45,9 +47,11 @@ const DashBoardAddModal = ({
   children,
   opened,
   onClose,
+  redirect,
 }: PropsWithChildren<{
   opened: boolean;
   onClose: () => void;
+  redirect: (id: number) => void;
 }>) => {
   const {
     register,
@@ -58,7 +62,6 @@ const DashBoardAddModal = ({
       title: '',
     },
   });
-  const { redirectDashboard } = useRoot();
   const device = useDevice();
   const [color, setColor] = useState<ColorType>(COLORS.green);
 
@@ -66,7 +69,7 @@ const DashBoardAddModal = ({
     let res;
     try {
       res = await postCreateDashboard({ title, color });
-      redirectDashboard(res.data.id);
+      redirect(res.data.id);
     } catch {
       // eslint-disable-next-line no-console
       console.log('네트워크 에러가 발생하였습니다. 잠시 후 다시 시도해주세요');
@@ -137,13 +140,23 @@ const DashBoardAddModal = ({
 };
 
 export default function SideBar() {
-  const { dashboardid, dashBoardList, redirectDashboard } = useRoot();
+  const router = useRouter();
+  const { dashboardid, setDashboardid } = useRoot();
+  const { dashBoardList } = useDashBoards();
   const device = useDevice();
   const [opened, { open, close }] = useDisclosure(false);
 
   const isMobile = device === 'mobile';
 
   const { dashboards } = dashBoardList;
+
+  const redirectDashboard = useCallback(
+    (id: number) => {
+      setDashboardid(String(id));
+      router.push(`/dashboard/${id}`);
+    },
+    [router, setDashboardid]
+  );
 
   const handleDashboardClick = (id: number) => {
     redirectDashboard(id);
@@ -169,7 +182,11 @@ export default function SideBar() {
           />
         )}
       </Link>
-      <DashBoardAddModal opened={opened} onClose={close}>
+      <DashBoardAddModal
+        opened={opened}
+        onClose={close}
+        redirect={redirectDashboard}
+      >
         <Flex className="mt-4 items-center justify-between md:mt-10">
           {!isMobile && (
             <Text className="font-xs-12px-semibold">Dash Boards</Text>
