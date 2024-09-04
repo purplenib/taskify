@@ -1,3 +1,15 @@
+import LandingBottom from '@components/Home/LandingBottom';
+import LandingMain from '@components/Home/LandingMain';
+import LandingTop from '@components/Home/LandingTop';
+import UnAutherHeader from '@components/Common/UnAuthHeader';
+
 export default function Home() {
-  return <div className="font-3xl-32px-bold">hello</div>;
+  return (
+    <>
+      <UnAutherHeader />
+      <LandingTop />
+      <LandingMain />
+      <LandingBottom />
+    </>
+  );
 }
