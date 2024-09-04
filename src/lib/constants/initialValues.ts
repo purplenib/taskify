@@ -4,7 +4,7 @@ import {
 } from '@core/dtos/DashboardDto';
 import { MembersResponseDto } from '@core/dtos/MembersDto';
 
-export const initialMembers: Partial<MembersResponseDto> = {
+export const initialMembers: MembersResponseDto = {
   members: [],
   totalCount: 0,
 };

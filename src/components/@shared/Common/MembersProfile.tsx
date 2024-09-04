@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRoot } from '@core/contexts/RootContexts';
 import useDashBoardMembers from '@lib/hooks/useDashBoardMembers';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
+import cn from '@lib/utils/cn';
 
 function getMemberLengthByDevice(device: keyof typeof DEVICE) {
   if (device === 'desktop') return 4;
@@ -30,9 +31,14 @@ export default function MembersProfile() {
   );
 
   return (
-    <Avatar.Group className="h-[38px]">
-      {dashBoardMembers?.members &&
-        dashBoardMembers?.members.slice(0, profileCount).map(member => (
+    <Avatar.Group
+      className={cn(
+        'h-[38px] pl-0',
+        dashBoardMembers.members.length > 0 && 'pl-8 md:pl-10'
+      )}
+    >
+      {dashBoardMembers.members &&
+        dashBoardMembers.members.slice(0, profileCount).map(member => (
           <Avatar key={member.id}>
             <Image
               width={38}

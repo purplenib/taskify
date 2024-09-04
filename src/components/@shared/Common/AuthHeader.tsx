@@ -11,7 +11,7 @@ import UserProfile from './UserProfile';
 
 export default function AuthHeader() {
   return (
-    <Flex className="fixed left-0 right-0 top-0 z-50 h-[60px] items-center justify-end gap-3 border-b-[1px] border-border-gray bg-white pl-[84px] pr-3 md:h-[70px] md:gap-6 md:px-10 md:pl-[200px] md:pr-10 xl:gap-8 xl:px-[70px] xl:pl-[340px] xl:pr-20">
+    <Flex className="fixed left-0 right-0 top-0 z-50 h-[60px] items-center justify-end border-b-[1px] border-border-gray bg-white pl-[84px] pr-3 md:h-[70px] md:px-10 md:pl-[200px] md:pr-10 xl:px-[70px] xl:pl-[340px] xl:pr-20">
       <HeaderTitle />
       <Group className="gap-[6px] font-md-14px-medium">
         <LinkButton href="/mypage">
@@ -36,7 +36,11 @@ export default function AuthHeader() {
         </LinkButton>
       </Group>
       <MembersProfile />
-      <Divider className="bg-border-gray" my="sm" orientation="vertical" />
+      <Divider
+        className="ml-4 mr-1 bg-border-gray"
+        my="sm"
+        orientation="vertical"
+      />
       <UserProfile />
     </Flex>
   );
