@@ -2,11 +2,11 @@ import Image from 'next/image';
 
 export default function LandingBottom() {
   return (
-    <div className="flex flex-col items-center text-[rgba(159,166,178,1)]">
+    <div className="flex flex-col items-center text-gray-300">
       <div className="mb-[12px]">
         <p>©codeit - 2023</p>
       </div>
-      <div className="mb-[68px] flex gap-[20px] text-[rgba(159,166,178,1)]">
+      <div className="mb-[68px] flex gap-[20px] text-gray-300">
         <p>Privacy Policy</p>
         <p>FAQ</p>
       </div>

@@ -10,6 +10,7 @@ export default function LandingTop() {
           alt="description"
           width={287}
           height={168}
+          priority
         />
         <div className="mt-[26px] flex flex-col flex-wrap items-center justify-center">
           <h1 className="font-4xl-40px-bold">새로운 일정 관리</h1>

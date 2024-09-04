@@ -9,13 +9,13 @@ export default function LandingMain() {
           point="01"
           title="일의 우선순위를 관리하세요"
           image="/images/landing1.png"
-          alt=""
+          alt="landing1"
         />
         <PointCard
           point="02"
           title="해야 할 일을 등록하세요"
           image="/images/landing2.png"
-          alt=""
+          alt="make a to do list"
         />
       </div>
       <div className="mb-[120px] flex w-full flex-col items-center justify-center">
@@ -35,7 +35,7 @@ export default function LandingMain() {
         <DescriptionCard
           title="구성원"
           des="구성원을 초대하고 내보낼 수 있어요."
-          image="/images/landing4.png"
+          image="/images/landing5.png"
         />
       </div>
     </>
