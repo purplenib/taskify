@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { useRoot } from '@core/contexts/RootContexts';
+import useDashBoardInfo from '@lib/hooks/useDashBoardInfo';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 
 const HeaderButton = ({ children }: PropsWithChildren) => {
@@ -38,7 +39,8 @@ function getTitleValue(pathname: string) {
 export default function AuthHeader() {
   const pathname = usePathname();
   const device = useDevice();
-  const { user, dashBoardMembers, dashBoardDetail } = useRoot()!;
+  const { user, dashboardid } = useRoot();
+  const { dashBoardMembers, dashBoardDetail } = useDashBoardInfo(dashboardid);
 
   const profileCount = getMemberLengthByDevice(device);
   const profileMore = getMemberMoreLength(
