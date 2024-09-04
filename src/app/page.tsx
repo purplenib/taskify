@@ -1,12 +1,12 @@
 import LandingBottom from '@components/Home/LandingBottom';
 import LandingMain from '@components/Home/LandingMain';
 import LandingTop from '@components/Home/LandingTop';
-import UnAutherHeader from '@components/Common/UnAuthHeader';
+import UnAuthHeader from '@components/Common/UnAuthHeader';
 
 export default function Home() {
   return (
     <>
-      <UnAutherHeader />
+      <UnAuthHeader />
       <LandingTop />
       <LandingMain />
       <LandingBottom />
