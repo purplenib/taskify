@@ -10,6 +10,7 @@
   }
 }
 
+
 @layer base {
   blockquote,
   dl,
@@ -82,6 +83,7 @@
       sans-serif;
     @apply bg-gray-50 text-black-600;
   }
+
 }
 
 @layer utilities {
