@@ -1,3 +1,7 @@
+
+import ColorPicker from './ColorPicker';
+
+
 export default function EditDashboard() {
   return (
     <div className="max-w-md rounded-lg bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
@@ -13,10 +17,10 @@ export default function EditDashboard() {
       </div>
       <div className="mb-6">
         <div className="mb-2 block text-gray-700">색상 선택</div>
-        <div>
-          <span>색1 </span>
-          <span>색2 </span>
-          <span>색3</span>
+
+        <div className="align-start flex w-full">
+          <ColorPicker />
+
         </div>
       </div>
       <button
