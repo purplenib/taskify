@@ -10,7 +10,8 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "prettier"
   ],
   "ignorePatterns": [".next"],
   "parser": "@typescript-eslint/parser",
@@ -19,16 +20,43 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["react", "@typescript-eslint", "react-refresh", "prettier"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-refresh",
+    "import",
+    "prettier"
+  ],
   "rules": {
-    "sort-imports": [
+    "import/order": [
       "error",
       {
-        "ignoreCase": false,
-        "ignoreDeclarationSort": false,
-        "ignoreMemberSort": false,
-        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
-        "allowSeparatedGroups": false
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react*",
+            "group": "builtin"
+          },
+          {
+            "pattern": "@/*",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": ["react*"],
+        "alphabetize": {
+          "order": "asc"
+        }
       }
     ],
     "react/function-component-definition": [
@@ -48,6 +76,8 @@
     ],
     "consistent-return": "off",
     "react/require-default-props": "off",
-    "react-refresh/only-export-components": "off"
+    "react-refresh/only-export-components": "off",
+    "max-len": "off",
+    "react/button-has-type": "off"
   }
 }
