@@ -14,7 +14,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* 오버레이 배경 > esc 누르면 모달 닫힘(오류 때문에 추가) */}
+      {/* 오버레이 배경 + esc 누르면 모달 닫힘(오류 때문에 추가) */}
       <div
         className="fixed inset-0 bg-black-700 bg-opacity-80"
         onClick={onClose}
