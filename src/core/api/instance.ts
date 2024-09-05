@@ -8,8 +8,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDU0NiwidGVhbUlkIjoiOC0zIiwiaWF0IjoxNzI0OTg1MjYxLCJpc3MiOiJzcC10YXNraWZ5In0.hZqXUgcSzrT0_0g8cmu6G5cYGYsWiV-6zK2TRju1ibE';
+  const token = localStorage.getItem('accessToken');
 
   // eslint-disable-next-line no-param-reassign
   if (token) config.headers.Authorization = `Bearer ${token}`;

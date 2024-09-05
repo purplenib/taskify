@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 const AUTH_OBJECT = ['ex3222@gmail.com', 'ex32221@gmail.com', 'ex32222@gmail.com', 'ex32223@gmail.com'];
 
-export default function Home() {
+export default function DashBoardPage() {
   const { login } = useRoot();
 
   useEffect(() => {
