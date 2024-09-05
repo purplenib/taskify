@@ -19,7 +19,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
         className="fixed inset-0 bg-black-700 bg-opacity-80"
         onClick={onClose}
         role="button"
-        tabIndex={0}
+        tabIndex={-1}
         onKeyDown={e => {
           if (e.key === 'Escape') {
             onClose();
