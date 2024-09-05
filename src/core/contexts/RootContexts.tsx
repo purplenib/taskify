@@ -22,7 +22,7 @@ import type {
 
 interface ContextValue {
   user: UserServiceResponseDto | undefined;
-  refreshUser: () => void;
+  refreshUser: (user: UserServiceResponseDto) => void;
   dashboardid: string | undefined;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
   login: (body: LoginRequestDto) => Promise<void>;
@@ -42,14 +42,20 @@ export default function RootProvider({ children }: PropsWithChildren) {
     '/auth/login',
     'POST'
   );
-  const { data: user, callApi: getMe } = useApi<UserServiceResponseDto>(
-    '/users/me',
-    'GET'
-  );
+  const {
+    data: user,
+    setData: setUser,
+    callApi: getMe,
+  } = useApi<UserServiceResponseDto>('/users/me', 'GET');
 
-  const refreshUser = useCallback(() => {
-    getMe(undefined);
-  }, [getMe]);
+  /** 유저 정보를 최신상태로 만들고 싶을 때 사용 */
+  const refreshUser = useCallback(
+    (userData: UserServiceResponseDto) => {
+      setUser(userData);
+      getMe(undefined);
+    },
+    [getMe, setUser]
+  );
 
   /** 로그인 로직: 로그인 기능을 만들 때 가져가서 사용하세요 */
   const login = useCallback(

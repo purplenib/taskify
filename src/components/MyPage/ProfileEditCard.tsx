@@ -53,7 +53,7 @@ export default function ProfileEditCard() {
     if ('message' in res) {
       return;
     }
-    refreshUser();
+    refreshUser(res);
   };
 
   const watchImage = watch('image');
