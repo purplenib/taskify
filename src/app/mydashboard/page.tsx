@@ -1,8 +1,8 @@
 'use client';
 
+import { MyDashboardProvider } from '@core/contexts/MyDashboardProvider';
 import InvitedDashboardList from 'src/components/MyDashBoard/InvitedDashboardList';
 import JoinedDashboardList from 'src/components/MyDashBoard/JoinedDashboardList';
-import { MyDashboardProvider } from '@core/contexts/MyDashboardProvider';
 
 export default function MyDashBoard() {
   return (
