@@ -3,27 +3,30 @@
 import type {
   InvitationsDto,
   InvitationsResponseDto,
-} from '@core/dtos/invitationsDto';
+} from '@core/dtos/InvitationsDto';
 import { useState } from 'react';
+import putInvitations from '@core/api/putInvitations';
 import { useSearch } from '@lib/hooks/useSearch';
 import InviteHeader from './UI/InviteHeader';
-import NoDashBoard from './UI/NoDashBoard';
+import NoDashboard from './UI/NoDashboard';
 import ReturnButton from './UI/ReturnButton';
 import SearchForm from './UI/SearchForm';
+import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
 
-interface InvitedDashBoardProps {
+interface InvitedDashboardProps {
   invitationsData: InvitationsResponseDto;
   loading: boolean;
   error: string | null;
   onAccept: (invitation: InvitationsDto) => void;
 }
 
-export default function InvitedDashBoard({
+export default function InvitedDashboard({
   invitationsData,
   loading,
   error,
   onAccept,
-}: InvitedDashBoardProps) {
+}: InvitedDashboardProps) {
+  const { addDashboard } = useMyDashboard();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [invitations, setInvitations] = useState<InvitationsDto[]>(
     invitationsData.invitations
@@ -38,13 +41,31 @@ export default function InvitedDashBoard({
     (invitation: InvitationsDto) => invitation.dashboard.title
   );
 
-  const handleAccept = (invitation: InvitationsDto) => {
-    onAccept(invitation);
-    setInvitations(prev => prev.filter(item => item.id !== invitation.id));
+  const handleAccept = async (invitation: InvitationsDto) => {
+    try {
+      await putInvitations(invitation.id, true);
+
+      // 로컬 대시보드 추가
+      const newDashboard = {
+        id: invitation.dashboard.id,
+        title: invitation.dashboard.title,
+      };
+      addDashboard(newDashboard);
+
+      onAccept(invitation);
+      setInvitations(prev => prev.filter(item => item.id !== invitation.id));
+    } catch (err) {
+      console.error('handleAccept 처리 중 에러 발생:', err);
+    }
   };
 
-  const handleReject = (invitation: InvitationsDto) => {
-    setInvitations(prev => prev.filter(item => item.id !== invitation.id));
+  const handleReject = async (invitation: InvitationsDto) => {
+    try {
+      await putInvitations(invitation.id, false);
+      setInvitations(prev => prev.filter(item => item.id !== invitation.id));
+    } catch (err) {
+      console.error('handleReject 처리 중 에러 발생:', err);
+    }
   };
 
   return (
@@ -56,7 +77,7 @@ export default function InvitedDashBoard({
       <ul className="flex flex-col gap-[20px]">
         {filteredResults.length === 0 ? (
           <li className="mt-12 flex flex-col items-center justify-center gap-2">
-            <NoDashBoard text="검색 결과에 해당하는 대시보드가 없어요." />
+            <NoDashboard text="검색 결과에 해당하는 대시보드가 없어요." />
             <ReturnButton buttonText="전체 목록 보기" onClick={handleReset} />
           </li>
         ) : (

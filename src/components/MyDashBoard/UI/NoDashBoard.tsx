@@ -5,7 +5,7 @@ interface NoDashBoardProps {
   text: string;
 }
 
-export default function NoDashBoard({ text }: NoDashBoardProps) {
+export default function NoDashboard({ text }: NoDashBoardProps) {
   return (
     <div className="flex flex-col items-center gap-6 pb-[120px] pt-10">
       <Image
