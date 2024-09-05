@@ -1,6 +1,4 @@
-
 import ColorPicker from './ColorPicker';
-
 
 export default function EditDashboard() {
   return (
@@ -20,7 +18,6 @@ export default function EditDashboard() {
 
         <div className="align-start flex w-full">
           <ColorPicker />
-
         </div>
       </div>
       <button
