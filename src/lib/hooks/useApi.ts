@@ -12,7 +12,7 @@ export default function useApi<T>(url: string, method: Method) {
   const [error, setError] = useState<unknown>(null);
 
   const callApi = useCallback(
-    async <R,>(body: R, config?: AxiosRequestConfig) => {
+    async <R>(body: R, config?: AxiosRequestConfig) => {
       setIsLoading(true);
       let res;
       try {
