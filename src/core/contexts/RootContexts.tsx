@@ -22,6 +22,7 @@ import type {
 
 interface ContextValue {
   user: UserServiceResponseDto | undefined;
+  refreshUser: () => void;
   dashboardid: string | undefined;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
   login: (body: LoginRequestDto) => Promise<void>;
@@ -29,6 +30,7 @@ interface ContextValue {
 
 const RootContext = createContext<ContextValue>({
   user: undefined,
+  refreshUser: () => {},
   dashboardid: undefined,
   setDashboardid: () => {},
   login: async () => {},
@@ -44,6 +46,10 @@ export default function RootProvider({ children }: PropsWithChildren) {
     '/users/me',
     'GET'
   );
+
+  const refreshUser = useCallback(() => {
+    getMe(undefined);
+  }, [getMe]);
 
   /** 로그인 로직: 로그인 기능을 만들 때 가져가서 사용하세요 */
   const login = useCallback(
@@ -65,11 +71,12 @@ export default function RootProvider({ children }: PropsWithChildren) {
   const value = useMemo(
     () => ({
       user,
+      refreshUser,
       dashboardid,
       setDashboardid,
       login,
     }),
-    [user, dashboardid, login]
+    [user, dashboardid, login, refreshUser]
   );
 
   return <RootContext.Provider value={value}>{children}</RootContext.Provider>;

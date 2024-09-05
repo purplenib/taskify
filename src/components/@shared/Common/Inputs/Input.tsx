@@ -22,6 +22,7 @@ type Props<T extends FieldValues> = {
   validation: RegisterOptions<T, Path<T>>;
   errors: FieldErrors;
   className?: string;
+  readOnly?: boolean;
 };
 
 function Input<T extends FieldValues>({
@@ -35,6 +36,7 @@ function Input<T extends FieldValues>({
   validation,
   errors,
   className = '',
+  readOnly = false,
 }: Props<T>) {
   const { ref, ...rest } = register(id, validation);
   const name = id as string;
@@ -54,18 +56,19 @@ function Input<T extends FieldValues>({
 
   return (
     <div className="relative flex flex-col gap-2">
-      <label className="font-lg-14px-bold" htmlFor={id}>
+      <label className="text-black-600 font-md-14px-regular" htmlFor={id}>
         {label}
       </label>
       <input
         className={cn(
-          'bg-secondary-100 hover:border-primary-100 rounded-xl px-4 py-[13px] placeholder:font-lg-16px-regular',
-          errors[name] ? 'border-[1px] border-[#F74747]' : '',
+          'bg-secondary-100 rounded-xl border border-border-gray px-4 py-[13px] font-lg-16px-regular placeholder:text-gray-300 placeholder:font-lg-16px-regular',
+          errors[name] ? 'border-red' : '',
           className
         )}
         type={type}
         id={id}
         placeholder={placeholder}
+        readOnly={readOnly}
         ref={ref}
         {...rest}
         onBlur={handleBlur}
@@ -86,7 +89,7 @@ function Input<T extends FieldValues>({
       )}
       {errors && (
         <ErrorMessage
-          className="text-error pl-6 font-lg-14px-semibold"
+          className="pl-6 text-red font-lg-14px-semibold"
           name={name}
           errors={errors}
           as="span"
