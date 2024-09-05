@@ -35,18 +35,20 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
             <Image src="/icons/X.png" alt="닫기" width={36} height={36} />
           </button>
         </div>
-        <label
-          htmlFor="InviteEmail"
-          className="mb-3 text-black-600 font-2lg-18px-medium"
-        >
-          이메일
-        </label>
-        <input
-          id="InviteEmail"
-          type="email"
-          placeholder="이메일을 입력하세요"
-          className="mb-4 w-full rounded border border-gray-200 p-2"
-        />
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="InviteEmail"
+            className="text-black-600 font-2lg-18px-medium"
+          >
+            이메일
+          </label>
+          <input
+            id="InviteEmail"
+            type="email"
+            placeholder="이메일을 입력하세요"
+            className="mb-5 w-full rounded border border-gray-200 p-2"
+          />
+        </div>
         <div className="flex justify-center gap-2">
           <button
             onClick={onClose}
