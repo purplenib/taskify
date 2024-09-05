@@ -1,12 +1,12 @@
-'use client';
+import React, { PropsWithChildren } from 'react';
 
-import { useRoot } from '@core/contexts/RootContexts';
-import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import { Avatar, Button, Divider, Flex, Group, Text } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { PropsWithChildren } from 'react';
+
+import { useRoot } from '@core/contexts/RootContexts';
+import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 
 const HeaderButton = ({ children }: PropsWithChildren) => {
   return (
@@ -22,11 +22,11 @@ function getMemberLengthByDevice(device: keyof typeof DEVICE) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getMemberMoreLength(arr: any[] | undefined, ProfileCount: number) {
+function getMemberMoreLength(arr: any[] | undefined, profileCount: number) {
   if (!arr) return 0;
-  const MoreLength = arr.length - ProfileCount;
-  if (MoreLength < 1) return 0;
-  return MoreLength;
+  const moreLength = arr.length - profileCount;
+  if (moreLength < 1) return 0;
+  return moreLength;
 }
 
 function getTitleValue(pathname: string) {
@@ -38,34 +38,58 @@ function getTitleValue(pathname: string) {
 export default function AuthHeader() {
   const pathname = usePathname();
   const device = useDevice();
-  const { user, dashboard } = useRoot();
-  const { title, createdByMe, members } = dashboard!;
+  const { user, dashBoardMembers, dashBoardDetail } = useRoot()!;
 
-  const ProfileCount = getMemberLengthByDevice(device);
-  const ProfileMore = getMemberMoreLength(dashboard?.members, ProfileCount);
-  const isMyPages = pathname.includes('mydashboard') || pathname.includes('mypage');
-  const titleValue = getTitleValue(pathname) || title;
+  const profileCount = getMemberLengthByDevice(device);
+  const profileMore = getMemberMoreLength(
+    dashBoardMembers?.members,
+    profileCount
+  );
+  const isManagedPage =
+    pathname.includes('mydashboard') || pathname.includes('mypage');
+  const titleValue = getTitleValue(pathname) || dashBoardDetail?.title;
 
   return (
     <Flex className="fixed left-0 right-0 top-0 z-50 h-[60px] items-center justify-end gap-3 border-b-[1px] border-border-gray bg-white pl-[84px] pr-3 md:h-[70px] md:gap-6 md:px-10 md:pl-[200px] md:pr-10 xl:gap-8 xl:px-[70px] xl:pl-[340px] xl:pr-20">
-      <div className={`grow items-center font-xl-20px-bold xl:flex xl:gap-2 ${isMyPages ? 'flex' : 'hidden'}`}>
+      <div
+        className={`grow items-center font-xl-20px-bold xl:flex xl:gap-2 ${isManagedPage ? 'flex' : 'hidden'}`}
+      >
         <h1>{titleValue}</h1>
-        {createdByMe && <Image width={20} height={16} src="/icons/crown.png" alt="createByMe" />}
+        {!isManagedPage && dashBoardDetail?.createdByMe && (
+          <Image
+            width={20}
+            height={16}
+            src="/icons/crown.png"
+            alt="createByMe"
+          />
+        )}
       </div>
       <Group className="gap-[6px] font-md-14px-medium">
         <HeaderButton>
-          <Image className="hidden md:mr-2 md:inline" width={20} height={20} src="/icons/settings.png" alt="settings" />
+          <Image
+            className="hidden md:mr-2 md:inline"
+            width={20}
+            height={20}
+            src="/icons/settings.png"
+            alt="settings"
+          />
           <Link href="/mypage">관리</Link>
         </HeaderButton>
         <HeaderButton>
-          <Image className="hidden md:mr-2 md:inline" width={20} height={20} src="/icons/add_box.png" alt="settings" />
+          <Image
+            className="hidden md:mr-2 md:inline"
+            width={20}
+            height={20}
+            src="/icons/add_box.png"
+            alt="settings"
+          />
           초대하기
         </HeaderButton>
       </Group>
-      {members && members.length !== 0 && (
+      {dashBoardMembers?.members && dashBoardMembers?.members.length !== 0 && (
         <Avatar.Group className="h-[38px]">
-          {members &&
-            members.slice(0, ProfileCount).map(member => (
+          {dashBoardMembers?.members &&
+            dashBoardMembers?.members.slice(0, profileCount).map(member => (
               <Avatar key={member.id}>
                 <Image
                   width={38}
@@ -75,14 +99,25 @@ export default function AuthHeader() {
                 />
               </Avatar>
             ))}
-          {ProfileMore !== 0 && <Avatar>+{ProfileMore}</Avatar>}
+          {profileMore !== 0 && <Avatar>+{profileMore}</Avatar>}
         </Avatar.Group>
       )}
       <Divider className="bg-border-gray" my="sm" orientation="vertical" />
       {user && (
         <Flex className="items-center gap-3">
-          <Avatar>{user.profileImageUrl && <Image src={user.profileImageUrl} alt="my profile" />}</Avatar>
-          <Text className="hidden font-lg-16px-medium md:block">{user.nickname}</Text>
+          <Avatar>
+            {user.profileImageUrl && (
+              <Image
+                width={38}
+                height={38}
+                src={user.profileImageUrl}
+                alt="my profile"
+              />
+            )}
+          </Avatar>
+          <Text className="hidden font-lg-16px-medium md:block">
+            {user.nickname}
+          </Text>
         </Flex>
       )}
     </Flex>

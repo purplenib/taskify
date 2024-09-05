@@ -1,6 +1,6 @@
-import type { Config } from 'tailwindcss';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { PluginAPI } from 'tailwindcss/types/config';
+
+import type { Config } from 'tailwindcss';
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {

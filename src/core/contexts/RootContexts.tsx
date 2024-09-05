@@ -11,36 +11,96 @@ import {
   useMemo,
   useState,
 } from 'react';
-import useApi from '@/src/lib/hooks/useApi';
-import type { MembersResponseDto } from '@core/dtos/MembersDto';
-import type { LoginRequestDto, LoginResponseDto, UserServiceResponseDto } from '@core/dtos/AuthDto';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
 
-type ContextDashboard = MembersResponseDto & DashboardApplicationServiceResponseDto;
+import { usePathname, useRouter } from 'next/navigation';
+
+import useApi from '@/src/lib/hooks/useApi';
+import {
+  DashboardApplicationServiceResponseDto,
+  DashboardsResponseDto,
+} from '@core/dtos/DashboardDto';
+
+import type {
+  LoginRequestDto,
+  LoginResponseDto,
+  UserServiceResponseDto,
+} from '@core/dtos/AuthDto';
+import type { MembersResponseDto } from '@core/dtos/MembersDto';
 
 interface ContextValue {
-  user: Partial<UserServiceResponseDto> | undefined;
-  dashboard: Partial<ContextDashboard> | undefined;
+  user: UserServiceResponseDto | undefined;
+  dashboardid: string | undefined;
+  dashBoardList: Partial<DashboardsResponseDto>;
+  dashBoardMembers: Partial<MembersResponseDto>;
+  dashBoardDetail: Partial<DashboardApplicationServiceResponseDto>;
   setDashboardid: Dispatch<SetStateAction<string | undefined>>;
+  redirectDashboard: (id: number) => void;
   login: (body: LoginRequestDto) => Promise<void>;
 }
 
 const RootContext = createContext<ContextValue>({
-  user: {},
-  dashboard: {},
+  user: undefined,
+  dashboardid: undefined,
+  dashBoardList: {},
+  dashBoardMembers: {},
+  dashBoardDetail: {},
   setDashboardid: () => {},
+  redirectDashboard: () => {},
   login: async () => {},
 });
 
+const initialMembers: Partial<MembersResponseDto> = {
+  members: [],
+  totalCount: 0,
+};
+
+const initialDetail: Partial<DashboardApplicationServiceResponseDto> = {
+  id: undefined,
+  title: undefined,
+  color: undefined,
+  createdAt: undefined,
+  updatedAt: undefined,
+  createdByMe: undefined,
+  userId: undefined,
+};
+
+const initialDashboard: Partial<DashboardsResponseDto> = {
+  cursorId: undefined,
+  totalCount: undefined,
+  dashboards: [],
+};
+
 export default function RootProvider({ children }: PropsWithChildren) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [dashboardid, setDashboardid] = useState<string | undefined>(undefined);
-  const { data: dashBoardMembersData, callApi: getDashBoardMembers } = useApi<MembersResponseDto>(`/members`, 'GET');
-  const { data: dashBoardDetailData, callApi: getDashBoardDetail } = useApi<DashboardApplicationServiceResponseDto>(
-    `/dashboards/${dashboardid}`,
+  const {
+    data: dashBoardMembers = initialMembers,
+    callApi: getDashBoardMembers,
+  } = useApi<MembersResponseDto>(`/members`, 'GET');
+  const { data: dashBoardDetail = initialDetail, callApi: getDashBoardDetail } =
+    useApi<DashboardApplicationServiceResponseDto>(
+      `/dashboards/${dashboardid}`,
+      'GET'
+    );
+  const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>(
+    '/auth/login',
+    'POST'
+  );
+  const { data: user, callApi: getMe } = useApi<UserServiceResponseDto>(
+    '/users/me',
     'GET'
   );
-  const { data: loginData, callApi: postAuthLogin } = useApi<LoginResponseDto>('/auth/login', 'POST');
-  const { data: user, callApi: getMe } = useApi<UserServiceResponseDto>('/users/me', 'GET');
+  const { data: dashBoardList = initialDashboard, callApi: getDashBoardList } =
+    useApi<DashboardsResponseDto>('/dashboards', 'GET');
+
+  const redirectDashboard = useCallback(
+    (id: number) => {
+      setDashboardid(String(id));
+      router.push(`/dashboard/${id}`);
+    },
+    [router]
+  );
 
   const login = useCallback(
     async (body: LoginRequestDto) => {
@@ -71,23 +131,36 @@ export default function RootProvider({ children }: PropsWithChildren) {
     if (loginData?.accessToken) {
       localStorage.setItem('accessToken', loginData?.accessToken);
     }
-  }, [loginData]);
-
-  useEffect(() => {
     getMe(undefined);
-  }, [getMe]);
+    getDashBoardList(undefined, {
+      params: {
+        navigationMethod: 'infiniteScroll',
+        page: 1,
+        size: 10,
+      },
+    });
+  }, [loginData, getMe, getDashBoardList, router, pathname]);
 
   const value = useMemo(
     () => ({
       user,
-      dashboard: {
-        ...dashBoardMembersData,
-        ...dashBoardDetailData,
-      },
+      dashboardid,
+      dashBoardMembers,
+      dashBoardDetail,
+      dashBoardList,
       setDashboardid,
       login,
+      redirectDashboard,
     }),
-    [user, login, dashBoardMembersData, dashBoardDetailData]
+    [
+      user,
+      dashboardid,
+      login,
+      dashBoardMembers,
+      dashBoardDetail,
+      dashBoardList,
+      redirectDashboard,
+    ]
   );
 
   return <RootContext.Provider value={value}>{children}</RootContext.Provider>;
@@ -96,7 +169,9 @@ export default function RootProvider({ children }: PropsWithChildren) {
 export function useRoot() {
   const context = useContext(RootContext);
   if (!context) {
-    throw new Error('useRoot는 RootProvider 하위 컴포넌트에서 사용해야 합니다.');
+    throw new Error(
+      'useRoot는 RootProvider 하위 컴포넌트에서 사용해야 합니다.'
+    );
   }
 
   return context;

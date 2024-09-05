@@ -1,11 +1,16 @@
 'use client';
 
-import { useRoot } from '@/src/core/contexts/RootContexts';
 import { useEffect } from 'react';
 
+import { useRoot } from '@/src/core/contexts/RootContexts';
 import ColumnList from '@components/dashboard/ColumnList';
 
-const AUTH_OBJECT = ['ex3222@gmail.com', 'ex32221@gmail.com', 'ex32222@gmail.com', 'ex32223@gmail.com'];
+const AUTH_OBJECT = [
+  'ex3222@gmail.com',
+  'ex32221@gmail.com',
+  'ex32222@gmail.com',
+  'ex32223@gmail.com',
+];
 
 export default function DashBoardPage() {
   const { login } = useRoot();
@@ -18,7 +23,7 @@ export default function DashBoardPage() {
   }, [login]);
 
   return (
-    <div className="ml-[67px] mt-[60px] flex flex-col pb-[49px] md:ml-[160px] md:mt-[70px] xl:ml-[300px] xl:flex-row">
+    <div className="ml-[67px] mt-[60px] flex flex-col overflow-hidden pb-[49px] md:ml-[160px] md:mt-[70px] xl:ml-[300px] xl:max-h-[92vh] xl:flex-row">
       <ColumnList />
     </div>
   );
