@@ -31,6 +31,9 @@ export default function ProfileEditCard() {
   });
 
   const onSubmit = async (data: FormData) => {
+    /** 수정할 프로필과 현재 프로필을 비교했을 때 완전히 같으면,
+     * 수정할 필요가 없으므로 return 시킨다.
+     */
     if (
       data.image === user?.profileImageUrl &&
       data.nickname === user.nickname
@@ -42,6 +45,9 @@ export default function ProfileEditCard() {
     const { nickname, image } = data;
     const formData = new FormData();
     let imgURL = image;
+    /** image 가 File이 아니라면 (string 이라면),
+     * 프로필 사진을 변경하지 않았다는 것과 같으므로, 이미지 업로드를 진행하지 않는다.
+     */
     if (image instanceof File) {
       formData.append('image', image);
       imgURL = await postImageUpload(formData);
@@ -60,13 +66,13 @@ export default function ProfileEditCard() {
 
   useEffect(() => {
     const setInitialInputs = async () => {
-      if (user) {
-        setValue('email', user.email, { shouldValidate: true });
-        setValue('nickname', user.nickname, { shouldValidate: true });
-        setValue('image', user.profileImageUrl!, { shouldValidate: true });
-      }
+      setValue('email', user!.email, { shouldValidate: true });
+      setValue('nickname', user!.nickname, { shouldValidate: true });
+      setValue('image', user!.profileImageUrl!, { shouldValidate: true });
     };
-    setInitialInputs();
+    if (user) {
+      setInitialInputs();
+    }
   }, [user, setValue]);
 
   return (
