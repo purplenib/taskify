@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import useDashboardDetails from '@lib/hooks/useDashboardDetails';
-import MyColorPicker from './ColorPicker';
+import DashboardColorPicker from './DashboardColorPicker';
 import { updateDashboard } from '@core/api/dashboardApi';
 
 interface EditDashboardProps {
@@ -43,7 +43,10 @@ export default function EditDashboard({ dashboardId }: EditDashboardProps) {
       <div className="mb-6">
         <div className="mb-2 block text-gray-700">색상 선택</div>
         <div className="align-start flex w-full">
-          <MyColorPicker color={dashboardColor} setColor={setDashboardColor} />
+          <DashboardColorPicker
+            color={dashboardColor}
+            setColor={setDashboardColor}
+          />
         </div>
       </div>
       <button

@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { Box, ColorPicker } from '@mantine/core';
 
 interface MyColorPickerProps {
@@ -9,20 +7,16 @@ interface MyColorPickerProps {
   setColor: (color: string) => void;
 }
 
-export default function MyColorPicker({ color, setColor }: MyColorPickerProps) {
-  const [localColor, setLocalColor] = useState<string>(color);
-
-  useEffect(() => {
-    setLocalColor(color);
-  }, [color]);
-
+export default function DashboardColorPicker({
+  color,
+  setColor,
+}: MyColorPickerProps) {
   return (
     <div className="mx-auto w-full max-w-xs md:max-w-md lg:max-w-lg">
       <ColorPicker
         format="hex"
-        value={localColor}
+        value={color}
         onChange={newColor => {
-          setLocalColor(newColor);
           setColor(newColor);
         }}
         fullWidth
@@ -61,7 +55,6 @@ export default function MyColorPicker({ color, setColor }: MyColorPickerProps) {
               className="h-9 w-9 cursor-pointer rounded border md:h-12 md:w-12 xl:h-14 xl:w-14"
               style={{ backgroundColor: swatch }}
               onClick={() => {
-                setLocalColor(swatch);
                 setColor(swatch);
               }}
             />
@@ -71,7 +64,7 @@ export default function MyColorPicker({ color, setColor }: MyColorPickerProps) {
         {/* 미리 보기 */}
         <Box
           className="h-16 w-16 rounded border border-gray-200 md:h-20 md:w-20 xl:h-24 xl:w-24"
-          style={{ backgroundColor: localColor }}
+          style={{ backgroundColor: color }}
         />
       </div>
     </div>
