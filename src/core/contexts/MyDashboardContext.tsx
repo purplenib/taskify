@@ -56,7 +56,7 @@ export const MyDashboardProvider = ({ children }) => {
   useEffect(() => {
     if (data && data.dashboards) {
       setFetchedDashboards(data.dashboards);
-      setLocalDashboards(prev => [...prev, ...data.dashboards]);
+      setLocalDashboards(data.dashboards);
     }
   }, [data]);
 

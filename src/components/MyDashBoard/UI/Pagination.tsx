@@ -6,15 +6,16 @@ interface PaginationProps {
   totalCount: number;
   currentPage: number;
   onPageChange: (newPage: number) => void;
+  itemsPerPage: number;
 }
 
 export default function Pagination({
   totalCount,
   currentPage,
   onPageChange,
+  itemsPerPage,
 }: PaginationProps) {
-  const size = 10;
-  const totalPages = Math.ceil(totalCount / size);
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   // 페이지 이동
   const handlePrevious = () => {

@@ -14,15 +14,13 @@ export default function JoinedDashboardList() {
   const { localDashboards, loading, error } = useMyDashboard();
   const [modalOpened, setModalOpened] = useState(false);
 
-  const itemsPerPage = 6;
-  const {
-    currentPage: paginationCurrentPage,
-    totalPages,
-    handlePageChange,
-  } = usePagination({
-    totalItems: localDashboards.length,
-    itemsPerPage,
-  });
+  const itemsPerPage = 5;
+
+  const { currentPage: paginationCurrentPage, handlePageChange } =
+    usePagination({
+      totalItems: localDashboards.length,
+      itemsPerPage,
+    });
 
   // 현재 페이지에 해당하는 대시보드 항목 계산
   const startIndex = (paginationCurrentPage - 1) * itemsPerPage;
@@ -38,6 +36,10 @@ export default function JoinedDashboardList() {
   const notCreatedByMeDashboards = currentDashboards.filter(
     dashboard => !dashboard.createdByMe
   );
+
+  console.log('Current Dashboards:', currentDashboards);
+  console.log('Created by Me Dashboards:', createdByMeDashboards);
+  console.log('Not Created by Me Dashboards:', notCreatedByMeDashboards);
 
   return (
     <section className="flex flex-col gap-3">
@@ -60,8 +62,8 @@ export default function JoinedDashboardList() {
           <Pagination
             totalCount={localDashboards.length}
             currentPage={paginationCurrentPage}
-            totalPages={totalPages}
             onPageChange={handlePageChange}
+            itemsPerPage={itemsPerPage}
           />
           <DashBoardAddModal
             opened={modalOpened}
