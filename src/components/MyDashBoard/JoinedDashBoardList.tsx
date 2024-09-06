@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+
+import DashBoardAddModal from '@components/@shared/Common/Modals/DashBoardAddModal';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import usePagination from '@lib/hooks/usePagination';
 
@@ -9,6 +12,7 @@ import Pagination from './UI/Pagination';
 
 export default function JoinedDashboardList() {
   const { localDashboards, loading, error } = useMyDashboard();
+  const [modalOpened, setModalOpened] = useState(false);
 
   const itemsPerPage = 6;
   const {
@@ -42,7 +46,7 @@ export default function JoinedDashboardList() {
       {!loading && !error && (
         <>
           <div className="grid grid-cols-3 grid-rows-2 gap-3">
-            <CreateDashboardButton />
+            <CreateDashboardButton onClick={() => setModalOpened(true)} />
             {createdByMeDashboards.map(myDashboard => (
               <DashboardCard key={myDashboard.id} value={myDashboard} />
             ))}
@@ -58,6 +62,10 @@ export default function JoinedDashboardList() {
             currentPage={paginationCurrentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+          />
+          <DashBoardAddModal
+            opened={modalOpened}
+            onClose={() => setModalOpened(false)}
           />
         </>
       )}
