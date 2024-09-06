@@ -39,12 +39,14 @@ export default function MemberList({ dashboardId }: MemberListProps) {
   };
   loadMembers();
 
+  // 멤버 삭제
   const handleDeleteMember = async (memberId: number) => {
     await deleteMember(dashboardId, memberId);
     setMembers(prevMembers =>
       prevMembers.filter(member => member.id !== memberId)
     );
   };
+
   return (
     <div className="max-w-[92%] rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
       <div className="mb-4 flex items-center justify-between">
