@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import PrimaryButton from '@components/@shared/UI/Button/PrimaryButton';
 import putInvitations from '@core/api/putInvitations';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import { useSearch } from '@lib/hooks/useSearch';
@@ -10,15 +11,14 @@ import InviteHeader from './UI/InviteHeader';
 import NoDashboard from './UI/NoDashboard';
 import ReturnButton from './UI/ReturnButton';
 import SearchForm from './UI/SearchForm';
-import PrimaryButton from '@components/@shared/UI/Button/PrimaryButton';
 
 import type {
-  invitationListDto,
-  invitationListResponseDto,
-} from '@core/dtos/invitationListDto';
+  InvitationsDto,
+  InvitationsResponseDto,
+} from '@core/dtos/InvitationsDto';
 
 interface InvitedDashboardProps {
-  invitationListData: invitationListResponseDto;
+  invitationListData: InvitationsResponseDto;
   loading: boolean;
   error: string | null;
 }
@@ -31,12 +31,12 @@ export default function InvitedDashboard({
   const { addDashboard } = useMyDashboard();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [invitationList, setInvitationList] = useState<invitationListDto[]>([]);
+  const [invitationList, setInvitationList] = useState<InvitationsDto[]>([]);
 
   // invitationListData가 변경될 때 invitationList 상태 업데이트
   useEffect(() => {
     if (invitationListData) {
-      setInvitationList(invitationListData.invitationList);
+      setInvitationList(invitationListData.invitations);
     }
   }, [invitationListData]);
 
@@ -47,11 +47,11 @@ export default function InvitedDashboard({
       totalCount: invitationList.length,
     },
     setCurrentPage,
-    (invitation: invitationListDto) => invitation.dashboard.title
+    (invitation: InvitationsDto) => invitation.dashboard.title
   );
 
   // 대시보드 초대 수락
-  const handleAccept = async (invitation: invitationListDto) => {
+  const handleAccept = async (invitation: InvitationsDto) => {
     setIsProcessing(true);
     try {
       await putInvitations(invitation.id, true);
@@ -71,7 +71,7 @@ export default function InvitedDashboard({
   };
 
   // 대시보드 초대 거절
-  const handleReject = async (invitation: invitationListDto) => {
+  const handleReject = async (invitation: InvitationsDto) => {
     setIsProcessing(true);
     try {
       await putInvitations(invitation.id, false);
@@ -98,7 +98,7 @@ export default function InvitedDashboard({
             <ReturnButton buttonText="전체 목록 보기" onClick={handleReset} />
           </li>
         ) : (
-          filteredResults.map((invitation: invitationListDto) => (
+          filteredResults.map((invitation: InvitationsDto) => (
             <li
               key={invitation.id}
               className="flex w-full justify-around border-b border-gray-100 pb-[20px] text-center text-black-600"
