@@ -13,7 +13,7 @@ import LandingTop from '@components/Home/LandingTop';
 // 같은 형태의 데이터를 만들어서 사용했습니다.
 
 const { user, dashBoardList } = {
-  user: 1,
+  user: 0,
   dashBoardList: {
     dashboards: [
       {
