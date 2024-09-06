@@ -13,13 +13,14 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "allowSyntheticDefaultImports": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
       "@app/*": ["src/app/*"],
@@ -28,15 +29,14 @@
       "@images/*": ["public/images/*"],
       "@icons/*": ["public/icons/*"],
       "@/*": ["*"]
-    },
-    "baseUrl": "."
-
+    }
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".next/types/**/*.ts",
+    "tailwind.config.ts",
     "postcss.config.mjs",
     "next.config.mjs"
   ],
