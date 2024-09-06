@@ -1,5 +1,5 @@
+import instance from '@core/api/instance';
 import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
-import instance from '@lib/api/instance';
 import COLORS from '@lib/constants/themeConst';
 
 type Body = {

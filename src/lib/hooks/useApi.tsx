@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 import { AxiosRequestConfig } from 'axios';
 
-import instance from '../api/instance';
+import instance from '@core/api/instance';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
