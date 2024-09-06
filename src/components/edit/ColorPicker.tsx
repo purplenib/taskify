@@ -1,7 +1,8 @@
 'use client';
 
-import { Box, ColorPicker } from '@mantine/core';
 import { useState } from 'react';
+
+import { Box, ColorPicker } from '@mantine/core';
 
 export default function MyColorPicker() {
   const [color, setColor] = useState<string>('#ffffff');
