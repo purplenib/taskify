@@ -1,7 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 import Image from 'next/image';
 
+import InviteModal from '@/src/components/edit/InviteModal';
 import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
 
@@ -17,6 +20,7 @@ const dummyEmailData: Item[] = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 export default function InvitationList() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 5;
   const { currentPage, handlePageChange } = usePagination({
     totalItems: dummyEmailData.length,
@@ -25,6 +29,14 @@ export default function InvitationList() {
 
   const startIdx = (currentPage - 1) * itemsPerPage;
   const currentItems = dummyEmailData.slice(startIdx, startIdx + itemsPerPage);
+
+  const handleInviteClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="max-w-[92%] rounded-lg bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
@@ -54,13 +66,13 @@ export default function InvitationList() {
         </div>
       </div>
 
-      {/* 이메일 레이블과 초대하기 버튼을 나란히 배치 */}
-      <div className="mb-4 flex items-center justify-between">
+      {/* 이메일과 초대하기 버튼 */}
+      <div className="mb-2 flex items-center justify-between">
         <div className="text-gray-600 font-lg-16px-regular">이메일</div>
-        {/* 초대하기 버튼 */}
         <button
           type="button"
           className="flex h-8 w-[105px] items-center justify-center gap-2 rounded border border-solid bg-violet text-white shadow font-md-14px-medium md:hidden"
+          onClick={handleInviteClick}
         >
           <Image
             src="/icons/add_box.png"
@@ -73,9 +85,12 @@ export default function InvitationList() {
       </div>
 
       {/* 테스트용 */}
-      {currentItems.map(item => (
-        <div key={item.id} className="w-full border-b border-gray-100">
-          <div className="flex w-full items-center justify-between py-2">
+      <div>
+        {currentItems.map(item => (
+          <div
+            key={item.id}
+            className="flex w-full items-center justify-between border-b border-gray-100 py-2"
+          >
             <div className="flex-1">{item.email}</div>
             <button
               type="button"
@@ -84,8 +99,11 @@ export default function InvitationList() {
               취소
             </button>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      {/* 초대 모달 */}
+      <InviteModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 }
