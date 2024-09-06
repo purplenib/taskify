@@ -36,7 +36,8 @@ export default function Column({
     getValues,
     watch,
     onSubmitCreateCard,
-    isAllInputFilled,
+    reset,
+    clearErrors,
   } = useCards(column.id);
   if (cardList === null) {
     return;
@@ -94,7 +95,8 @@ export default function Column({
           setValue={setValue}
           getValues={getValues}
           closeCreateCard={closeCreateCard}
-          isAllInputFilled={isAllInputFilled}
+          reset={reset}
+          clearErrors={clearErrors}
         />
       </Modal>
     </>

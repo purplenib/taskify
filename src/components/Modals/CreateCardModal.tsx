@@ -2,7 +2,6 @@ import '@mantine/dates/styles.css';
 import {
   ChangeEvent,
   KeyboardEventHandler,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -11,6 +10,7 @@ import {
   Control,
   Controller,
   FieldErrors,
+  UseFormClearErrors,
   UseFormGetValues,
   UseFormHandleSubmit,
   UseFormRegister,
@@ -47,9 +47,10 @@ interface CreateCardModalProps {
   setValue: UseFormSetValue<CreateCardRequestDto>;
   getValues: UseFormGetValues<CreateCardRequestDto>;
   watch: UseFormWatch<CreateCardRequestDto>;
-  onSubmitCreateCard: (fieldData: CreateCardRequestDto) => Promise<void>;
+  onSubmitCreateCard: (fieldData: CreateCardRequestDto) => Promise<boolean>;
   closeCreateCard: () => void;
-  isAllInputFilled: boolean;
+  reset: () => void;
+  clearErrors: UseFormClearErrors<CreateCardRequestDto>;
 }
 export default function CreateCardModal({
   members,
@@ -62,9 +63,10 @@ export default function CreateCardModal({
   watch,
   onSubmitCreateCard,
   closeCreateCard,
+  errors,
+  reset,
+  clearErrors,
 }: CreateCardModalProps) {
-  const tagInputRef = useRef<HTMLInputElement>(null);
-  const imgInputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -73,6 +75,7 @@ export default function CreateCardModal({
   const [selectedAssigneeImg, setSelectedAssigneeImg] = useState('');
 
   // ---------태그인풋 로직
+  const tagInputRef = useRef<HTMLInputElement>(null);
   const tags = watch('tags');
   const handleKeyDownTag: KeyboardEventHandler<HTMLInputElement> = e => {
     if (!(e.key === 'Enter' && tagInputRef.current)) {
@@ -85,11 +88,12 @@ export default function CreateCardModal({
     tagInputRef.current.value = '';
   };
   // ---------이미지 인풋 로직(+이미지크롭 모달)
+  const imgInputRef = useRef<HTMLInputElement>(null);
   const [cropperModal, { open: openCropper, close: closeCropper }] =
     useDisclosure(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const onChangeFileInput = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) {
+    if (!e.target.files || e.target.files.length === 0) {
       return;
     }
     const image = e.target.files[0];
@@ -99,39 +103,41 @@ export default function CreateCardModal({
   };
   const handleImageUrlData = (imageUrl: string) => {
     setValue('imageUrl', imageUrl);
+    clearErrors('imageUrl');
   };
   const image = watch('imageUrl');
 
-  const handleAssigneeUserIdValue = useCallback(
-    (nickname: string) => {
+  // assignee가 변경되면 field value를 바꾸고 프로필 이미지 불러옴
+  useEffect(() => {
+    const handleAssigneeUserIdValue = (nickname: string) => {
       const selectedUser = members.find(member => member.nickname === nickname);
       setValue('assigneeUserId', selectedUser?.userId);
-    },
-    [members, setValue]
-  );
-
-  // assignee가 변경되면 field value를 바꾸고 이미지 불러옴
-  useEffect(() => {
+    };
+    clearErrors('assigneeUserId');
+    handleAssigneeUserIdValue(selectedAssignee);
     setSelectedAssigneeImg(() => {
       const selectedUser = members.find(
         member => member.nickname === selectedAssignee
       );
+
       if (!selectedUser?.profileImageUrl) {
         return '';
       }
       return selectedUser.profileImageUrl;
     });
-    handleAssigneeUserIdValue(selectedAssignee);
-  }, [selectedAssignee, handleAssigneeUserIdValue, members]);
+  }, [selectedAssignee, members, clearErrors, setValue]);
+
+  const onSubmit = async (data: CreateCardRequestDto) => {
+    const result = await onSubmitCreateCard(data);
+    if (!result) {
+      return;
+    }
+    closeCreateCard();
+    reset();
+  };
   return (
     <>
-      <form
-        className="flex flex-col gap-8"
-        onSubmit={handleSubmit(data => {
-          onSubmitCreateCard(data);
-          closeCreateCard();
-        })}
-      >
+      <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <span className="font-2lg-18px-medium">담당자</span>
           <Combobox
@@ -172,7 +178,7 @@ export default function CreateCardModal({
                 )}
               </InputBase>
             </Combobox.Target>
-
+            <p className="pt-1 text-red">{errors.assigneeUserId?.message}</p>
             <Combobox.Dropdown>
               {members.map(member => (
                 <Combobox.Option value={member.nickname} key={member.id}>
@@ -205,6 +211,7 @@ export default function CreateCardModal({
             className="pt-2.5"
             placeholder="제목을 입력해 주세요."
           />
+          <p className="pt-1 text-red">{errors.title?.message}</p>
         </Input.Wrapper>
         <Input.Wrapper
           withAsterisk
@@ -216,6 +223,7 @@ export default function CreateCardModal({
             {...register('description')}
             rows={5}
           />
+          <p className="pt-1 text-red">{errors.description?.message}</p>
         </Input.Wrapper>
         <Input.Wrapper
           label={<span className="font-2lg-18px-medium">마감일</span>}
@@ -307,8 +315,9 @@ export default function CreateCardModal({
             type="file"
             className="hidden"
           />
+          <p className="pt-1 text-red">{errors.imageUrl?.message}</p>
         </div>
-        <div className="flex h-[54px] w-full">
+        <div className="flex h-[54px] w-full gap-2">
           <Button
             type="button"
             className="h-full grow border-gray-200 bg-white text-gray-400"

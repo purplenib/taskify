@@ -28,11 +28,12 @@ export default function useCards(columnId: number) {
     getValues,
     watch,
     setError,
+    reset,
+    clearErrors,
   } = useForm<CreateCardRequestDto>({
     mode: 'onSubmit',
     defaultValues: {
       dueDate: new Date().toString(),
-      imageUrl: '',
     },
   });
 
@@ -85,7 +86,7 @@ export default function useCards(columnId: number) {
   const onSubmitCreateCard = async (fieldData: CreateCardRequestDto) => {
     const result = createFormValidator(fieldData);
     if (!result) {
-      return;
+      return false;
     }
 
     const formattedDueDate = dayjs(fieldData.dueDate).format(
@@ -109,6 +110,7 @@ export default function useCards(columnId: number) {
       }
       return [...prev, data];
     });
+    return true;
   };
 
   useEffect(() => {
@@ -128,5 +130,7 @@ export default function useCards(columnId: number) {
     getValues,
     watch,
     onSubmitCreateCard,
+    reset,
+    clearErrors,
   };
 }
