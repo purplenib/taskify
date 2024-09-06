@@ -10,15 +10,9 @@ type DeviceKeyObject = {
 };
 
 const MODAL_SIZE: DeviceKeyObject = {
-  mobile: '327px',
-  tablet: '584px',
-  desktop: '584px',
-};
-
-const MODAL_RADIUS: DeviceKeyObject = {
-  mobile: '8px',
-  tablet: '16px',
-  desktop: '16px',
+  mobile: '272px',
+  tablet: '368px',
+  desktop: '368px',
 };
 
 export default function PasswordEditModal({
@@ -33,15 +27,18 @@ export default function PasswordEditModal({
 
   return (
     <Modal
+      p="0px"
       size={MODAL_SIZE[device]}
-      radius={MODAL_RADIUS[device]}
+      radius="16px"
       opened={opened}
       onClose={onClose}
       withCloseButton={false}
       centered
     >
-      <Stack className="gap-4 md:p-4">
-        <h2 className="font-xl-20px-bold">{children}</h2>
+      <Stack className="items-center gap-4 p-4">
+        <h2 className="font-lg-16px-medium md:font-xl-20px-medium">
+          {children}
+        </h2>
         <Flex className="mt-4 gap-2">
           <PrimaryButton disabled={false} onClick={onClose}>
             확인

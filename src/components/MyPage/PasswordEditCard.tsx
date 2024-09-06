@@ -22,6 +22,7 @@ export default function PasswordConfirmCard() {
     handleSubmit,
     watch,
     trigger,
+    reset,
     formState: { errors, isValid },
   } = useForm<FormData>({
     defaultValues: {
@@ -44,6 +45,7 @@ export default function PasswordConfirmCard() {
       setStatusMessage(res.response?.data.message);
     } else {
       setStatusMessage('비밀번호가 변경되었습니다.');
+      reset();
     }
     open();
   };
