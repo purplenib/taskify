@@ -53,7 +53,6 @@ export default function DashBoardEditPage() {
 
         {/* 메인 콘텐츠 */}
         <div className="mt-8 space-y-6 px-4 md:mt-14">
-          {/* dashboardId가 있을 때만 EditDashboard 컴포넌트 렌더링 */}
           <EditDashboard dashboardId={Number(dashboardId)} />
           <MemberList />
           <InvitationList />
