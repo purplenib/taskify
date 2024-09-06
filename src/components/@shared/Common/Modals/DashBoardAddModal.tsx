@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import PrimaryButton from '@components/@shared/UI/Button/PrimaryButton';
 import SecondaryButton from '@components/@shared/UI/Button/SecondaryButton';
-import postCreateDashboard from '@core/api/postDashboard';
+import postCreateDashboards from '@core/api/postDashboards';
 import { useRoot } from '@core/contexts/RootContexts';
 import COLORS from '@lib/constants/themeConst';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
@@ -69,7 +69,7 @@ export default function DashBoardAddModal({
   const onSubmit: SubmitHandler<Inputs> = async ({ title }) => {
     let res;
     try {
-      res = await postCreateDashboard({ title, color });
+      res = await postCreateDashboards({ title, color });
       redirectDashboard(res.data.id);
     } catch {
       // eslint-disable-next-line no-console
