@@ -21,12 +21,14 @@ interface InvitedDashboardProps {
   invitationsData: InvitationsResponseDto;
   loading: boolean;
   error: string | null;
+  onUpdateInvitations: () => void;
 }
 
 export default function InvitedDashboard({
   invitationsData,
   loading,
   error,
+  onUpdateInvitations,
 }: InvitedDashboardProps) {
   const { addDashboard } = useMyDashboard();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -58,10 +60,11 @@ export default function InvitedDashboard({
       const newInvitedDashboard = {
         id: invitation.dashboard.id,
         title: invitation.dashboard.title,
-        color: invitation.dashboard.color,
+        color: '#000',
       };
       addDashboard(newInvitedDashboard); // 로컬에 대시보드 추가
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
+      onUpdateInvitations(); // 부모 컴포넌트에 알림
       alert('초대를 수락했습니다. 내 대시보드를 확인해보세요!');
     } catch (err) {
       console.error('handleAccept 처리 중 에러 발생:', err);
@@ -77,6 +80,7 @@ export default function InvitedDashboard({
     try {
       await putInvitations(invitation.id, false);
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
+      onUpdateInvitations();
       alert('초대를 거절했습니다.');
     } catch (err) {
       console.error('handleReject 처리 중 에러 발생:', err);
