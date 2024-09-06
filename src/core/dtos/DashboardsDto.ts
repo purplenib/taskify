@@ -1,24 +1,24 @@
-export interface DashboardDto {
+export interface DashboardApplicationServiceResponseDto {
   id: number;
   title: string;
-  color?: string;
-  userId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  createdByMe?: boolean;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdByMe: boolean;
+  userId: number;
 }
 
 export interface DashboardsResponseDto {
-  dashboards: DashboardDto[];
+  dashboards: DashboardApplicationServiceResponseDto[];
   totalCount: number;
   cursorId: number | null;
 }
 
 export interface MyDashboardContextDto {
-  myDashboards: DashboardDto[];
-  localDashboards: DashboardDto[];
+  myDashboards: DashboardApplicationServiceResponseDto[];
+  localDashboards: DashboardApplicationServiceResponseDto[];
   loading: boolean;
   error: string | null;
-  addDashboard: (newDashboard: DashboardDto) => void;
+  addDashboard: (newDashboard: DashboardApplicationServiceResponseDto) => void;
   fetchDashboards: () => Promise<void>;
 }
