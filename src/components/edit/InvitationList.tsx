@@ -53,6 +53,7 @@ export default function InvitationList() {
           />
           <button
             type="button"
+            onClick={handleInviteClick}
             className="hidden h-8 w-[105px] items-center justify-center gap-2 rounded border border-solid bg-violet text-white shadow font-md-14px-medium md:flex"
           >
             <Image
