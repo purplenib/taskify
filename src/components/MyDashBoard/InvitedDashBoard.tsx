@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import putInvitations from '@core/api/putInvitations';
-import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
+import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import { useSearch } from '@lib/hooks/useSearch';
 
 import InviteHeader from './UI/InviteHeader';

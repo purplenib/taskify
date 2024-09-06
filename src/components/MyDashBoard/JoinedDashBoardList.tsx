@@ -1,6 +1,6 @@
 'use client';
 
-import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
+import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import usePagination from '@lib/hooks/usePagination';
 
 import CreateDashboardButton from './UI/CreateDashboardButton';

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { useRoot } from '@/src/core/contexts/RootContexts';
-import { MyDashboardProvider } from '@core/contexts/MyDashboardProvider';
+import { MyDashboardProvider } from '@core/contexts/MyDashboardContext';
 import InvitedDashboardList from 'src/components/MyDashBoard/InvitedDashboardList';
 import JoinedDashboardList from 'src/components/MyDashBoard/JoinedDashboardList';
 
