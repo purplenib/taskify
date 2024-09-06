@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-import PrimaryButton from '@components/@shared/UI/Button/PrimaryButton';
 import putInvitations from '@core/api/putInvitations';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import { useSearch } from '@lib/hooks/useSearch';
 
+import AcceptButton from './UI/AcceptButton';
 import InviteHeader from './UI/InviteHeader';
 import NoDashboard from './UI/NoDashboard';
 import ReturnButton from './UI/ReturnButton';
@@ -18,13 +18,13 @@ import type {
 } from '@core/dtos/InvitationsDto';
 
 interface InvitedDashboardProps {
-  invitationListData: InvitationsResponseDto;
+  invitationsData: InvitationsResponseDto;
   loading: boolean;
   error: string | null;
 }
 
 export default function InvitedDashboard({
-  invitationListData,
+  invitationsData,
   loading,
   error,
 }: InvitedDashboardProps) {
@@ -33,12 +33,12 @@ export default function InvitedDashboard({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [invitationList, setInvitationList] = useState<InvitationsDto[]>([]);
 
-  // invitationListData가 변경될 때 invitationList 상태 업데이트
+  // invitationsData가 변경될 때 invitationList 상태 업데이트
   useEffect(() => {
-    if (invitationListData) {
-      setInvitationList(invitationListData.invitations);
+    if (invitationsData) {
+      setInvitationList(invitationsData.invitations);
     }
-  }, [invitationListData]);
+  }, [invitationsData]);
 
   // 대시보드 검색
   const { filteredResults, handleSearch, handleReset } = useSearch(
@@ -101,22 +101,24 @@ export default function InvitedDashboard({
           filteredResults.map((invitation: InvitationsDto) => (
             <li
               key={invitation.id}
-              className="flex w-full justify-around border-b border-gray-100 pb-[20px] text-center text-black-600"
+              className="grid w-full grid-cols-3 justify-around border-b border-gray-100 pb-[20px] text-center text-black-600"
             >
               <p>{invitation.dashboard.title}</p>
               <p>{invitation.inviter.nickname}</p>
-              <p>
-                <PrimaryButton onClick={() => handleAccept(invitation)}>
+              <div className="flex justify-center gap-[10px]">
+                <AcceptButton
+                  className="bg-violet px-[29px] py-[7px] text-white"
+                  onClick={() => handleAccept(invitation)}
+                >
                   수락
-                </PrimaryButton>
-                <button
-                  type="button"
-                  className="border-1 ml-2 w-[84px] rounded-[4px] border border-gray-200 px-4 py-2 text-violet"
+                </AcceptButton>
+                <AcceptButton
+                  className="border-1 ml-2 border border-gray-200 px-[29px] py-[7px] text-violet"
                   onClick={() => handleReject(invitation)}
                 >
                   거절
-                </button>
-              </p>
+                </AcceptButton>
+              </div>
             </li>
           ))
         )}

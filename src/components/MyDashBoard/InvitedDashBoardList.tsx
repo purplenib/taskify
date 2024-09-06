@@ -28,7 +28,11 @@ export default function InvitedDashboardList() {
   return (
     <section className="flex flex-col gap-6 rounded-2xl bg-white px-6 pb-8 pt-6">
       <h1 className="font-2xl-24px-bold">초대받은 대시보드</h1>
-      {invitationsData?.invitations?.length === 0 ? (
+      {isLoading ? (
+        <p>로딩 중...</p>
+      ) : !invitationsData ||
+        !invitationsData.invitations ||
+        invitationsData.invitations.length === 0 ? (
         <NoDashboard text="아직 초대받은 대시보드가 없어요" />
       ) : (
         <InvitedDashboard
