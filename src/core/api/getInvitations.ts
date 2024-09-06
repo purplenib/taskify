@@ -1,5 +1,6 @@
+import instance from '@lib/api/instance';
+
 import type { InvitationsResponseDto } from '@core/dtos/InvitationsDto';
-import { apiCall } from './apiCall';
 
 export interface GetInvitationsParams {
   size?: number;
@@ -8,11 +9,17 @@ export interface GetInvitationsParams {
 }
 
 const getInvitations = async (
-  params: GetInvitationsParams
+  params: GetInvitationsParams = {}
 ): Promise<InvitationsResponseDto> => {
-  return apiCall<InvitationsResponseDto>('GET', 'invitations', undefined, {
-    ...params,
-  });
+  const queryString = new URLSearchParams(
+    params as Record<string, string>
+  ).toString();
+
+  const response = await instance.get(`/invitations?${queryString}`);
+
+  console.log(response.data);
+
+  return response.data;
 };
 
 export default getInvitations;

@@ -1,4 +1,4 @@
-import { apiCall } from './apiCall';
+import instance from '@lib/api/instance';
 
 const putInvitations = async (
   invitationId: number,
@@ -7,13 +7,13 @@ const putInvitations = async (
   const endpoint = `invitations/${invitationId}`;
 
   const requestBody = {
-    inviteAccepted: inviteAccepted,
+    inviteAccepted,
   };
 
   try {
-    const response = await apiCall('PUT', endpoint, requestBody);
-    console.log('putInvitations succeed:', response);
-    return response;
+    const response = await instance.put(endpoint, requestBody);
+    console.log('putInvitations succeed:', response.data);
+    return response.data;
   } catch (error) {
     console.error('putInvitations failed:', error);
     throw error;
