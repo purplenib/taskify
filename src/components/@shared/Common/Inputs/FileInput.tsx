@@ -77,7 +77,7 @@ function FileInput<T extends FormData>({
     <div className="flex flex-col gap-3">
       <label
         htmlFor="image"
-        className="relative flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-md bg-[#f5f5f5] hover:bg-gray-200"
+        className="relative flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-md bg-[#f5f5f5] hover:bg-gray-200 md:h-[182px] md:w-[182px]"
         onMouseOver={onHover}
         onFocus={onHover}
         onMouseOut={onBlur}
@@ -92,15 +92,14 @@ function FileInput<T extends FormData>({
           />
         )}
         {preview && (
-          <div className="absolute h-[100px] w-[100px] bg-white">
+          <div className="absolute h-full w-full bg-white">
             <Image className="bg-cover" fill src={preview} alt="preview" />
           </div>
         )}
         {isHover && (
-          <div className="absolute z-20 flex h-[100px] w-[100px] items-center justify-center rounded-md bg-[#000000] opacity-60">
+          <div className="absolute z-20 flex h-full w-full items-center justify-center rounded-md bg-[#000000] opacity-60">
             <Image
-              width={75}
-              height={75}
+              fill
               className="bg-cover"
               src="/icons/pencil.png"
               alt="preview"
@@ -108,7 +107,6 @@ function FileInput<T extends FormData>({
           </div>
         )}
       </label>
-
       <input
         className="hidden"
         ref={ref}

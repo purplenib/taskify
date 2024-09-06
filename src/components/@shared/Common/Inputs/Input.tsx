@@ -15,7 +15,7 @@ type Props<T extends FieldValues> = {
   id: Path<T>;
   label: string;
   type: string;
-  onVisible?: (name: 'password' | 'passwordCheck') => void;
+  onVisible?: (name: string) => void;
   onTrigger?: () => void;
   placeholder: string;
   register: ReturnType<typeof useForm<T>>['register'];
@@ -45,7 +45,7 @@ function Input<T extends FieldValues>({
 
   const handleVisible = () => {
     if (onVisible) {
-      onVisible(name as 'password' | 'passwordCheck');
+      onVisible(name as string);
     }
   };
 
@@ -56,7 +56,10 @@ function Input<T extends FieldValues>({
 
   return (
     <div className="relative flex flex-col gap-2">
-      <label className="text-black-600 font-md-14px-regular" htmlFor={id}>
+      <label
+        className="text-black-600 font-md-14px-regular md:font-lg-16px-regular"
+        htmlFor={id}
+      >
         {label}
       </label>
       <input
