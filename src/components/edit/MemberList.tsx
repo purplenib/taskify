@@ -1,28 +1,42 @@
 'use client';
 
+import { useState } from 'react';
+
 import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
+import { getMembers } from '@core/api/dashboardApi';
 
-// 테스트용 더미 데이터 - 이름
-interface Item {
-  id: number;
-  name: string;
+interface MemberListProps {
+  dashboardId: number;
 }
 
-const dummyNameData: Item[] = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  name: `${i + 1}`,
-}));
+// 구성원 데이터 타입 정의
+interface Member {
+  id: number;
+  nickname: string;
+}
 
-export default function MemberList() {
+export default function MemberList({ dashboardId }: MemberListProps) {
   const itemsPerPage = 4;
+  const [members, setMembers] = useState<Member[]>([]);
   const { currentPage, handlePageChange } = usePagination({
-    totalItems: dummyNameData.length,
+    totalItems: members.length,
     itemsPerPage,
   });
 
   const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentItems = dummyNameData.slice(startIdx, startIdx + itemsPerPage);
+  const currentItems = Array.isArray(members)
+    ? members.slice(startIdx, startIdx + itemsPerPage)
+    : [];
+
+  const loadMembers = async () => {
+    const response = await getMembers(dashboardId);
+
+    if (response && Array.isArray(response.members)) {
+      setMembers(response.members);
+    }
+  };
+  loadMembers();
 
   return (
     <div className="max-w-[92%] rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
@@ -30,7 +44,7 @@ export default function MemberList() {
         <h2 className="text-xl font-bold">구성원</h2>
         <Pagination
           currentPage={currentPage}
-          totalItems={dummyNameData.length}
+          totalItems={members.length}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
         />
@@ -38,13 +52,12 @@ export default function MemberList() {
 
       <div>
         <div className="mb-2 text-gray-600 font-lg-16px-regular">이름</div>
-        {/* 테스트용 */}
-        {currentItems.map(item => (
+        {currentItems.map(member => (
           <div
-            key={item.id}
+            key={member.id}
             className="flex items-center justify-between border-b border-gray-100 py-2"
           >
-            <div>{item.name}</div>
+            <div>{member.nickname}</div>
             <button
               type="button"
               className="flex h-8 w-20 items-center justify-center rounded border border-solid border-gray-200 text-violet font-md-14px-medium"

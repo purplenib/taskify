@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import axios from './instance';
 
 import type { GetCardsResponseDto } from '@core/dtos/CardsDto';
@@ -8,6 +9,7 @@ import type {
   UpdateColumnRequestDto,
 } from '@core/dtos/ColumnsDto';
 import type { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import { MemberApplicationServiceResponseDto } from '@core/dtos/MembersDto';
 
 export const getColumns = async (dashboardId: number) => {
   const res = await axios.get<GetColumnsResponseDto>(
@@ -79,6 +81,19 @@ export const updateDashboard = async (
   const res = await axios.put<DashboardApplicationServiceResponseDto>(
     `dashboards/${dashboardId}`,
     data
+  );
+  return res.data;
+};
+
+interface GetMembersResponse {
+  members: MemberApplicationServiceResponseDto[];
+}
+
+export const getMembers = async (
+  dashboardId: number
+): Promise<GetMembersResponse> => {
+  const res = await axios.get<GetMembersResponse>(
+    `/members?dashboardId=${dashboardId}`
   );
   return res.data;
 };

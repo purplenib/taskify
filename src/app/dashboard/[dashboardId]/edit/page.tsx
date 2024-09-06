@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // next/navigation에서 useRouter 가져오기
+import { usePathname } from 'next/navigation';
 
 // eslint-disable-next-line import/order
 import { useRoot } from '@core/contexts/RootContexts';
@@ -52,7 +52,7 @@ export default function DashBoardEditPage() {
       {/* 메인 콘텐츠 */}
       <div className="mt-8 space-y-6 px-4 md:mt-14">
         <EditDashboard dashboardId={Number(dashboardId)} />
-        <MemberList />
+        <MemberList dashboardId={Number(dashboardId)} />
         <InvitationList />
         <button
           type="button"
