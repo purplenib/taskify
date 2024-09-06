@@ -97,3 +97,8 @@ export const getMembers = async (
   );
   return res.data;
 };
+
+export const deleteMember = async (dashboardId: number, memberId: number) => {
+  const response = await axios.delete(`/members/${memberId}`);
+  return response.data;
+};

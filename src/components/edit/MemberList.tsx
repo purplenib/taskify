@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
-import { getMembers } from '@core/api/dashboardApi';
+import { getMembers, deleteMember } from '@core/api/dashboardApi';
 
 interface MemberListProps {
   dashboardId: number;
@@ -29,6 +29,7 @@ export default function MemberList({ dashboardId }: MemberListProps) {
     ? members.slice(startIdx, startIdx + itemsPerPage)
     : [];
 
+  // 구성원 목록 불러오기
   const loadMembers = async () => {
     const response = await getMembers(dashboardId);
 
@@ -38,6 +39,12 @@ export default function MemberList({ dashboardId }: MemberListProps) {
   };
   loadMembers();
 
+  const handleDeleteMember = async (memberId: number) => {
+    await deleteMember(dashboardId, memberId);
+    setMembers(prevMembers =>
+      prevMembers.filter(member => member.id !== memberId)
+    );
+  };
   return (
     <div className="max-w-[92%] rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
       <div className="mb-4 flex items-center justify-between">
@@ -60,6 +67,7 @@ export default function MemberList({ dashboardId }: MemberListProps) {
             <div>{member.nickname}</div>
             <button
               type="button"
+              onClick={() => handleDeleteMember(member.id)}
               className="flex h-8 w-20 items-center justify-center rounded border border-solid border-gray-200 text-violet font-md-14px-medium"
             >
               삭제
