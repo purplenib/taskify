@@ -25,7 +25,7 @@ export default function MemberList() {
   const currentItems = dummyNameData.slice(startIdx, startIdx + itemsPerPage);
 
   return (
-    <div className="max-w-md rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
+    <div className="max-w-[92%] rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold">구성원</h2>
         <Pagination

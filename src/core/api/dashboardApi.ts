@@ -71,3 +71,14 @@ export const getDashboardDetail = async (dashboardId: number) => {
   const { data } = res;
   return data;
 };
+
+export const updateDashboard = async (
+  dashboardId: number,
+  data: { title: string; color: string }
+) => {
+  const res = await axios.put<DashboardApplicationServiceResponseDto>(
+    `dashboards/${dashboardId}`,
+    data
+  );
+  return res.data;
+};

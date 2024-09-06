@@ -1,21 +1,46 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'; // next/navigation에서 useRouter 가져오기
+
+// eslint-disable-next-line import/order
+import { useRoot } from '@core/contexts/RootContexts';
 
 import DashboardLayout from '@components/@shared/Layout/DashboardLayout';
 import EditDashboard from '@components/edit/EditDashboard';
 import InvitationList from '@components/edit/InvitationList';
 import MemberList from '@components/edit/MemberList';
 
+const AUTH_OBJECT = [
+  'ex3222@gmail.com',
+  'ex32221@gmail.com',
+  'ex32222@gmail.com',
+  'ex32223@gmail.com',
+];
+
 export default function DashBoardEditPage() {
+  const { login } = useRoot();
+  const pathname = usePathname();
+
+  const dashboardId = pathname.split('/')[2];
+
+  useEffect(() => {
+    const handleLogin = async () => {
+      await login({ email: AUTH_OBJECT[0], password: '123123123' });
+    };
+    handleLogin();
+  }, [login]);
+
   return (
     <DashboardLayout>
-      <div className="relative mt-14 flex-1 overflow-y-auto bg-gray-50 p-4 md:mt-16 lg:mt-14">
+      <div className="relative left-12 mt-14 flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 p-4 md:left-40 md:mt-16 lg:mt-14 xl:left-[300px]">
         {/* 돌아가기 버튼 */}
         <Link
           href="/"
-          className="absolute left-4 top-4 z-20 mb-4 flex items-center gap-2 md:left-6 md:top-6 lg:left-8 lg:top-8 xl:left-4"
+          className="absolute left-8 top-4 z-20 mb-4 flex items-center gap-2 md:left-8 md:top-6 lg:left-8 lg:top-8 xl:left-8"
         >
           <Image
             src="/icons/arrow_left.png"
@@ -27,13 +52,14 @@ export default function DashBoardEditPage() {
         </Link>
 
         {/* 메인 콘텐츠 */}
-        <div className="mt-8 space-y-6 md:mt-14">
-          <EditDashboard />
+        <div className="mt-8 space-y-6 px-4 md:mt-14">
+          {/* dashboardId가 있을 때만 EditDashboard 컴포넌트 렌더링 */}
+          <EditDashboard dashboardId={Number(dashboardId)} />
           <MemberList />
           <InvitationList />
           <button
             type="button"
-            className="flex h-[52px] w-full max-w-md items-center justify-center rounded-lg border border-solid border-gray-200 shadow font-lg-16px-medium md:w-[320px]"
+            className="flex h-[52px] w-full max-w-[92%] items-center justify-center rounded-lg border border-solid border-gray-200 shadow font-lg-16px-medium md:w-[320px]"
           >
             대시보드 삭제하기
           </button>

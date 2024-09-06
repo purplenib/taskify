@@ -27,16 +27,31 @@ export default function InvitationList() {
   const currentItems = dummyEmailData.slice(startIdx, startIdx + itemsPerPage);
 
   return (
-    <div className="max-w-md rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
-      {/* 초대 내역 + 페이지네이션 (초대하기 버튼은 아래로 이동) */}
+    <div className="max-w-[92%] rounded-lg bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
+      {/* 초대 내역 + 페이지네이션 + 초대하기 버튼 */}
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-lg-16px-bold md:font-xl-20px-bold">초대 내역</h2>
-        <Pagination
-          currentPage={currentPage}
-          totalItems={dummyEmailData.length}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
+        <div className="flex items-center gap-4">
+          {/* md 이상일 때 페이지네이션과 함께 보여지는 초대하기 버튼 */}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={dummyEmailData.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+          <button
+            type="button"
+            className="hidden h-8 w-[105px] items-center justify-center gap-2 rounded border border-solid bg-violet text-white shadow font-md-14px-medium md:flex"
+          >
+            <Image
+              src="/icons/add_box.png"
+              alt="초대하기"
+              width={16}
+              height={16}
+            />
+            초대하기
+          </button>
+        </div>
       </div>
 
       {/* 이메일 레이블과 초대하기 버튼을 나란히 배치 */}
@@ -45,7 +60,7 @@ export default function InvitationList() {
         {/* 초대하기 버튼 */}
         <button
           type="button"
-          className="flex h-8 w-[105px] items-center justify-center gap-2 rounded border border-solid bg-violet text-white shadow font-md-14px-medium"
+          className="flex h-8 w-[105px] items-center justify-center gap-2 rounded border border-solid bg-violet text-white shadow font-md-14px-medium md:hidden"
         >
           <Image
             src="/icons/add_box.png"

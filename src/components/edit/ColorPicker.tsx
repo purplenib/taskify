@@ -1,18 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Box, ColorPicker } from '@mantine/core';
 
-export default function MyColorPicker() {
-  const [color, setColor] = useState<string>('#ffffff');
+interface MyColorPickerProps {
+  color: string;
+  setColor: (color: string) => void;
+}
+
+export default function MyColorPicker({ color, setColor }: MyColorPickerProps) {
+  const [localColor, setLocalColor] = useState<string>(color);
+
+  useEffect(() => {
+    setLocalColor(color);
+  }, [color]);
 
   return (
     <div className="mx-auto w-full max-w-xs md:max-w-md lg:max-w-lg">
       <ColorPicker
         format="hex"
-        value={color}
-        onChange={setColor}
+        value={localColor}
+        onChange={newColor => {
+          setLocalColor(newColor);
+          setColor(newColor);
+        }}
         fullWidth
         styles={{
           body: { padding: '10px' },
@@ -48,7 +60,10 @@ export default function MyColorPicker() {
               key={swatch}
               className="h-9 w-9 cursor-pointer rounded border md:h-12 md:w-12 xl:h-14 xl:w-14"
               style={{ backgroundColor: swatch }}
-              onClick={() => setColor(swatch)}
+              onClick={() => {
+                setLocalColor(swatch);
+                setColor(swatch);
+              }}
             />
           ))}
         </div>
@@ -56,11 +71,9 @@ export default function MyColorPicker() {
         {/* 미리 보기 */}
         <Box
           className="h-16 w-16 rounded border border-gray-200 md:h-20 md:w-20 xl:h-24 xl:w-24"
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: localColor }}
         />
       </div>
-
-      <p className="mt-2 text-gray-700">선택한 색상: {color}</p>
     </div>
   );
 }

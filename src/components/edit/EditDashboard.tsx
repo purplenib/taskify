@@ -27,7 +27,7 @@ export default function EditDashboard({ dashboardId }: EditDashboardProps) {
   };
 
   return (
-    <div className="max-w-md rounded-lg bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
+    <div className="max-w-[92%] rounded-lg bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
       <h2 className="mb-4 text-xl font-bold">{dashboardName}</h2>
       <div className="mb-4">
         <label htmlFor="dashboard-name" className="mb-2 block text-gray-700">
