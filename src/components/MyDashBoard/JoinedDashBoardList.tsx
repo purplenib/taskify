@@ -37,10 +37,6 @@ export default function JoinedDashboardList() {
     dashboard => !dashboard.createdByMe
   );
 
-  console.log('Current Dashboards:', currentDashboards);
-  console.log('Created by Me Dashboards:', createdByMeDashboards);
-  console.log('Not Created by Me Dashboards:', notCreatedByMeDashboards);
-
   return (
     <section className="flex flex-col gap-3">
       {loading && <div>나의 대시보드 목록을 불러오고 있습니다.</div>}

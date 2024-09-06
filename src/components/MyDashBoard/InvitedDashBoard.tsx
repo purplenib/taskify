@@ -58,6 +58,7 @@ export default function InvitedDashboard({
       const newInvitedDashboard = {
         id: invitation.dashboard.id,
         title: invitation.dashboard.title,
+        color: invitation.dashboard.color,
       };
       addDashboard(newInvitedDashboard); // 로컬에 대시보드 추가
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
