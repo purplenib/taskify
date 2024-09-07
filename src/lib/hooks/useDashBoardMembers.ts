@@ -6,16 +6,16 @@ import { initialMembers } from '@lib/constants/initialValues';
 
 import useApi from './useApi';
 
-export default function useDashBoardMembers(dashboardid: string | undefined) {
+export default function useDashboardMembers(dashboardid: string | undefined) {
   const { user } = useRoot();
   const {
     data: dashBoardMembers = initialMembers,
-    callApi: getDashBoardMembers,
+    callApi: getDashboardMembers,
   } = useApi<MembersResponseDto>(`/members`, 'GET');
 
   useEffect(() => {
     const fetchMembers = async () => {
-      await getDashBoardMembers(undefined, {
+      await getDashboardMembers(undefined, {
         params: {
           dashboardId: dashboardid,
         },
@@ -25,7 +25,7 @@ export default function useDashBoardMembers(dashboardid: string | undefined) {
     if (dashboardid) {
       fetchMembers();
     }
-  }, [dashboardid, getDashBoardMembers, user]);
+  }, [dashboardid, getDashboardMembers, user]);
 
   return { dashBoardMembers };
 }

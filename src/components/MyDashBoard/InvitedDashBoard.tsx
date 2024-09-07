@@ -8,7 +8,7 @@ import { useSearch } from '@lib/hooks/useSearch';
 
 import AcceptButton from './UI/AcceptButton';
 import InviteHeader from './UI/InviteHeader';
-import NoDashboard from './UI/NoDashboard';
+import NoDashboard from './UI/NoDashBoard';
 import ReturnButton from './UI/ReturnButton';
 import SearchForm from './UI/SearchForm';
 

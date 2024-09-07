@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import DashBoardAddModal from '@components/@shared/Common/Modals/DashBoardAddModal';
+import DashboardAddModal from '@components/@shared/Common/Modals/DashboardAddModal';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import usePagination from '@lib/hooks/usePagination';
 
@@ -61,7 +61,7 @@ export default function JoinedDashboardList() {
             onPageChange={handlePageChange}
             itemsPerPage={itemsPerPage}
           />
-          <DashBoardAddModal
+          <DashboardAddModal
             opened={modalOpened}
             onClose={() => setModalOpened(false)}
           />

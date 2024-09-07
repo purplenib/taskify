@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import useApi from '@lib/hooks/useApi';
 
-import InvitedDashboard from './InvitedDashBoard';
+import InvitedDashboard from './InvitedDashboard';
 import NoDashboard from './UI/NoDashboard';
 
 import type { InvitationsResponseDto } from '@core/dtos/InvitationsDto';

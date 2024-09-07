@@ -36,7 +36,7 @@ const MODAL_RADIUS: DeviceKeyObject = {
   desktop: '16px',
 };
 
-export default function DashBoardAddModal({
+export default function DashboardAddModal({
   children,
   opened,
   onClose,

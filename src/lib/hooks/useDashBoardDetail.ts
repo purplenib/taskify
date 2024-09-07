@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
 import { initialDetail } from '@lib/constants/initialValues';
 
 import useApi from './useApi';
 
-export default function useDashBoardDetail(dashboardid: string | undefined) {
+export default function useDashboardDetail(dashboardid: string | undefined) {
   const { user } = useRoot();
-  const { data: dashBoardDetail = initialDetail, callApi: getDashBoardDetail } =
+  const { data: dashboardDetail = initialDetail, callApi: getDashboardDetail } =
     useApi<DashboardApplicationServiceResponseDto>(
       `/dashboards/${dashboardid}`,
       'GET'
@@ -16,12 +16,12 @@ export default function useDashBoardDetail(dashboardid: string | undefined) {
 
   useEffect(() => {
     const fetchDetail = async () => {
-      await getDashBoardDetail(undefined);
+      await getDashboardDetail(undefined);
     };
     if (dashboardid) {
       fetchDetail();
     }
-  }, [dashboardid, getDashBoardDetail, user]);
+  }, [dashboardid, getDashboardDetail, user]);
 
-  return { dashBoardDetail };
+  return { dashboardDetail };
 }
