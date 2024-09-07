@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import dashboardEmpty from '@images/dashboard_empty.png';
 
 interface NoDashBoardProps {

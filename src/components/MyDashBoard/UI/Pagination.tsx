@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import arrowLeft from '@icons/arrow_left.png';
 import arrowRight from '@icons/arrow_right.png';
 
