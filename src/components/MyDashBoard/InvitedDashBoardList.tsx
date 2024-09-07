@@ -30,23 +30,39 @@ export default function InvitedDashboardList() {
     callApi(undefined);
   };
 
+  // 초대 데이터 유효성 검사
+  const hasNoInvitations =
+    !invitationsData || !invitationsData.invitations?.length;
+
+  const renderLoading = () => <p>로딩 중...</p>;
+
+  const renderError = () => <p>오류가 발생했습니다</p>;
+
+  const renderNoDashboard = () => (
+    <NoDashboard text="아직 초대받은 대시보드가 없어요" />
+  );
+
+  const renderInvitedDashboard = () => (
+    <InvitedDashboard
+      invitationsData={invitationsData!}
+      isLoading={isLoading}
+      error={error}
+      onUpdateInvitations={handleUpdateInvitations}
+    />
+  );
+
+  // 렌더링할 콘텐츠를 결정하는 조건 함수
+  const renderContent = () => {
+    if (isLoading) return renderLoading();
+    if (error) return renderError();
+    if (hasNoInvitations) return renderNoDashboard();
+    return renderInvitedDashboard();
+  };
+
   return (
     <section className="flex flex-col gap-6 rounded-2xl bg-white px-6 pb-8 pt-6">
       <h1 className="font-2xl-24px-bold">초대받은 대시보드</h1>
-      {isLoading ? (
-        <p>로딩 중...</p>
-      ) : !invitationsData ||
-        !invitationsData.invitations ||
-        invitationsData.invitations.length === 0 ? (
-        <NoDashboard text="아직 초대받은 대시보드가 없어요" />
-      ) : (
-        <InvitedDashboard
-          invitationsData={invitationsData}
-          isLoading={isLoading}
-          error={error}
-          onUpdateInvitations={handleUpdateInvitations}
-        />
-      )}
+      {renderContent()}
     </section>
   );
 }
