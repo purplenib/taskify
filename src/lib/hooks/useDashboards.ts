@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { DashboardsResponseDto } from '@core/dtos/DashboardDto';
+import { DashboardsResponseDto } from '@core/dtos/DashboardsDto';
 import { initialDashboard } from '@lib/constants/initialValues';
 
 import useApi from './useApi';

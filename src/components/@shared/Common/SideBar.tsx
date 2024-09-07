@@ -26,7 +26,7 @@ export default function SideBar() {
             className="relative flex h-5 w-5 items-center justify-center"
             onClick={open}
           >
-            <Image fill src="/icons/add_box.png" alt="dashboard create" />
+            <Image fill src="/icons/add_box.png" alt="Dashboard create" />
           </UnstyledButton>
         </Flex>
       </DashboardAddModal>

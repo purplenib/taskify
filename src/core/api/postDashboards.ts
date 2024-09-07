@@ -1,15 +1,18 @@
-import instance from '@core/api/instance';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
 import COLORS from '@lib/constants/themeConst';
+
+import instance from './instance';
 
 type Body = {
   title: string;
   color: keyof typeof COLORS;
 };
 
-export default async function postCreateDashboard(body: Body) {
+async function postCreateDashboards(body: Body) {
   return instance.post<DashboardApplicationServiceResponseDto>(
     '/dashboards',
     body
   );
 }
+
+export default postCreateDashboards;

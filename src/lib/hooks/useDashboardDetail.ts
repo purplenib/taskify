@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
 import { initialDetail } from '@lib/constants/initialValues';
 
 import useApi from './useApi';

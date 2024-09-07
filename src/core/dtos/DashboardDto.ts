@@ -1,3 +1,9 @@
+export interface AssigneeDto {
+  profileImageUrl: string | null;
+  nickname: string;
+  id: number;
+}
+
 export interface DashboardApplicationServiceResponseDto {
   id: number;
   title: string;
