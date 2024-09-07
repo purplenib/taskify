@@ -2,23 +2,21 @@
 
 import React, { PropsWithChildren, useEffect } from 'react';
 
+import { useParams } from 'next/navigation';
+
 import { useRoot } from '@core/contexts/RootContexts';
 
 import AuthHeader from '../Common/AuthHeader';
 import SideBar from '../Common/SideBar';
 import UnAuthHeader from '../Common/UnAuthHeader';
 
-export default function DashboardLayout({
-  children,
-  dashboardid,
-}: PropsWithChildren<{
-  dashboardid: string | null;
-}>) {
+export default function DashboardLayout({ children }: PropsWithChildren) {
+  const { dashboardid } = useParams();
   const { user, dashboardid: id, setDashboardid } = useRoot();
 
   useEffect(() => {
     if (!id && dashboardid) {
-      setDashboardid(dashboardid);
+      setDashboardid(dashboardid as string);
     }
   }, [dashboardid, setDashboardid, id]);
 
