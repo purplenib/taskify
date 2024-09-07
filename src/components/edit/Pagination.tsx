@@ -1,7 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import React from 'react';
+
+import Image from 'next/image';
 
 interface PaginationProps {
   currentPage: number;
@@ -38,7 +39,11 @@ export default function Pagination({
         {totalPages} 페이지 중 {currentPage}
       </div>
       <div>
-        <button type="button" onClick={handlePrePage}>
+        <button
+          type="button"
+          onClick={handlePrePage}
+          aria-label="이전 페이지로 이동"
+        >
           <div
             className="flex h-8 w-8 items-center justify-center border border-gray-200 md:h-10 md:w-10"
             style={{
@@ -56,7 +61,11 @@ export default function Pagination({
             />
           </div>
         </button>
-        <button type="button" onClick={handleNextPage}>
+        <button
+          type="button"
+          onClick={handleNextPage}
+          aria-label="다음 페이지로 이동"
+        >
           <div
             className="flex h-8 w-8 items-center justify-center border border-gray-200 md:h-10 md:w-10"
             style={{
