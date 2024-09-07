@@ -23,6 +23,7 @@ export default function InviteModal({
 
   const handleCreateEmail = () => {
     if (email.trim() === '') {
+      // eslint-disable-next-line no-alert
       alert('이메일을 입력하세요.');
       return;
     }

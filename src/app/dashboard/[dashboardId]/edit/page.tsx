@@ -1,4 +1,3 @@
-/* eslint-disable import/no-named-as-default */
 /* eslint-disable import/order */
 
 'use client';
@@ -8,7 +7,6 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
-// eslint-disable-next-line import/order
 import { useRoot } from '@core/contexts/RootContexts';
 
 import EditDashboard from '@components/edit/EditDashboard';
@@ -46,6 +44,7 @@ export default function DashBoardEditPage() {
   // 대시보드 삭제
   const handleDeleteDashboard = async () => {
     await deleteDashboard(dashboardId);
+    // eslint-disable-next-line no-alert
     alert('대시보드 삭제 완료!');
     router.push('/');
   };

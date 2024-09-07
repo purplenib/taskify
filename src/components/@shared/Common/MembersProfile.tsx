@@ -2,7 +2,7 @@ import { Avatar } from '@mantine/core';
 import Image from 'next/image';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import useDashBoardMembers from '@lib/hooks/useDashBoardMembers';
+import useDashboardMembers from '@lib/hooks/useDashBoardMembers';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import cn from '@lib/utils/cn';
 
@@ -22,11 +22,11 @@ function getMemberMoreLength(arr: any[] | undefined, profileCount: number) {
 export default function MembersProfile() {
   const device = useDevice();
   const { dashboardid } = useRoot();
-  const { dashBoardMembers } = useDashBoardMembers(dashboardid);
+  const { dashboardMembers } = useDashboardMembers(dashboardid);
 
   const profileCount = getMemberLengthByDevice(device);
   const profileMore = getMemberMoreLength(
-    dashBoardMembers?.members,
+    dashboardMembers?.members,
     profileCount
   );
 
@@ -34,11 +34,11 @@ export default function MembersProfile() {
     <Avatar.Group
       className={cn(
         'h-[38px] pl-0',
-        dashBoardMembers.members.length > 0 && 'pl-8 md:pl-10'
+        dashboardMembers.members.length > 0 && 'pl-8 md:pl-10'
       )}
     >
-      {dashBoardMembers.members &&
-        dashBoardMembers.members.slice(0, profileCount).map(member => (
+      {dashboardMembers.members &&
+        dashboardMembers.members.slice(0, profileCount).map(member => (
           <Avatar key={member.id}>
             <Image
               width={38}

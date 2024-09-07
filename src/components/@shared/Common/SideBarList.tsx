@@ -5,17 +5,17 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import useDashBoards from '@lib/hooks/useDashBoards';
+import useDashboards from '@lib/hooks/useDashBoards';
 import useDevice from '@lib/hooks/useDevice';
 import cn from '@lib/utils/cn';
 
 export default function SideBarList() {
   const router = useRouter();
   const { dashboardid, setDashboardid } = useRoot();
-  const { dashBoardList } = useDashBoards();
+  const { dashboardList } = useDashboards();
   const device = useDevice();
 
-  const { dashboards } = dashBoardList;
+  const { dashboards } = dashboardList;
 
   const isMobile = device === 'mobile';
 

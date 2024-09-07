@@ -16,6 +16,7 @@ export default function useDashboardDetails(dashboardId: number) {
 
   useEffect(() => {
     fetchDashboardDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dashboardId]);
 
   return {

@@ -1,7 +1,7 @@
 import {
   DashboardApplicationServiceResponseDto,
   DashboardsResponseDto,
-} from '@core/dtos/DashboardDto';
+} from '@core/dtos/DashboardsDto';
 import { MembersResponseDto } from '@core/dtos/MembersDto';
 
 export const initialMembers: MembersResponseDto = {
