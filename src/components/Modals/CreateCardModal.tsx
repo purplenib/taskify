@@ -78,14 +78,13 @@ export default function CreateCardModal({
   const tagInputRef = useRef<HTMLInputElement>(null);
   const tags = watch('tags');
   const handleKeyDownTag: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (!(e.key === 'Enter' && tagInputRef.current)) {
-      return;
+    if (e.key === 'Enter' && tagInputRef.current) {
+      e.preventDefault();
+      const currentTags = getValues('tags') || [];
+      const newTags = tagInputRef.current.value;
+      setValue('tags', [...currentTags, newTags]);
+      tagInputRef.current.value = '';
     }
-    e.preventDefault();
-    const currentTags = getValues('tags') || [];
-    const newTags = tagInputRef.current.value;
-    setValue('tags', [...currentTags, newTags]);
-    tagInputRef.current.value = '';
   };
   // ---------이미지 인풋 로직(+이미지크롭 모달)
   const imgInputRef = useRef<HTMLInputElement>(null);
@@ -130,10 +129,9 @@ export default function CreateCardModal({
   const onSubmit = async (data: CreateCardRequestDto) => {
     const result = await onSubmitCreateCard(data);
     if (!result) {
-      return;
+      closeCreateCard();
+      reset();
     }
-    closeCreateCard();
-    reset();
   };
   return (
     <>

@@ -39,9 +39,7 @@ export default function Column({
     reset,
     clearErrors,
   } = useCards(column.id);
-  if (cardList === null) {
-    return;
-  }
+  if (!cardList) return;
 
   return (
     <>
