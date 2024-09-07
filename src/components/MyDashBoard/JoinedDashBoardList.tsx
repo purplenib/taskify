@@ -1,13 +1,14 @@
 'use client';
 
-import { useMyDashboard } from '@core/contexts/MyDashboardProvider';
-import postDashboard from '@core/api/postDashboards';
+import { useMyDashboard } from '@core/contexts/MyDashboardContext';
 import usePagination from '@lib/hooks/usePagination';
+
+import CreateDashboardButton from './UI/CreateDashboardButton';
+import DashboardCard from './UI/DashboardCard';
 import Pagination from './UI/Pagination';
 
 export default function JoinedDashboardList() {
-  const { myDashboards, loading, error, addDashboard, fetchDashboards } =
-    useMyDashboard();
+  const { localDashboards, loading, error } = useMyDashboard();
 
   const itemsPerPage = 6;
   const {
@@ -15,28 +16,13 @@ export default function JoinedDashboardList() {
     totalPages,
     handlePageChange,
   } = usePagination({
-    totalItems: myDashboards.length,
+    totalItems: localDashboards.length,
     itemsPerPage,
   });
 
-  // 대시보드 생성 로직 구현 중입니다.
-  const handleCreateDashboard = async (title: string, color: string) => {
-    try {
-      const createdDashboard = await postDashboard(title, color);
-
-      // 로컬 상태에 추가
-      addDashboard(createdDashboard);
-
-      // 대시보드 목록 재패칭
-      await fetchDashboards();
-    } catch (err) {
-      console.error('handleCreateDashboard fialed:', err);
-    }
-  };
-
   // 현재 페이지에 해당하는 대시보드 항목 계산
   const startIndex = (paginationCurrentPage - 1) * itemsPerPage;
-  const currentDashboards = myDashboards.slice(
+  const currentDashboards = localDashboards.slice(
     startIndex,
     startIndex + itemsPerPage
   );
@@ -56,22 +42,19 @@ export default function JoinedDashboardList() {
       {!loading && !error && (
         <>
           <div className="grid grid-cols-3 grid-rows-2 gap-3">
-            <button type="button" onClick={handleCreateDashboard}>
-              새로운 대시보드 +
-            </button>
+            <CreateDashboardButton />
             {createdByMeDashboards.map(myDashboard => (
-              <button key={myDashboard.id} type="button">
-                {myDashboard.title}
-              </button>
+              <DashboardCard key={myDashboard.id} value={myDashboard} />
             ))}
             {notCreatedByMeDashboards.map(notCreatedByMeDashboard => (
-              <button key={notCreatedByMeDashboard.id} type="button">
-                {notCreatedByMeDashboard.title}
-              </button>
+              <DashboardCard
+                key={notCreatedByMeDashboard.id}
+                value={notCreatedByMeDashboard}
+              />
             ))}
           </div>
           <Pagination
-            totalCount={myDashboards.length}
+            totalCount={localDashboards.length}
             currentPage={paginationCurrentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}

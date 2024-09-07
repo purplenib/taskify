@@ -1,33 +1,29 @@
 'use client';
 
-import {
-  INIT_INVITATIONS_REQUEST,
-  INIT_INVITATIONS_RESPONSE,
-} from '@lib/constants/initialValue';
-import type {
-  InvitationsResponseDto,
-  InvitationsDto,
-} from '@core/dtos/invitationsDto';
-import getInvitations from '@core/api/getInvitations';
+import { useEffect } from 'react';
+
 import useApi from '@lib/hooks/useApi';
+
 import InvitedDashboard from './InvitedDashboard';
 import NoDashboard from './UI/NoDashboard';
+
+import type { InvitationsResponseDto } from '@core/dtos/InvitationsDto';
 
 export default function InvitedDashboardList() {
   const {
     data: invitationsData,
-    loading,
+    isLoading,
     error,
-  } = useApi<InvitationsResponseDto, typeof INIT_INVITATIONS_REQUEST>(
-    getInvitations,
-    INIT_INVITATIONS_REQUEST,
-    INIT_INVITATIONS_RESPONSE
-  );
+    callApi,
+  } = useApi<InvitationsResponseDto>('/invitations', 'GET');
 
-  const onAccept = (invitation: InvitationsDto) => {
-    // putInvitaions 추가
-    console.log('Invitation accepted:', invitation);
-  };
+  // 컴포넌트가 마운트될 때 API 호출
+  useEffect(() => {
+    const fetchData = async () => {
+      await callApi(undefined);
+    };
+    fetchData();
+  }, [callApi]);
 
   return (
     <section className="flex flex-col gap-6 rounded-2xl bg-white px-6 pb-8 pt-6">
@@ -37,9 +33,8 @@ export default function InvitedDashboardList() {
       ) : (
         <InvitedDashboard
           invitationsData={invitationsData}
-          loading={loading}
+          isLoading={isLoading}
           error={error}
-          onAccept={onAccept}
         />
       )}
     </section>

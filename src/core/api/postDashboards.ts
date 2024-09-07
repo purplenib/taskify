@@ -1,21 +1,17 @@
-import { apiCall } from './apiCall';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
+import instance from '@lib/api/instance';
+import COLORS from '@lib/constants/themeConst';
 
-const postDashboard = async (title, color) => {
-  const endpoint = `dashboards`;
-
-  const requestBody = {
-    title: title,
-    color: color,
-  };
-
-  try {
-    const response = await apiCall('POST', endpoint, requestBody);
-    console.log('postDashboard succeed:', response);
-    return response;
-  } catch (error) {
-    console.error('postDashboard failed:', error);
-    throw error;
-  }
+type Body = {
+  title: string;
+  color: keyof typeof COLORS;
 };
 
-export default postDashboard;
+async function postCreateDashboards(body: Body) {
+  return instance.post<DashboardApplicationServiceResponseDto>(
+    '/dashboards',
+    body
+  );
+}
+
+export default postCreateDashboards;

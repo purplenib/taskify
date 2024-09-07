@@ -1,18 +1,8 @@
-import type { DashboardsResponseDto } from '@core/dtos/DashboardsDto';
-import { apiCall } from './apiCall';
+import instance from '@lib/api/instance';
 
-export interface GetDashboardsParams {
-  navigationMethod: string;
-  page: number;
-  size: number;
-}
-
-const getDashboards = async (
-  params: GetDashboardsParams
-): Promise<DashboardsResponseDto> => {
-  return apiCall<DashboardsResponseDto>('GET', 'dashboards', undefined, {
-    ...params,
-  });
+const getDashboards = async () => {
+  const response = await instance.get('/dashboards');
+  return response.data;
 };
 
 export default getDashboards;
