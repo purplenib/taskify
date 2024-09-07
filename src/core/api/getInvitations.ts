@@ -17,6 +17,7 @@ const getInvitations = async (
 
   const response = await instance.get(`/invitations?${queryString}`);
 
+  // eslint-disable-next-line no-console
   console.log(response.data);
 
   return response.data;

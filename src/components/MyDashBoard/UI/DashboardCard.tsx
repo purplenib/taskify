@@ -18,7 +18,7 @@ const DashboardCard = ({ value }: DashboardCardProps) => {
 
   return (
     <LinkButton
-      href={`/dashboards/${dashboardId}`}
+      href={`/dashboard/${dashboardId}`}
       className="flex justify-between rounded-lg border border-gray-200 bg-white px-5 py-[22px] font-lg-16px-semibold"
     >
       <div className="my-auto flex flex-1 gap-3">

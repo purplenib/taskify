@@ -1,5 +1,5 @@
 export const INIT_MYDASHBOARDS_CONTEXT = {
-  myDashboards: [],
+  fetchedDashboards: [],
   localDashboards: [],
   loading: true,
   error: null,

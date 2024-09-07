@@ -27,6 +27,7 @@
       "@lib/*": ["src/lib/*"],
       "@images/*": ["public/images/*"],
       "@icons/*": ["public/icons/*"],
+      "@UI/*": ["src/components/UI/*"],
       "@/*": ["*"]
     }
   },

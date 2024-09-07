@@ -6,6 +6,8 @@ import React, {
   useEffect,
   useState,
   useMemo,
+  PropsWithChildren,
+  useCallback,
 } from 'react';
 
 import getDashboards from '@core/api/getDashboards';
@@ -14,6 +16,7 @@ import useApi from '@lib/hooks/useApi';
 
 import type {
   DashboardApplicationServiceResponseDto,
+  DashboardsResponseDto,
   MyDashboardContextDto,
 } from '@core/dtos/DashboardsDto';
 
@@ -21,7 +24,7 @@ const MyDashboardContext = createContext<MyDashboardContextDto>(
   INIT_MYDASHBOARDS_CONTEXT
 );
 
-export const MyDashboardProvider = ({ children }) => {
+export const MyDashboardProvider = ({ children }: PropsWithChildren) => {
   const [fetchedDashboards, setFetchedDashboards] = useState<
     DashboardApplicationServiceResponseDto[]
   >([]);
@@ -29,7 +32,10 @@ export const MyDashboardProvider = ({ children }) => {
     DashboardApplicationServiceResponseDto[]
   >([]);
 
-  const { data, isLoading, error, callApi } = useApi('/dashboards', 'GET');
+  const { data, isLoading, error, callApi } = useApi<DashboardsResponseDto>(
+    '/dashboards',
+    'GET'
+  );
 
   // 컴포넌트가 마운트될 때 API 호출
   useEffect(() => {
@@ -61,11 +67,11 @@ export const MyDashboardProvider = ({ children }) => {
   }, [data]);
 
   // 대시보드 데이터 재패칭 함수
-  const fetchDashboards = async () => {
+  const fetchDashboards = useCallback(async () => {
     const response = await getDashboards();
     setFetchedDashboards(response.dashboards);
     setLocalDashboards(response.dashboards);
-  };
+  }, []);
 
   // Context 값 메모이제이션
   const value = useMemo(
@@ -77,7 +83,7 @@ export const MyDashboardProvider = ({ children }) => {
       addDashboard,
       fetchDashboards,
     }),
-    [fetchDashboards, localDashboards, isLoading, error]
+    [fetchDashboards, localDashboards, isLoading, error, fetchedDashboards]
   );
 
   return (

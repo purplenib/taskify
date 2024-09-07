@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
 interface DataResponse {
@@ -5,7 +6,7 @@ interface DataResponse {
   totalCount: number;
 }
 
-export const useSearch = (
+const useSearch = (
   data: DataResponse,
   setCurrentPage: (page: number) => void,
   getProperty: (item: any) => string
@@ -36,3 +37,5 @@ export const useSearch = (
     filteredResults,
   };
 };
+
+export default useSearch;

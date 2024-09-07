@@ -3,13 +3,13 @@
 import { useEffect } from 'react';
 
 import { useRoot } from '@/src/core/contexts/RootContexts';
-import InvitedDashboardList from '@components/mydashboard/InvitedDashboardList';
-import JoinedDashboardList from '@components/mydashboard/JoinedDashboardList';
+import InvitedDashboardList from '@components/MyDashboard/InvitedDashboardList';
+import JoinedDashboardList from '@components/MyDashboard/JoinedDashboardList';
 import { MyDashboardProvider } from '@core/contexts/MyDashboardContext';
 
 const AUTH_OBJECT = ['zero@naver.com', 'two@naver.com'];
 
-export default function MyDashBoard() {
+export default function Mydashboard() {
   const { login } = useRoot();
 
   useEffect(() => {

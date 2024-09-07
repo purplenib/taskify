@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 
 import putInvitations from '@core/api/putInvitations';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
-import { useSearch } from '@lib/hooks/useSearch';
+import useSearch from '@lib/hooks/useSearch';
 
 import AcceptButton from './UI/AcceptButton';
 import InviteHeader from './UI/InviteHeader';
-import NoDashboard from './UI/NoDashBoard';
+import NoDashboard from './UI/NoDashboard';
 import ReturnButton from './UI/ReturnButton';
 import SearchForm from './UI/SearchForm';
 
@@ -70,9 +70,12 @@ export default function InvitedDashboard({
       addDashboard(newInvitedDashboard); // 로컬에 대시보드 추가
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
       onUpdateInvitations(); // 부모 컴포넌트에 알림
+      // eslint-disable-next-line no-alert
       alert('초대를 수락했습니다. 내 대시보드를 확인해보세요!');
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('초대 수락 중 오류:', err);
+      // eslint-disable-next-line no-alert
       alert('초대 수락에 실패했습니다. 다시 시도해 주세요.');
     }
   };
@@ -83,9 +86,12 @@ export default function InvitedDashboard({
       await putInvitations(invitation.id, false);
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
       onUpdateInvitations();
+      // eslint-disable-next-line no-alert
       alert('초대를 거절했습니다.');
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('초대 거절 중 오류:', err);
+      // eslint-disable-next-line no-alert
       alert('초대 거절에 실패했습니다. 다시 시도해 주세요.');
     }
   };
