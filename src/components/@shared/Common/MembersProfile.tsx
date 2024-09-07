@@ -2,7 +2,7 @@ import { Avatar } from '@mantine/core';
 import Image from 'next/image';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import useDashBoardMembers from '@lib/hooks/useDashBoardMembers';
+import useDashboardMembers from '@lib/hooks/useDashboardMembers';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import cn from '@lib/utils/cn';
 
@@ -22,7 +22,7 @@ function getMemberMoreLength(arr: any[] | undefined, profileCount: number) {
 export default function MembersProfile() {
   const device = useDevice();
   const { dashboardid } = useRoot();
-  const { dashBoardMembers } = useDashBoardMembers(dashboardid);
+  const { dashBoardMembers } = useDashboardMembers(dashboardid);
 
   const profileCount = getMemberLengthByDevice(device);
   const profileMore = getMemberMoreLength(
