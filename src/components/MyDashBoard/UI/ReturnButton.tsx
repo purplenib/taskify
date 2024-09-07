@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import backIc from '@icons/back.png';
 
 interface ReturnButtonProps {

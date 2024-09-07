@@ -2,7 +2,11 @@ import Image from 'next/image';
 
 import addPurple from '@icons/add_purple.png';
 
-const CreateDashboardButton = ({ onClick }) => (
+interface CreateDashboardButtonProps {
+  onClick: () => void;
+}
+
+const CreateDashboardButton = ({ onClick }: CreateDashboardButtonProps) => (
   <button
     type="button"
     onClick={onClick}

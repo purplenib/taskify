@@ -1,4 +1,4 @@
-import { DashboardDto } from './DashboardsDto';
+import { DashboardApplicationServiceResponseDto } from './DashboardsDto';
 
 export interface InviterDto {
   nickname: string;
@@ -16,7 +16,7 @@ export interface InvitationsDto {
   id: number;
   inviter: InviterDto;
   teamId: string;
-  dashboard: DashboardDto;
+  dashboard: DashboardApplicationServiceResponseDto;
   invitee: InviteeDto;
   inviteAccepted: boolean;
   createdAt: string;

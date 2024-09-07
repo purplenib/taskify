@@ -19,20 +19,25 @@ import type {
 
 interface InvitedDashboardProps {
   invitationsData: InvitationsResponseDto;
-  loading: boolean;
-  error: string | null;
+  isLoading: boolean;
+  error: unknown;
   onUpdateInvitations: () => void;
+}
+
+interface NewInvitedDashboard {
+  id: number;
+  title: string;
+  color: string;
+  createdByMe: boolean;
 }
 
 export default function InvitedDashboard({
   invitationsData,
-  loading,
+  isLoading,
   error,
   onUpdateInvitations,
 }: InvitedDashboardProps) {
   const { addDashboard } = useMyDashboard();
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [invitationList, setInvitationList] = useState<InvitationsDto[]>([]);
 
   // invitationsData가 변경될 때 invitationList 상태 업데이트
@@ -48,45 +53,40 @@ export default function InvitedDashboard({
       list: invitationList,
       totalCount: invitationList.length,
     },
-    setCurrentPage,
+    () => {},
     (invitation: InvitationsDto) => invitation.dashboard.title
   );
 
   // 대시보드 초대 수락
   const handleAccept = async (invitation: InvitationsDto) => {
-    setIsProcessing(true);
     try {
       await putInvitations(invitation.id, true);
-      const newInvitedDashboard = {
+      const newInvitedDashboard: NewInvitedDashboard = {
         id: invitation.dashboard.id,
         title: invitation.dashboard.title,
         color: '#000',
+        createdByMe: false,
       };
       addDashboard(newInvitedDashboard); // 로컬에 대시보드 추가
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
       onUpdateInvitations(); // 부모 컴포넌트에 알림
       alert('초대를 수락했습니다. 내 대시보드를 확인해보세요!');
     } catch (err) {
-      console.error('handleAccept 처리 중 에러 발생:', err);
-      alert('초대 수락에 실패했습니다.');
-    } finally {
-      setIsProcessing(false);
+      console.error('초대 수락 중 오류:', err);
+      alert('초대 수락에 실패했습니다. 다시 시도해 주세요.');
     }
   };
 
   // 대시보드 초대 거절
   const handleReject = async (invitation: InvitationsDto) => {
-    setIsProcessing(true);
     try {
       await putInvitations(invitation.id, false);
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
       onUpdateInvitations();
       alert('초대를 거절했습니다.');
     } catch (err) {
-      console.error('handleReject 처리 중 에러 발생:', err);
-      alert('초대 거절에 실패했습니다.');
-    } finally {
-      setIsProcessing(false);
+      console.error('초대 거절 중 오류:', err);
+      alert('초대 거절에 실패했습니다. 다시 시도해 주세요.');
     }
   };
 
@@ -94,8 +94,8 @@ export default function InvitedDashboard({
     <>
       <SearchForm onSearch={handleSearch} />
       <InviteHeader />
-      {loading && <p>초대 목록을 불러오고 있습니다.</p>}
-      {error && <p>오류가 발생했습니다: {error}</p>}
+      {isLoading && <p>초대 목록을 불러오고 있습니다...</p>}
+      {error && <p>오류가 발생했습니다</p>}
       <ul className="flex flex-col gap-[20px]">
         {filteredResults.length === 0 ? (
           <li className="mt-12 flex flex-col items-center justify-center gap-2">

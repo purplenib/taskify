@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+
 import Image from 'next/image';
+
 import searchIcon from '@/public/icons/search.png';
 
 interface SearchFormProps {
