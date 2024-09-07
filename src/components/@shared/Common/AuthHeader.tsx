@@ -1,11 +1,11 @@
+/* eslint-disable import/order */
 import React, { PropsWithChildren } from 'react';
-
 import { Avatar, Button, Divider, Flex, Group, Text } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { useRoot } from '@core/contexts/RootContexts';
+
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 
 const HeaderButton = ({ children }: PropsWithChildren) => {
@@ -15,12 +15,10 @@ const HeaderButton = ({ children }: PropsWithChildren) => {
     </Button>
   );
 };
-
 function getMemberLengthByDevice(device: keyof typeof DEVICE) {
   if (device === 'desktop') return 4;
   return 2;
 }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getMemberMoreLength(arr: any[] | undefined, profileCount: number) {
   if (!arr) return 0;
@@ -28,18 +26,15 @@ function getMemberMoreLength(arr: any[] | undefined, profileCount: number) {
   if (moreLength < 1) return 0;
   return moreLength;
 }
-
 function getTitleValue(pathname: string) {
   if (pathname === '/mydashboard') return '내 대시보드';
   if (pathname === '/mypage') return '계정 관리';
   return null;
 }
-
 export default function AuthHeader() {
   const pathname = usePathname();
   const device = useDevice();
   const { user, dashBoardMembers, dashBoardDetail } = useRoot()!;
-
   const profileCount = getMemberLengthByDevice(device);
   const profileMore = getMemberMoreLength(
     dashBoardMembers?.members,
