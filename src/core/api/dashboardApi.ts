@@ -149,3 +149,8 @@ export const deleteInvitation = async (
 ): Promise<void> => {
   await axios.delete(`dashboards/${dashboardId}/invitations/${invitationId}`);
 };
+
+// 대시보드 삭제
+export const deleteDashboard = async (dashboardId: string): Promise<void> => {
+  await axios.delete(`dashboards/${dashboardId}`);
+};

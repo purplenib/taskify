@@ -1,10 +1,12 @@
+/* eslint-disable import/order */
+
 'use client';
 
 import { useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 // eslint-disable-next-line import/order
 import { useRoot } from '@core/contexts/RootContexts';
@@ -12,6 +14,8 @@ import { useRoot } from '@core/contexts/RootContexts';
 import EditDashboard from '@components/edit/EditDashboard';
 import InvitationList from '@components/edit/InvitationList';
 import MemberList from '@components/edit/MemberList';
+
+import { deleteDashboard } from '@core/api/dashboardApi';
 
 const AUTH_OBJECT = [
   'ex3222@gmail.com',
@@ -23,6 +27,7 @@ const AUTH_OBJECT = [
 export default function DashBoardEditPage() {
   const { login } = useRoot();
   const pathname = usePathname();
+  const router = useRouter();
 
   const dashboardId = pathname.split('/')[2];
 
@@ -32,6 +37,13 @@ export default function DashBoardEditPage() {
     };
     handleLogin();
   }, [login]);
+
+  // 대시보드 삭제
+  const handleDeleteDashboard = async () => {
+    await deleteDashboard(dashboardId);
+    alert('대시보드 삭제 완료!');
+    router.push('/');
+  };
 
   return (
     <div className="relative left-12 mt-14 flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 p-4 md:left-40 md:mt-16 lg:mt-14 xl:left-[300px]">
@@ -55,6 +67,7 @@ export default function DashBoardEditPage() {
         <MemberList dashboardId={Number(dashboardId)} />
         <InvitationList dashboardId={Number(dashboardId)} />
         <button
+          onClick={handleDeleteDashboard}
           type="button"
           className="flex h-[52px] w-full max-w-[92%] items-center justify-center rounded-lg border border-solid border-gray-200 shadow font-lg-16px-medium md:w-[320px]"
         >
