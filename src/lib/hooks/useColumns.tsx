@@ -9,7 +9,7 @@ import {
   getDashboardDetail,
   postColumn,
   putColumn,
-} from '@core/api/dashboardApi';
+} from '@core/api/columnApis';
 
 import type { ColumnServiceResponseDto } from '@core/dtos/ColumnsDto';
 
