@@ -6,7 +6,7 @@ import { initialDashboard } from '@lib/constants/initialValues';
 import useApi from './useApi';
 
 export default function useDashboards() {
-  const { data: dashBoardList = initialDashboard, callApi: getDashboardList } =
+  const { data: dashboardList = initialDashboard, callApi: getDashboardList } =
     useApi<DashboardsResponseDto>('/dashboards', 'GET');
 
   useEffect(() => {
@@ -19,5 +19,5 @@ export default function useDashboards() {
     });
   }, [getDashboardList]);
 
-  return { dashBoardList };
+  return { dashboardList };
 }

@@ -9,7 +9,7 @@ import useApi from './useApi';
 export default function useDashboardMembers(dashboardid: string | undefined) {
   const { user } = useRoot();
   const {
-    data: dashBoardMembers = initialMembers,
+    data: dashboardMembers = initialMembers,
     callApi: getDashboardMembers,
   } = useApi<MembersResponseDto>(`/members`, 'GET');
 
@@ -27,5 +27,5 @@ export default function useDashboardMembers(dashboardid: string | undefined) {
     }
   }, [dashboardid, getDashboardMembers, user]);
 
-  return { dashBoardMembers };
+  return { dashboardMembers };
 }

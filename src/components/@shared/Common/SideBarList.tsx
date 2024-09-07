@@ -12,10 +12,10 @@ import cn from '@lib/utils/cn';
 export default function SideBarList() {
   const router = useRouter();
   const { dashboardid, setDashboardid } = useRoot();
-  const { dashBoardList } = useDashboards();
+  const { dashboardList } = useDashboards();
   const device = useDevice();
 
-  const { dashboards } = dashBoardList;
+  const { dashboards } = dashboardList;
 
   const isMobile = device === 'mobile';
 

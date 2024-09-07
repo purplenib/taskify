@@ -8,7 +8,7 @@ import useApi from './useApi';
 
 export default function useDashboardDetail(dashboardid: string | undefined) {
   const { user } = useRoot();
-  const { data: dashBoardDetail = initialDetail, callApi: getDashboardDetail } =
+  const { data: dashboardDetail = initialDetail, callApi: getDashboardDetail } =
     useApi<DashboardApplicationServiceResponseDto>(
       `/dashboards/${dashboardid}`,
       'GET'
@@ -23,5 +23,5 @@ export default function useDashboardDetail(dashboardid: string | undefined) {
     }
   }, [dashboardid, getDashboardDetail, user]);
 
-  return { dashBoardDetail };
+  return { dashboardDetail };
 }
