@@ -5,7 +5,6 @@
 import { useEffect } from 'react';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 // eslint-disable-next-line import/order
@@ -38,6 +37,11 @@ export default function DashBoardEditPage() {
     handleLogin();
   }, [login]);
 
+  // 돌아가기 버튼
+  const handleGoBack = () => {
+    router.push(`/dashboard/${dashboardId}`);
+  };
+
   // 대시보드 삭제
   const handleDeleteDashboard = async () => {
     await deleteDashboard(dashboardId);
@@ -48,8 +52,8 @@ export default function DashBoardEditPage() {
   return (
     <div className="relative left-12 mt-14 flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 p-4 md:left-40 md:mt-16 lg:mt-14 xl:left-[300px]">
       {/* 돌아가기 버튼 */}
-      <Link
-        href="/"
+      <button
+        onClick={handleGoBack}
         className="absolute left-8 top-4 z-20 mb-4 flex items-center gap-2 md:left-8 md:top-6 lg:left-8 lg:top-8 xl:left-8"
       >
         <Image
@@ -59,7 +63,7 @@ export default function DashBoardEditPage() {
           height={16}
         />
         <span className="font-lg-16px-medium">돌아가기</span>
-      </Link>
+      </button>
 
       {/* 메인 콘텐츠 */}
       <div className="mt-8 space-y-6 px-4 md:mt-14">
