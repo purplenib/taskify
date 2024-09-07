@@ -102,3 +102,50 @@ export const deleteMember = async (dashboardId: number, memberId: number) => {
   const response = await axios.delete(`/members/${memberId}`);
   return response.data;
 };
+
+// 초대 목록 응답 형식 정의
+export interface InvitationResponse {
+  invitations: { id: number; invitee: { email: string } }[];
+  totalCount: number;
+}
+
+// 이메일 초대 정보 정의
+export interface EmailInvitation {
+  id: number;
+  email: string;
+}
+
+// 초대 목록 가져오기
+export const getInvitations = async (
+  dashboardId: string
+): Promise<EmailInvitation[]> => {
+  const { data } = await axios.get<InvitationResponse>(
+    `dashboards/${dashboardId}/invitations`
+  );
+
+  return data.invitations.map(invitation => ({
+    id: invitation.id,
+    email: invitation.invitee.email,
+  }));
+};
+
+// 초대 목록에 추가
+export const addInvitation = async (
+  dashboardId: string,
+  email: string
+): Promise<EmailInvitation> => {
+  const { data } = await axios.post<{
+    id: number;
+    invitee: { email: string };
+  }>(`dashboards/${dashboardId}/invitations`, { email });
+
+  return { id: data.id, email: data.invitee.email };
+};
+
+// 초대 삭제
+export const deleteInvitation = async (
+  dashboardId: string,
+  invitationId: number
+): Promise<void> => {
+  await axios.delete(`dashboards/${dashboardId}/invitations/${invitationId}`);
+};

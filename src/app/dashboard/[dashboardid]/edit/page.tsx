@@ -53,7 +53,7 @@ export default function DashBoardEditPage() {
       <div className="mt-8 space-y-6 px-4 md:mt-14">
         <EditDashboard dashboardId={Number(dashboardId)} />
         <MemberList dashboardId={Number(dashboardId)} />
-        <InvitationList />
+        <InvitationList dashboardId={Number(dashboardId)} />
         <button
           type="button"
           className="flex h-[52px] w-full max-w-[92%] items-center justify-center rounded-lg border border-solid border-gray-200 shadow font-lg-16px-medium md:w-[320px]"
