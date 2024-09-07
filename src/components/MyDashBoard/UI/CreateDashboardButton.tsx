@@ -1,9 +1,9 @@
 import Image from 'next/image';
+
 import addPurple from '@icons/add_purple.png';
 
 const CreateDashboardButton = ({ onClick }) => (
   <button
-    button
     type="button"
     onClick={onClick}
     className="flex justify-center gap-3 rounded-lg border border-gray-200 bg-white px-5 py-[22px] font-lg-16px-semibold"
