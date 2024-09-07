@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 
 import InviteModal from '@/src/components/edit/InviteModal';
@@ -27,6 +27,7 @@ export default function InvitationList({ dashboardId }: InvitationListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [invitations, setInvitations] = useState<EmailInvitation[]>([]);
   const itemsPerPage = 5;
+  const hasLoadedInvitations = useRef(false);
 
   const { currentPage, handlePageChange } = usePagination({
     totalItems: invitations.length,
@@ -38,7 +39,8 @@ export default function InvitationList({ dashboardId }: InvitationListProps) {
 
   // 초대 리스트 불러오기
   const loadInvitations = async () => {
-    if (dashboardId) {
+    if (dashboardId && !hasLoadedInvitations.current) {
+      hasLoadedInvitations.current = true;
       const response = await getInvitations(dashboardId.toString());
       setInvitations(response);
     }
@@ -146,7 +148,7 @@ export default function InvitationList({ dashboardId }: InvitationListProps) {
             </div>
           ))
         ) : (
-          <div className="text-gray-500">초대된 이메일이 없습니다.</div>
+          <div className="text-gray-500">친구를 초대해보세요!</div>
         )}
       </div>
 
