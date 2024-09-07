@@ -12,8 +12,9 @@ export default function useApi<T>(url: string, method: Method) {
   const [error, setError] = useState<unknown>(null);
 
   const callApi = useCallback(
-    async <R,>(body: R, config?: AxiosRequestConfig) => {
+    async <R>(body: R, config?: AxiosRequestConfig) => {
       setIsLoading(true);
+      setError(null);
       let res;
       try {
         res = await instance(url, {
@@ -21,10 +22,10 @@ export default function useApi<T>(url: string, method: Method) {
           data: body,
           ...config,
         });
-      } catch (err) {
-        setError(err);
-      } finally {
         setData(res?.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
         setIsLoading(false);
       }
     },

@@ -3,7 +3,6 @@ import './globals.css';
 
 import { MantineProvider } from '@mantine/core';
 import localFont from 'next/font/local';
-import { headers } from 'next/headers';
 
 import DashboardLayout from '@components/@shared/Layout/DashboardLayout';
 import DeviceProvider from '@core/contexts/DeviceContext';
@@ -25,21 +24,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const headerResponse = headers();
-  const dashboardid = headerResponse.get('x-dashboardid');
-
+}) {
   return (
     <html lang="en">
       <body className={`${pretandard.variable}`}>
         <MantineProvider>
           <DeviceProvider>
             <RootProvider>
-              <DashboardLayout dashboardid={dashboardid}>
-                {children}
-              </DashboardLayout>
+              <DashboardLayout>{children}</DashboardLayout>
             </RootProvider>
           </DeviceProvider>
         </MantineProvider>
