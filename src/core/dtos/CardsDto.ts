@@ -42,7 +42,7 @@ export interface UpdateCardRequestDto {
   assigneeUserId?: number | null;
   title?: string;
   description?: string;
-  dueDate?: Date | null;
+  dueDate?: string | null;
   tags?: string[];
   imageUrl?: string | null;
 }

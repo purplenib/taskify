@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { useParams } from 'next/navigation';
 
-import { getCards, getMembers, postCard } from '@core/api/cardApis';
+import { getCards, getMembers, postCard, putCard } from '@core/api/cardApis';
 import {
   CardServiceResponseDto,
   CreateCardRequestDto,
+  UpdateCardRequestDto,
 } from '@core/dtos/CardsDto';
 import { MemberApplicationServiceResponseDto } from '@core/dtos/MembersDto';
 
@@ -51,7 +52,8 @@ export default function useCards(columnId: number) {
     setMembers(nextMembers as MemberApplicationServiceResponseDto[]);
   }, [dashboardid]);
 
-  const createFormValidator = (fieldData: CreateCardRequestDto) => {
+  // 카드 생성, 수정시 폼데이터 검사
+  const requestCardFormValidator = (fieldData: CreateCardRequestDto) => {
     let result = true;
     if (!fieldData.assigneeUserId) {
       setError('assigneeUserId', {
@@ -83,8 +85,9 @@ export default function useCards(columnId: number) {
     }
     return result;
   };
+  // 카드생성 submit
   const onSubmitCreateCard = async (fieldData: CreateCardRequestDto) => {
-    const result = createFormValidator(fieldData);
+    const result = requestCardFormValidator(fieldData);
     if (!result) {
       return false;
     }
@@ -113,6 +116,55 @@ export default function useCards(columnId: number) {
     return true;
   };
 
+  // 카드수정 submit
+  const onSubmitEditCard = async (
+    cardId: number,
+    fieldData: CreateCardRequestDto
+  ) => {
+    const result = requestCardFormValidator(fieldData);
+    if (!result) {
+      return false;
+    }
+
+    const formattedDueDate = dayjs(fieldData.dueDate).format(
+      'YYYY-MM-DD HH:mm'
+    );
+    const formData: UpdateCardRequestDto = {
+      assigneeUserId: Number(fieldData.assigneeUserId),
+      columnId: Number(columnId),
+      title: fieldData.title,
+      description: fieldData.description,
+      dueDate: formattedDueDate,
+      tags: fieldData.tags,
+      imageUrl: fieldData.imageUrl,
+    };
+
+    const data = await putCard(Number(cardId), formData);
+
+    setCardList(prev => {
+      if (prev === null || cardList === null) {
+        return [];
+      }
+      // 수정한 카드의 컬럼 아이디가 수정 후 컬럼과 다르면 컬럼에서 제거
+      if (Number(data.columnId) !== columnId) {
+        const CardListWithOutCurrentCard = cardList.filter(
+          card => card.id === cardId
+        );
+        return [...CardListWithOutCurrentCard];
+      }
+      // 같으면 해당 컬럼에서 업데이트
+      if (Number(data.columnId) === columnId) {
+        const updatedCardList = cardList.map(card =>
+          card.id === cardId ? { ...card, ...data } : card
+        );
+        return [...updatedCardList];
+      }
+
+      return [...prev, data];
+    });
+    return true;
+  };
+
   useEffect(() => {
     loadCards();
     loadMembers();
@@ -130,6 +182,7 @@ export default function useCards(columnId: number) {
     getValues,
     watch,
     onSubmitCreateCard,
+    onSubmitEditCard,
     reset,
     clearErrors,
   };

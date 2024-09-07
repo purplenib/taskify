@@ -1,9 +1,13 @@
+import { useState } from 'react';
+
 import { Button, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Image from 'next/image';
 
 import PurpleAddIcon from '@components/@shared/UI/PurpleAddIcon';
 import CreateCardModal from '@components/Modals/CreateCardModal';
+import EditCardModal from '@components/Modals/EditCardModal';
+import { CardServiceResponseDto } from '@core/dtos/CardsDto';
 import setting from '@icons/settings.png';
 import useCards from '@lib/hooks/useCards';
 
@@ -38,7 +42,15 @@ export default function Column({
     onSubmitCreateCard,
     reset,
     clearErrors,
+    onSubmitEditCard,
   } = useCards(column.id);
+  const [selectedCard, setSelectedCard] =
+    useState<CardServiceResponseDto | null>(null);
+  const onClickCard = (data: CardServiceResponseDto) => {
+    setSelectedCard(data);
+  };
+
+  const [edit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   if (cardList === null) {
     return;
   }
@@ -75,7 +87,14 @@ export default function Column({
           <PurpleAddIcon />
         </Button>
         {cardList.length > 0 &&
-          cardList.map(card => <Card key={card.id} card={card} />)}
+          cardList.map(card => (
+            <Card
+              openEdit={openEdit}
+              onClickCard={onClickCard}
+              key={card.id}
+              card={card}
+            />
+          ))}
       </div>
       <Modal
         centered
@@ -97,6 +116,24 @@ export default function Column({
           closeCreateCard={closeCreateCard}
           reset={reset}
           clearErrors={clearErrors}
+        />
+      </Modal>
+      <Modal opened={edit} onClose={closeEdit}>
+        <EditCardModal
+          members={members}
+          columnId={column.id}
+          register={register}
+          handleSubmit={handleSubmit}
+          errors={errors}
+          control={control}
+          onSubmitEditCard={onSubmitEditCard}
+          watch={watch}
+          setValue={setValue}
+          getValues={getValues}
+          closeCreateCard={closeCreateCard}
+          reset={reset}
+          clearErrors={clearErrors}
+          card={selectedCard}
         />
       </Modal>
     </>
