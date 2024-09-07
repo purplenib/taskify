@@ -1,9 +1,7 @@
 'use client';
 
-
 import Pagination from '@components/edit/Pagination';
 import usePagination from '@lib/hooks/usePaginavigation';
-
 
 // 테스트용 더미 데이터 - 이름
 interface Item {

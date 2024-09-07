@@ -27,7 +27,6 @@ export default function InvitationList() {
 
   return (
     <div className="max-w-md rounded-md bg-white p-6 shadow md:mx-0 md:max-w-[544px] xl:max-w-[620px]">
-
       {/* 초대 내역 + 페이지네이션 (초대하기 버튼은 아래로 이동) */}
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-lg-16px-bold md:font-xl-20px-bold">초대 내역</h2>
@@ -71,7 +70,6 @@ export default function InvitationList() {
           </div>
         </div>
       ))}
-
     </div>
   );
 }

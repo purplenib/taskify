@@ -40,9 +40,7 @@ export default function Pagination({
       <div>
         <button type="button" onClick={handlePrePage}>
           <div
-
             className="flex h-8 w-8 items-center justify-center border border-gray-200 md:h-10 md:w-10"
-
             style={{
               borderTopLeftRadius: '4px',
               borderTopRightRadius: '0px',
@@ -60,9 +58,7 @@ export default function Pagination({
         </button>
         <button type="button" onClick={handleNextPage}>
           <div
-
             className="flex h-8 w-8 items-center justify-center border border-gray-200 md:h-10 md:w-10"
-
             style={{
               borderTopLeftRadius: '0px',
               borderTopRightRadius: '4px',
