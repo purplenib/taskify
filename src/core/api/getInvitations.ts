@@ -1,4 +1,4 @@
-import instance from '@lib/api/instance';
+import instance from './instance';
 
 import type { InvitationsResponseDto } from '@core/dtos/InvitationsDto';
 

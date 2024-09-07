@@ -1,4 +1,4 @@
-import instance from '@lib/api/instance';
+import instance from './instance';
 
 const putInvitations = async (
   invitationId: number,

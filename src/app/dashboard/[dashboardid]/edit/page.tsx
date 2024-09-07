@@ -1,40 +1,18 @@
-/* eslint-disable import/order */
-
 'use client';
-
-import { useEffect } from 'react';
 
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { useRoot } from '@core/contexts/RootContexts';
-
 import EditDashboard from '@components/edit/EditDashboard';
 import InvitationList from '@components/edit/InvitationList';
 import MemberList from '@components/edit/MemberList';
-
-import { deleteDashboard } from '@core/api/dashboardApi';
-
-const AUTH_OBJECT = [
-  'ex3222@gmail.com',
-  'ex32221@gmail.com',
-  'ex32222@gmail.com',
-  'ex32223@gmail.com',
-];
+import { deleteDashboard } from '@core/api/columnApis';
 
 export default function DashBoardEditPage() {
-  const { login } = useRoot();
   const pathname = usePathname();
   const router = useRouter();
 
   const dashboardId = pathname.split('/')[2];
-
-  useEffect(() => {
-    const handleLogin = async () => {
-      await login({ email: AUTH_OBJECT[0], password: '123123123' });
-    };
-    handleLogin();
-  }, [login]);
 
   // 돌아가기 버튼
   const handleGoBack = () => {
