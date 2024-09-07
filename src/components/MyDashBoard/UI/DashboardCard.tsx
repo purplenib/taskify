@@ -6,7 +6,7 @@ import crown from '@icons/crown.png';
 
 interface DashboardCardProps {
   value: {
-    id: string;
+    id: number;
     title: string;
     color: string;
     createdByMe: boolean;

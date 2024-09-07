@@ -19,14 +19,21 @@ import type {
 
 interface InvitedDashboardProps {
   invitationsData: InvitationsResponseDto;
-  loading: boolean;
-  error: string | null;
+  isLoading: boolean;
+  error: unknown;
   onUpdateInvitations: () => void;
+}
+
+interface NewInvitedDashboard {
+  id: number;
+  title: string;
+  color: string;
+  createdByMe: boolean;
 }
 
 export default function InvitedDashboard({
   invitationsData,
-  loading,
+  isLoading,
   error,
   onUpdateInvitations,
 }: InvitedDashboardProps) {
@@ -57,10 +64,11 @@ export default function InvitedDashboard({
     setIsProcessing(true);
     try {
       await putInvitations(invitation.id, true);
-      const newInvitedDashboard = {
+      const newInvitedDashboard: NewInvitedDashboard = {
         id: invitation.dashboard.id,
         title: invitation.dashboard.title,
         color: '#000',
+        createdByMe: false,
       };
       addDashboard(newInvitedDashboard); // 로컬에 대시보드 추가
       setInvitationList(prev => prev.filter(item => item.id !== invitation.id));
@@ -94,8 +102,8 @@ export default function InvitedDashboard({
     <>
       <SearchForm onSearch={handleSearch} />
       <InviteHeader />
-      {loading && <p>초대 목록을 불러오고 있습니다.</p>}
-      {error && <p>오류가 발생했습니다: {error}</p>}
+      {isLoading && <p>초대 목록을 불러오고 있습니다.</p>}
+      {error && <p>오류가 발생했습니다</p>}
       <ul className="flex flex-col gap-[20px]">
         {filteredResults.length === 0 ? (
           <li className="mt-12 flex flex-col items-center justify-center gap-2">
