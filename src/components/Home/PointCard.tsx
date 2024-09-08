@@ -21,7 +21,7 @@ export default function PointCard({
         <p className="mt-[61px] text-white font-4xl-36px-bold">{title}</p>
       </div>
       <div className="mt-[194px] w-full">
-        <Image src={image} alt={alt} width={260} height={248} />
+        <Image src={image} alt={alt} width={260} height={248} priority />
       </div>
     </div>
   );
