@@ -15,7 +15,7 @@ export default function ConfirmDeleteModal({
 }: ConfirmDeleteModalProps) {
   return (
     <>
-      <div className="flex justify-center pb-10 font-xl-20px-medium">
+      <div className="flex justify-center pb-10 font-xl-20px-semibold">
         컬럼의 모든 카드가 삭제됩니다.
       </div>
       <div className="flex h-[54px]">

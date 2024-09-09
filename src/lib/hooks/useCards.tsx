@@ -1,24 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import dayjs from 'dayjs';
 import { useParams } from 'next/navigation';
 
-import { getCards, getMembers, postCard, putCard } from '@core/api/cardApis';
+import { postCard, putCard } from '@core/api/cardApis';
+import { DashBoardContext } from '@core/contexts/DashBoardContext';
 import {
   CardServiceResponseDto,
   CreateCardRequestDto,
   UpdateCardRequestDto,
 } from '@core/dtos/CardsDto';
-import { MemberApplicationServiceResponseDto } from '@core/dtos/MembersDto';
 
 export default function useCards(columnId: number) {
-  const [cardList, setCardList] = useState<CardServiceResponseDto[] | null>(
-    null
-  );
-  const [members, setMembers] = useState<MemberApplicationServiceResponseDto[]>(
-    []
-  );
+  const [cards, setCards] = useState<CardServiceResponseDto[]>([]);
+  const { cardList2D, moveCard } = useContext(DashBoardContext);
   const { dashboardid } = useParams();
   const {
     register,
@@ -37,20 +33,6 @@ export default function useCards(columnId: number) {
       dueDate: new Date().toString(),
     },
   });
-
-  const loadCards = useCallback(async () => {
-    const data = await getCards(columnId);
-    const Cards: CardServiceResponseDto[] = data.cards;
-    setCardList(Cards);
-  }, [columnId]);
-
-  const loadMembers = useCallback(async () => {
-    const nextMembers = await getMembers(Number(dashboardid));
-    if (!nextMembers) {
-      return;
-    }
-    setMembers(nextMembers as MemberApplicationServiceResponseDto[]);
-  }, [dashboardid]);
 
   // 카드 생성, 수정시 폼데이터 검사
   const requestCardFormValidator = (fieldData: CreateCardRequestDto) => {
@@ -107,12 +89,7 @@ export default function useCards(columnId: number) {
     };
 
     const data = await postCard(formData);
-    setCardList(prev => {
-      if (prev === null) {
-        return [data];
-      }
-      return [...prev, data];
-    });
+    setCards(prev => [...prev, data]);
     return true;
   };
 
@@ -130,8 +107,8 @@ export default function useCards(columnId: number) {
       'YYYY-MM-DD HH:mm'
     );
     const formData: UpdateCardRequestDto = {
+      columnId: Number(fieldData.columnId),
       assigneeUserId: Number(fieldData.assigneeUserId),
-      columnId: Number(columnId),
       title: fieldData.title,
       description: fieldData.description,
       dueDate: formattedDueDate,
@@ -140,45 +117,30 @@ export default function useCards(columnId: number) {
     };
 
     const data = await putCard(Number(cardId), formData);
+    // 컬럼을 옮긴경우
+    if (data.columnId !== columnId) {
+      moveCard(columnId, data);
+    } else {
+      setCards(prev => prev.map(card => (card.id === data.id ? data : card)));
+    }
 
-    setCardList(prev => {
-      if (prev === null || cardList === null) {
-        return [];
-      }
-      // 수정한 카드의 컬럼 아이디가 수정 후 컬럼과 다르면 컬럼에서 제거
-      if (Number(data.columnId) !== columnId) {
-        const CardListWithOutCurrentCard = cardList.filter(
-          card => card.id === cardId
-        );
-        return [...CardListWithOutCurrentCard];
-      }
-      // 같으면 해당 컬럼에서 업데이트
-      if (Number(data.columnId) === columnId) {
-        const updatedCardList = cardList.map(card =>
-          card.id === cardId ? { ...card, ...data } : card
-        );
-        return [...updatedCardList];
-      }
-
-      return [...prev, data];
-    });
     return true;
   };
-
   useEffect(() => {
-    loadCards();
-    loadMembers();
-  }, [columnId, loadCards, loadMembers]);
+    const nextCards = cardList2D.find(
+      cardList => cardList.columnId === columnId
+    );
+    if (nextCards) setCards(nextCards.cardList);
+  }, [cardList2D, columnId]);
 
   return {
-    cardList,
-    loadMembers,
-    members,
+    cards,
     register,
     handleSubmit,
     errors,
     control,
     setValue,
+    setError,
     getValues,
     watch,
     onSubmitCreateCard,

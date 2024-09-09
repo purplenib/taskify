@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
+import calendar from '@icons/calendar.png';
 import convertStringToColorHex from '@lib/utils/convertStringToColorHex';
 import convertStringToRGBA from '@lib/utils/convertStringToRGBA';
 
@@ -24,7 +25,7 @@ export default function Card({ card, openEdit, onClickCard }: CardProps) {
       >
         수정하기
       </button>
-      <div className="mt-4 flex flex-col gap-1 rounded-md border border-gray-200 bg-white px-3 pb-[5px] pt-3 md:flex-row md:gap-5 xl:flex-col xl:gap-4">
+      <div className="mt-4 flex flex-col gap-1 rounded-md border border-gray-200 bg-white px-3 pb-[5px] pt-3 md:flex-row md:gap-5 md:px-5 md:py-5 xl:flex-col xl:gap-4">
         <div className="relative w-full pb-[60%] md:w-[90px] md:pb-[54px] xl:w-full xl:pb-[60%]">
           {card.imageUrl && (
             <Image src={card.imageUrl} fill alt="카드 이미지" />
@@ -49,10 +50,21 @@ export default function Card({ card, openEdit, onClickCard }: CardProps) {
                 ))}
             </div>
             <div className="flex items-center justify-between md:grow">
-              <span className="text-gray-400 font-xs-12px-medium">
-                {formattedDueDate}
-              </span>
-              <span>담당자프로필</span>
+              <div className="flex gap-1.5">
+                <Image src={calendar} alt="마감일" width={18} height={18} />
+                <span className="text-gray-400 font-xs-12px-medium">
+                  {formattedDueDate}
+                </span>
+              </div>
+              {card.assignee?.profileImageUrl ? (
+                <Image
+                  src={card.assignee.profileImageUrl}
+                  alt="담당자 프로필 이미지"
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />
+              ) : null}
             </div>
           </div>
         </div>

@@ -1,10 +1,13 @@
 'use client';
 
+import { useContext } from 'react';
+
 import { Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import CreateColumnModal from '@components/Modals/CreateColumnModal';
 import EditColumnModal from '@components/Modals/EditColumnModal';
+import { DashBoardContext } from '@core/contexts/DashBoardContext';
 import useColumns from '@lib/hooks/useColumns';
 
 import AddColumnButton from './UI/AddColumnButton';
@@ -12,8 +15,6 @@ import Column from './UI/Column';
 
 export default function ColumnList() {
   const {
-    columnList,
-    dashboardColor,
     onSubmitCreateColumnForm,
     onSubmitEditColumnForm,
     handleSubmit,
@@ -29,7 +30,8 @@ export default function ColumnList() {
     useDisclosure(false);
   const [confirmDeleteModal, { open: openConfirm, close: closeConfirm }] =
     useDisclosure(false);
-
+  const { columnList, dashboardColor: columnColor } =
+    useContext(DashBoardContext);
   const onClickEditOpen = (id: number, defaultValue: string) => {
     setTargetColumnId(id);
     setValue('editedTitle', defaultValue);
@@ -40,21 +42,21 @@ export default function ColumnList() {
     openCreate();
   };
 
-  if (columnList === null) {
-    return;
-  }
   return (
     <>
-      <div className="no-scrollbar flex min-h-[100vh] flex-col md:mx-0 md:max-w-full xl:max-w-[1062px] xl:flex-row xl:overflow-scroll">
-        {columnList?.length > 0 &&
-          columnList.map(column => (
-            <Column
-              onClickEditOpen={onClickEditOpen}
-              key={column.id}
-              column={column}
-              dashboardColor={dashboardColor}
-            />
-          ))}
+      <div className="no-scrollbar flex flex-col md:mx-0 md:max-w-full xl:min-h-[100vh] xl:max-w-[1062px] xl:flex-row xl:overflow-scroll">
+        {Boolean(columnList?.length) &&
+          columnList.map(
+            column =>
+              Boolean(column.id) && (
+                <Column
+                  onClickEditOpen={onClickEditOpen}
+                  key={column.id}
+                  column={column}
+                  dashboardColor={columnColor}
+                />
+              )
+          )}
       </div>
       <AddColumnButton open={onClickCreateOpen} />
       <Modal

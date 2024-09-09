@@ -2,6 +2,8 @@ import '@mantine/dates/styles.css';
 import {
   ChangeEvent,
   KeyboardEventHandler,
+  useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -14,6 +16,7 @@ import {
   UseFormGetValues,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormSetError,
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
@@ -33,40 +36,39 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 
 import ImageCropperModal from '@components/Modals/ImageCropperModal';
+import { DashBoardContext } from '@core/contexts/DashBoardContext';
 import {
   CardServiceResponseDto,
   CreateCardRequestDto,
 } from '@core/dtos/CardsDto';
-import { MemberApplicationServiceResponseDto } from '@core/dtos/MembersDto';
 import addPurple from '@icons/add_purple.png';
 
 interface CreateCardModalProps {
-  members: MemberApplicationServiceResponseDto[];
   columnId: number;
   register: UseFormRegister<CreateCardRequestDto>;
   handleSubmit: UseFormHandleSubmit<CreateCardRequestDto, undefined>;
   errors: FieldErrors<CreateCardRequestDto>;
+  setError: UseFormSetError<CreateCardRequestDto>;
   control: Control<CreateCardRequestDto>;
   setValue: UseFormSetValue<CreateCardRequestDto>;
   getValues: UseFormGetValues<CreateCardRequestDto>;
   watch: UseFormWatch<CreateCardRequestDto>;
   onSubmitEditCard: (
     cardId: number,
-    columnId: number,
     fieldData: CreateCardRequestDto
   ) => Promise<boolean>;
   closeCreateCard: () => void;
   reset: () => void;
   clearErrors: UseFormClearErrors<CreateCardRequestDto>;
-  card: CardServiceResponseDto | null;
+  card: CardServiceResponseDto;
 }
 export default function EditCardModal({
-  members,
   columnId,
   register,
   handleSubmit,
   control,
   setValue,
+  setError,
   getValues,
   watch,
   onSubmitEditCard,
@@ -76,25 +78,55 @@ export default function EditCardModal({
   clearErrors,
   card,
 }: CreateCardModalProps) {
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
+  const assigneeCombobox = useCombobox({
+    onDropdownClose: () => assigneeCombobox.resetSelectedOption(),
   });
-
+  const columnCombobox = useCombobox({
+    onDropdownClose: () => assigneeCombobox.resetSelectedOption(),
+  });
+  const { columnList } = useContext(DashBoardContext);
   const [selectedAssignee, setSelectedAssignee] = useState('');
   const [selectedAssigneeImg, setSelectedAssigneeImg] = useState('');
-
+  const { members, dashboardColor } = useContext(DashBoardContext);
   // ---------태그인풋 로직
   const tagInputRef = useRef<HTMLInputElement>(null);
   const tags = watch('tags');
   const handleKeyDownTag: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (!(e.key === 'Enter' && tagInputRef.current)) {
+    if (!tagInputRef.current) {
       return;
     }
-    e.preventDefault();
-    const currentTags = getValues('tags') || [];
-    const newTags = tagInputRef.current.value;
-    setValue('tags', [...currentTags, newTags]);
-    tagInputRef.current.value = '';
+    if (tagInputRef.current.value.length > 5) {
+      setError('tags', {
+        type: 'tagValueLength',
+        message: '태그는 5자 까지 등록 가능합니다.',
+      });
+      return;
+    }
+    clearErrors('tags');
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (tags?.length > 3) {
+        setError('tags', {
+          type: 'tagsLength',
+          message: '태그는 4개 까지 등록 가능합니다.',
+        });
+        return;
+      }
+      clearErrors('tags');
+
+      const currentTags = getValues('tags') || [];
+      const newTags = tagInputRef.current.value;
+      setValue('tags', [...currentTags, newTags]);
+      tagInputRef.current.value = '';
+    } else if (
+      e.key === 'Backspace' &&
+      !tagInputRef.current.value &&
+      tags.length
+    ) {
+      const removedTag = tags.slice(0, tags.length - 1);
+      setValue('tags', removedTag);
+    }
   };
   // ---------이미지 인풋 로직(+이미지크롭 모달)
   const imgInputRef = useRef<HTMLInputElement>(null);
@@ -115,111 +147,208 @@ export default function EditCardModal({
     clearErrors('imageUrl');
   };
   const image = watch('imageUrl');
-
-  // assignee가 변경되면 field value를 바꾸고 프로필 이미지 불러옴
+  //-----
+  const nowColumnId = watch('columnId');
+  const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>('');
   useEffect(() => {
-    const handleAssigneeUserIdValue = (nickname: string) => {
-      const selectedUser = members.find(member => member.nickname === nickname);
-      setValue('assigneeUserId', selectedUser?.userId);
-    };
-    clearErrors('assigneeUserId');
-    handleAssigneeUserIdValue(selectedAssignee);
-    setSelectedAssigneeImg(() => {
-      const selectedUser = members.find(
-        member => member.nickname === selectedAssignee
-      );
-
-      if (!selectedUser?.profileImageUrl) {
-        return '';
-      }
-      return selectedUser.profileImageUrl;
+    setSelectedColumnTitle(prev => {
+      const select = columnList.find(column => column.id === nowColumnId);
+      return select ? select.title : prev;
     });
-  }, [selectedAssignee, members, clearErrors, setValue]);
+  }, [nowColumnId, columnList]);
+  const onClickColumnOption = (value: string) => {
+    const columnIdNum = Number(value);
+    setValue('columnId', columnIdNum);
+  };
 
   const onSubmit = async (data: CreateCardRequestDto) => {
-    const result = await onSubmitEditCard(card!.id, columnId, data);
+    const result = await onSubmitEditCard(card.id, data);
     if (!result) {
       return;
     }
     closeCreateCard();
     reset();
   };
+  const handleAssigneeUserIdValue = useCallback(
+    (nickname: string) => {
+      const selectedUser = members.find(member => member.nickname === nickname);
+      setValue('assigneeUserId', selectedUser?.userId);
+    },
+    [members, setValue]
+  );
+
+  const handleAssigneeUserImage = useCallback(
+    (nickname: string) => {
+      const selectedUser = members.find(member => member.nickname === nickname);
+
+      if (!selectedUser?.profileImageUrl) {
+        return '';
+      }
+      return selectedUser.profileImageUrl;
+    },
+    [members]
+  );
+
+  useEffect(() => {
+    clearErrors('assigneeUserId');
+
+    // 드롭다운 메뉴 클릭시 유저 닉네임이 state에 저장되고 해당 정보로 userId를 저장, 프로필 이미지불러옴
+    handleAssigneeUserIdValue(selectedAssignee);
+    const userImage = handleAssigneeUserImage(selectedAssignee);
+    setSelectedAssigneeImg(userImage);
+  }, [
+    selectedAssignee,
+    clearErrors,
+    handleAssigneeUserIdValue,
+    handleAssigneeUserImage,
+  ]);
+
+  useEffect(() => {
+    setValue('assigneeUserId', card.assignee?.id);
+    setValue('title', card.title);
+    setValue('description', card.description);
+    setValue('dueDate', card.dueDate?.toString());
+    setValue('tags', card.tags);
+    setValue('imageUrl', card.imageUrl!);
+    setValue('columnId', columnId);
+  }, [
+    card.assignee?.id,
+    card.description,
+    card.dueDate,
+    card.imageUrl,
+    card.tags,
+    card.title,
+    columnId,
+    setValue,
+  ]);
   return (
     <>
-      <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <span className="font-2lg-18px-medium">담당자</span>
-          <Combobox
-            store={combobox}
-            onOptionSubmit={value => {
-              setSelectedAssignee(value);
-              combobox.closeDropdown();
-            }}
-          >
-            <Combobox.Target>
-              <InputBase
-                className="pt-2.5"
-                component="button"
-                type="button"
-                rightSection={<Combobox.Chevron />}
-                onClick={() => combobox.toggleDropdown()}
-                pointer
-              >
-                {selectedAssignee ? (
-                  <div className="flex items-center gap-2">
-                    {selectedAssigneeImg ? (
-                      <Image
-                        className="rounded-full"
-                        src={selectedAssigneeImg}
-                        width={25}
-                        height={25}
-                        alt="멤버 프로필"
-                      />
-                    ) : (
-                      <span className="h-[25px] w-[25px]" />
-                    )}
-                    <span className="font-lg-16px-regular">
-                      {selectedAssignee}
-                    </span>
+      <form
+        className="flex flex-col gap-8"
+        onSubmit={handleSubmit(data => {
+          onSubmit(data);
+        })}
+      >
+        <div className="flex w-full gap-8">
+          <div className="grow">
+            <span className="font-2lg-18px-medium">상태</span>
+
+            <Combobox
+              store={columnCombobox}
+              onOptionSubmit={value => {
+                onClickColumnOption(value);
+                columnCombobox.closeDropdown();
+              }}
+            >
+              <Combobox.Target>
+                <InputBase
+                  className="pt-2.5"
+                  component="button"
+                  type="button"
+                  rightSection={<Combobox.Chevron />}
+                  onClick={() => columnCombobox.toggleDropdown()}
+                  pointer
+                >
+                  <div className="flex items-center gap-2 px-2.5">
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ backgroundColor: dashboardColor }}
+                    />
+                    <span>{selectedColumnTitle}</span>
                   </div>
-                ) : (
-                  <div className="flex h-[25px] items-center gap-2">
-                    {card?.assignee?.profileImageUrl && (
-                      <Image
-                        src={card.assignee.profileImageUrl}
-                        className="rounded-full"
-                        width={25}
-                        height={25}
-                        alt="멤버 프로필"
+                </InputBase>
+              </Combobox.Target>
+              <p className="pt-1 text-red">{errors.assigneeUserId?.message}</p>
+              <Combobox.Dropdown>
+                {columnList.map(column => (
+                  <Combobox.Option value={column.id.toString()} key={column.id}>
+                    <button className="flex items-center gap-2 px-2.5">
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ backgroundColor: dashboardColor }}
                       />
-                    )}
-                    <span>{card?.assignee?.nickname}</span>
-                  </div>
-                )}
-              </InputBase>
-            </Combobox.Target>
-            <p className="pt-1 text-red">{errors.assigneeUserId?.message}</p>
-            <Combobox.Dropdown>
-              {members.map(member => (
-                <Combobox.Option value={member.nickname} key={member.id}>
-                  <button className="flex items-center gap-2">
-                    {member.profileImageUrl ? (
-                      <Image
-                        className="rounded-full"
-                        src={member.profileImageUrl}
-                        width={25}
-                        height={25}
-                        alt="멤버 프로필"
-                      />
-                    ) : (
-                      <span className="h-[25px] w-[25px]" />
-                    )}
-                    <span>{member.nickname}</span>
-                  </button>
-                </Combobox.Option>
-              ))}
-            </Combobox.Dropdown>
-          </Combobox>
+                      <span>{column.title}</span>
+                    </button>
+                  </Combobox.Option>
+                ))}
+              </Combobox.Dropdown>
+            </Combobox>
+          </div>
+          <div className="grow">
+            <span className="font-2lg-18px-medium">담당자</span>
+
+            <Combobox
+              store={assigneeCombobox}
+              onOptionSubmit={value => {
+                setSelectedAssignee(value);
+                assigneeCombobox.closeDropdown();
+              }}
+            >
+              <Combobox.Target>
+                <InputBase
+                  className="pt-2.5"
+                  component="button"
+                  type="button"
+                  rightSection={<Combobox.Chevron />}
+                  onClick={() => assigneeCombobox.toggleDropdown()}
+                  pointer
+                >
+                  {selectedAssignee ? (
+                    <div className="flex items-center gap-2">
+                      {selectedAssigneeImg ? (
+                        <Image
+                          className="rounded-full"
+                          src={selectedAssigneeImg}
+                          width={25}
+                          height={25}
+                          alt="멤버 프로필"
+                        />
+                      ) : (
+                        <span className="h-[25px] w-[25px]" />
+                      )}
+                      <span className="font-lg-16px-regular">
+                        {selectedAssignee}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex h-[25px] items-center gap-2">
+                      {card?.assignee?.profileImageUrl && (
+                        <Image
+                          src={card.assignee.profileImageUrl}
+                          className="rounded-full"
+                          width={25}
+                          height={25}
+                          alt="멤버 프로필"
+                        />
+                      )}
+                      <span>{card?.assignee?.nickname}</span>
+                    </div>
+                  )}
+                </InputBase>
+              </Combobox.Target>
+              <p className="pt-1 text-red">{errors.assigneeUserId?.message}</p>
+              <Combobox.Dropdown>
+                {members.map(member => (
+                  <Combobox.Option value={member.nickname} key={member.id}>
+                    <button className="flex items-center gap-2">
+                      {member.profileImageUrl ? (
+                        <Image
+                          className="rounded-full"
+                          src={member.profileImageUrl}
+                          width={25}
+                          height={25}
+                          alt="멤버 프로필"
+                        />
+                      ) : (
+                        <span className="h-[25px] w-[25px]" />
+                      )}
+                      <span>{member.nickname}</span>
+                    </button>
+                  </Combobox.Option>
+                ))}
+              </Combobox.Dropdown>
+            </Combobox>
+          </div>
         </div>
 
         <Input.Wrapper
@@ -297,7 +426,12 @@ export default function EditCardModal({
         </div>
 
         <div className="flex flex-col">
-          <span className="font-2lg-18px-medium">이미지</span>
+          <div className="flex items-center gap-1">
+            <span className="font-2lg-18px-medium">이미지</span>
+            <span className="mantine-inputWrapper-required text-[#FA5252] font-md-14px-medium">
+              *
+            </span>
+          </div>
           {image ? (
             <button
               className="max-w-[127px]"
@@ -346,11 +480,15 @@ export default function EditCardModal({
             취소
           </Button>
           <Button type="submit" className="h-full grow bg-violet">
-            생성
+            수정
           </Button>
         </div>
       </form>
-      <Modal opened={cropperModal} onClose={closeCropper}>
+      <Modal
+        title={<div className="font-2lg-18px-semibold">이미지 업로드</div>}
+        opened={cropperModal}
+        onClose={closeCropper}
+      >
         <ImageCropperModal
           closeCropper={closeCropper}
           imageSrc={imageSrc!}

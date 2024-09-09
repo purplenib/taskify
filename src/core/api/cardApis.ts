@@ -13,7 +13,7 @@ export const getCards = async (columnId: number) => {
     `/cards?size=10&columnId=${columnId}`
   );
   const { data } = res;
-  return data;
+  return data.cards;
 };
 
 export const postCard = async (formData: CreateCardRequestDto) => {
