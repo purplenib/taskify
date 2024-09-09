@@ -176,10 +176,9 @@ export default function CreateCardModal({
   const onSubmit = async (data: CreateCardRequestDto) => {
     const result = await onSubmitCreateCard(data);
     if (!result) {
-      return;
+      closeCreateCard();
+      reset();
     }
-    closeCreateCard();
-    reset();
   };
   useEffect(() => {
     setValue('assigneeUserId', 0);
