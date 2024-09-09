@@ -1,27 +1,29 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useRoot } from '@core/contexts/RootContexts';
-import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
-import { initialDetail } from '@lib/constants/initialValues';
+import { getDashboardDetail } from '@core/api/columnApis';
 
-import useApi from './useApi';
+export default function useDashboardDetail(dashboardId: number) {
+  const [dashboardName, setDashboardName] = useState<string>('');
+  const [dashboardColor, setDashboardColor] = useState<string>('');
 
-export default function useDashboardDetail(dashboardid: string | undefined) {
-  const { user } = useRoot();
-  const { data: dashboardDetail = initialDetail, callApi: getDashboardDetail } =
-    useApi<DashboardApplicationServiceResponseDto>(
-      `/dashboards/${dashboardid}`,
-      'GET'
-    );
+  const fetchDashboardDetails = async () => {
+    const details = await getDashboardDetail(dashboardId);
+    if (details) {
+      setDashboardName(details.title);
+      setDashboardColor(details.color);
+    }
+  };
 
   useEffect(() => {
-    const fetchDetail = async () => {
-      await getDashboardDetail(undefined);
-    };
-    if (dashboardid) {
-      fetchDetail();
-    }
-  }, [dashboardid, getDashboardDetail, user]);
+    fetchDashboardDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dashboardId]);
 
-  return { dashboardDetail };
+  return {
+    dashboardName,
+    setDashboardName,
+    dashboardColor,
+    setDashboardColor,
+    refetch: fetchDashboardDetails,
+  };
 }

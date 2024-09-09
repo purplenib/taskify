@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
-import useDashboardDetails from '@lib/hooks/useDashboardDetails';
+import useDashboardDetail from '@lib/hooks/useDashboardDetail';
 import DashboardColorPicker from './DashboardColorPicker';
-import { updateDashboard } from '@core/api/dashboardApi';
+import { updateDashboard } from '@core/api/columnApis';
 
 interface EditDashboardProps {
   dashboardId: number;
@@ -14,7 +14,7 @@ export default function EditDashboard({ dashboardId }: EditDashboardProps) {
     dashboardColor,
     setDashboardColor,
     refetch,
-  } = useDashboardDetails(dashboardId);
+  } = useDashboardDetail(dashboardId);
 
   const handleUpdate = async () => {
     // 대시보드 업데이트

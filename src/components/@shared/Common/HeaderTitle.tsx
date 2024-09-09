@@ -1,10 +1,14 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import useDashboardInfo from '@lib/hooks/useDashboardDetail';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardDto';
+import { initialDetail } from '@lib/constants/initialValues';
+import useApi from '@lib/hooks/useApi';
 
 function getTitleValue(pathname: string) {
   if (pathname === '/mydashboard') return '내 대시보드';
@@ -14,11 +18,25 @@ function getTitleValue(pathname: string) {
 
 export default function HeaderTitle() {
   const pathname = usePathname();
-  const { dashboardid } = useRoot();
-  const { dashboardDetail } = useDashboardInfo(dashboardid);
+  const { user, dashboardid } = useRoot();
+  const { data: dashboardDetail = initialDetail, callApi: getDashboardDetail } =
+    useApi<DashboardApplicationServiceResponseDto>(
+      `/dashboards/${dashboardid}`,
+      'GET'
+    );
+
   const isManagedPage =
     pathname.includes('mydashboard') || pathname.includes('mypage');
   const titleValue = getTitleValue(pathname) || dashboardDetail?.title;
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      await getDashboardDetail(undefined);
+    };
+    if (dashboardid) {
+      fetchDetail();
+    }
+  }, [dashboardid, getDashboardDetail, user]);
 
   return (
     <div
