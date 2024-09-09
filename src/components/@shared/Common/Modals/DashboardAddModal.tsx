@@ -12,7 +12,7 @@ import { useRoot } from '@core/contexts/RootContexts';
 import COLORS from '@lib/constants/themeConst';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 
-import Input from '../Input';
+import Input from '../Inputs/Input';
 
 type ColorType = keyof typeof COLORS;
 

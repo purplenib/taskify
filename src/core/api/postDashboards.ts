@@ -1,6 +1,7 @@
 import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
-import instance from '@lib/api/instance';
 import COLORS from '@lib/constants/themeConst';
+
+import instance from './instance';
 
 type Body = {
   title: string;
