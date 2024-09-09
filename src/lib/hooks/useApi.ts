@@ -32,5 +32,5 @@ export default function useApi<T>(url: string, method: Method) {
     [url, method]
   );
 
-  return { data, isLoading, error, callApi };
+  return { data, setData, isLoading, error, callApi };
 }

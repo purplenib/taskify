@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable no-bitwise */
 /* eslint-disable no-plusplus */
 
@@ -5,11 +6,12 @@
 
 import { useState, useRef } from 'react';
 
+import { getMembers, deleteMember } from '@core/api/columnApis';
+
 import Image from 'next/image';
 
 import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
-import { getMembers, deleteMember } from '@core/api/dashboardApi';
 
 interface MemberListProps {
   dashboardId: number;

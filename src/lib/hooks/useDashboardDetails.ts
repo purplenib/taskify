@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getDashboardDetail } from '@core/api/dashboardApi';
+import { getDashboardDetail } from '@core/api/columnApis';
 
 export default function useDashboardDetails(dashboardId: number) {
   const [dashboardName, setDashboardName] = useState<string>('');

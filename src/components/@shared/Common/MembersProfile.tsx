@@ -2,7 +2,7 @@ import { Avatar } from '@mantine/core';
 import Image from 'next/image';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import useDashboardMembers from '@lib/hooks/useDashBoardMembers';
+import useDashboardMembers from '@lib/hooks/useDashboardMembers';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
 import cn from '@lib/utils/cn';
 

@@ -12,7 +12,7 @@ import {
   addInvitation,
   getInvitations,
   deleteInvitation,
-} from '@core/api/dashboardApi';
+} from '@core/api/columnApis';
 
 interface InvitationListProps {
   dashboardId: number;

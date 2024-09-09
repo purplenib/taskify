@@ -1,7 +1,6 @@
 /* eslint-disable import/order */
 import axios from './instance';
 
-import type { GetCardsResponseDto } from '@core/dtos/CardsDto';
 import type {
   GetColumnsResponseDto,
   CreateColumnRequestDto,
@@ -56,14 +55,6 @@ export const deleteColumn = async (columnId: number) => {
   } catch (error) {
     return null;
   }
-};
-
-export const getCards = async (columnId: number) => {
-  const res = await axios.get<GetCardsResponseDto>(
-    `/cards?size=10&columnId=${columnId}`
-  );
-  const { data } = res;
-  return data;
 };
 
 export const getDashboardDetail = async (dashboardId: number) => {

@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import useDashboardDetails from '@lib/hooks/useDashboardDetails';
 import DashboardColorPicker from './DashboardColorPicker';
-import { updateDashboard } from '@core/api/dashboardApi';
+import { updateDashboard } from '@core/api/columnApis';
 
 interface EditDashboardProps {
   dashboardId: number;

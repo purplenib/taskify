@@ -1,10 +1,11 @@
+/* eslint-disable import/order */
 import React from 'react';
 
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 import { useRoot } from '@core/contexts/RootContexts';
-import usedashboardInfo from '@lib/hooks/useDashBoardDetail';
+import useDashboardInfo from '@lib/hooks/useDashboardDetails';
 
 function getTitleValue(pathname: string) {
   if (pathname === '/mydashboard') return '내 대시보드';
@@ -15,7 +16,7 @@ function getTitleValue(pathname: string) {
 export default function HeaderTitle() {
   const pathname = usePathname();
   const { dashboardid } = useRoot();
-  const { dashboardDetail } = usedashboardInfo(dashboardid);
+  const { dashboardDetail } = useDashboardInfo(dashboardid);
   const isManagedPage =
     pathname.includes('mydashboard') || pathname.includes('mypage');
   const titleValue = getTitleValue(pathname) || dashboardDetail?.title;

@@ -4,8 +4,9 @@ import cn from '@lib/utils/cn';
 
 interface Props {
   type?: 'button' | 'submit' | 'reset';
-  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -13,6 +14,7 @@ export default function Button({
   children,
   onClick,
   className,
+  disabled = true,
 }: PropsWithChildren<Props>) {
   return (
     <button
@@ -21,6 +23,7 @@ export default function Button({
         className
       )}
       type={type}
+      disabled={disabled}
       onClick={onClick}
     >
       {children}

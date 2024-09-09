@@ -26,7 +26,7 @@ export interface CreateCardRequestDto {
   columnId: number;
   title: string;
   description: string;
-  dueDate?: Date;
+  dueDate?: string;
   tags?: string[];
   imageUrl?: string;
 }
