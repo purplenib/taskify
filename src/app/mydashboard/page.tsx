@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 
 import { useRoot } from '@/src/core/contexts/RootContexts';
-import InvitedDashboardList from '@components/MyDashboard/InvitedDashboardList';
-import JoinedDashboardList from '@components/MyDashboard/JoinedDashboardList';
+import InvitedDashboardList from '@components/MyDashBoard/InvitedDashboardList';
+import JoinedDashboardList from '@components/MyDashBoard/JoinedDashboardList';
 import { MyDashboardProvider } from '@core/contexts/MyDashboardContext';
 
 const AUTH_OBJECT = ['zero@naver.com', 'two@naver.com'];
