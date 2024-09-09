@@ -40,10 +40,9 @@ export default function JoinedDashboardList() {
   return (
     <section className="flex flex-col gap-3">
       {loading && <div>나의 대시보드 목록을 불러오고 있습니다.</div>}
-      {error && <div>{error}</div>}
       {!loading && !error && (
         <>
-          <div className="grid grid-cols-3 grid-rows-2 gap-3">
+          <div className="grid grid-flow-row-dense grid-cols-1 grid-rows-6 gap-3 md:grid-cols-2 md:grid-rows-3 xl:grid-cols-3 xl:grid-rows-2">
             <CreateDashboardButton onClick={() => setModalOpened(true)} />
             {createdByMeDashboards.map(myDashboard => (
               <DashboardCard key={myDashboard.id} value={myDashboard} />
