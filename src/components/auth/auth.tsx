@@ -1,14 +1,15 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import {
   SubmitHandler,
   useForm,
   FieldErrors,
   UseFormRegister,
 } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { useState, useMemo } from 'react';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface AuthPageProps {
   mode: 'login' | 'signup';
