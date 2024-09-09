@@ -38,6 +38,7 @@ export default function InvitedDashboardList() {
 
   const renderError = () => <p>오류가 발생했습니다</p>;
 
+  // 렌더링할 콘텐츠
   const renderNoDashboard = () => (
     <NoDashboard text="아직 초대받은 대시보드가 없어요" />
   );
