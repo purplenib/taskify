@@ -1,4 +1,8 @@
-import { AssigneeDto } from './DashboardDto';
+export interface AssigneeDto {
+  profileImageUrl: string | null;
+  nickname: string;
+  id: number;
+}
 
 export interface CardServiceResponseDto {
   id: number;
