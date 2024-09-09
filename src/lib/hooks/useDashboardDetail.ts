@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { getDashboardDetail } from '@core/api/columnApis';
 
-export default function useDashboardDetails(dashboardId: number) {
+export default function useDashboardDetail(dashboardId: number) {
   const [dashboardName, setDashboardName] = useState<string>('');
   const [dashboardColor, setDashboardColor] = useState<string>('');
 
