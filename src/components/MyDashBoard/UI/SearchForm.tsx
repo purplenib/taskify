@@ -32,7 +32,7 @@ function SearchForm({ onSearch }: SearchFormProps) {
       <input
         className="flex h-full w-full rounded-md bg-white px-4 py-[6px] pl-9 text-gray-300 outline-none outline-1 outline-gray-200 font-md-14px-regular md:font-lg-16px-regular"
         placeholder={
-          deviceType === 'mobile' ? '검색' : '대시보드 이름을 검색해보세요.'
+          deviceType === 'mobile' ? '검색' : '대시보드 이름을 검색해보세요'
         }
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
