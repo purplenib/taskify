@@ -127,7 +127,7 @@ export default function InvitedDashboard({
               </p>
               <div className="mt-[14px] flex justify-center gap-[10px] md:mt-0 md:w-1/3 md:gap-0">
                 <AcceptButton
-                  divClassName="bg-violet "
+                  divClassName="bg-violet"
                   buttonClassName="text-white"
                   onClick={() => handleAccept(invitation)}
                 >
@@ -135,7 +135,7 @@ export default function InvitedDashboard({
                 </AcceptButton>
                 <AcceptButton
                   divClassName="border-1 md:ml-2 border border-gray-200 "
-                  buttonClassName=" text-violet"
+                  buttonClassName="text-violet"
                   onClick={() => handleReject(invitation)}
                 >
                   거절
