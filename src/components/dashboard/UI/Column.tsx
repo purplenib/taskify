@@ -146,7 +146,7 @@ export default function Column({
           setValue={setValue}
           setError={setError}
           getValues={getValues}
-          closeCreateCard={closeCreateCard}
+          closeEdit={closeEdit}
           reset={reset}
           clearErrors={clearErrors}
           card={selectedCard}

@@ -57,7 +57,7 @@ interface CreateCardModalProps {
     cardId: number,
     fieldData: CreateCardRequestDto
   ) => Promise<boolean>;
-  closeCreateCard: () => void;
+  closeEdit: () => void;
   reset: () => void;
   clearErrors: UseFormClearErrors<CreateCardRequestDto>;
   card: CardServiceResponseDto;
@@ -72,7 +72,7 @@ export default function EditCardModal({
   getValues,
   watch,
   onSubmitEditCard,
-  closeCreateCard,
+  closeEdit,
   errors,
   reset,
   clearErrors,
@@ -166,7 +166,7 @@ export default function EditCardModal({
     if (!result) {
       return;
     }
-    closeCreateCard();
+    closeEdit();
     reset();
   };
   const handleAssigneeUserIdValue = useCallback(
@@ -475,7 +475,7 @@ export default function EditCardModal({
           <Button
             type="button"
             className="h-full grow border-gray-200 bg-white text-gray-400"
-            onClick={closeCreateCard}
+            onClick={closeEdit}
           >
             취소
           </Button>
