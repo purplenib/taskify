@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import putInvitations from '@core/api/putInvitations';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
+import { DashboardApplicationServiceResponseDto } from '@core/dtos/DashboardsDto';
 import useDevice from '@lib/hooks/useDevice';
 import useSearch from '@lib/hooks/useSearch';
 
@@ -23,13 +24,6 @@ interface InvitedDashboardProps {
   isLoading: boolean;
   error: unknown;
   onUpdateInvitations: () => void;
-}
-
-interface NewInvitedDashboard {
-  id: number;
-  title: string;
-  color: string;
-  createdByMe: boolean;
 }
 
 export default function InvitedDashboard({
@@ -63,7 +57,7 @@ export default function InvitedDashboard({
   const handleAccept = async (invitation: InvitationsDto) => {
     try {
       await putInvitations(invitation.id, true);
-      const newInvitedDashboard: NewInvitedDashboard = {
+      const newInvitedDashboard: DashboardApplicationServiceResponseDto = {
         id: invitation.dashboard.id,
         title: invitation.dashboard.title,
         color: '#000',
