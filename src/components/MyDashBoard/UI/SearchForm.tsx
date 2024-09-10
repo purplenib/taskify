@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 import searchIcon from '@/public/icons/search.png';
+import useDevice from '@lib/hooks/useDevice';
 
 interface SearchFormProps {
   onSearch: (searchTerm: string) => void;
@@ -12,13 +13,14 @@ interface SearchFormProps {
 
 function SearchForm({ onSearch }: SearchFormProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const deviceType = useDevice();
 
   const handleSearch = () => {
     onSearch(searchTerm);
   };
 
   return (
-    <div className="relative mx-auto mt-8 w-full">
+    <div className="relative mt-0 w-full md:mt-[1px] xl:mx-auto xl:mt-8">
       <Image
         src={searchIcon}
         alt="돋보기 아이콘"
@@ -28,8 +30,10 @@ function SearchForm({ onSearch }: SearchFormProps) {
         height={16}
       />
       <input
-        className="flex h-full w-full rounded-md bg-white px-4 py-[6px] pl-9 text-gray-300 outline-none outline-1 outline-gray-200"
-        placeholder="대시보드 이름을 검색해보세요."
+        className="flex h-full w-full rounded-md bg-white px-4 py-[6px] pl-9 text-gray-300 outline-none outline-1 outline-gray-200 font-md-14px-regular md:font-lg-16px-regular"
+        placeholder={
+          deviceType === 'mobile' ? '검색' : '대시보드 이름을 검색해보세요'
+        }
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         onKeyPress={e => e.key === 'Enter' && handleSearch()}

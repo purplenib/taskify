@@ -5,25 +5,34 @@ import cn from '@lib/utils/cn';
 interface Props {
   type?: 'button' | 'submit' | 'reset';
   onClick: (e: MouseEvent<HTMLButtonElement>) => void;
-  className?: string;
+  buttonClassName?: string;
+  divClassName?: string;
 }
 
 export default function AcceptButton({
   type = 'button',
   children,
   onClick,
-  className,
+  divClassName,
+  buttonClassName,
 }: PropsWithChildren<Props>) {
   return (
-    <button
+    <div
       className={cn(
-        'flex items-center justify-center rounded-[4px] font-md-14px-medium',
-        className
+        'flex w-full items-center justify-center rounded-[4px]',
+        divClassName
       )}
-      type={type}
-      onClick={onClick}
     >
-      {children}
-    </button>
+      <button
+        className={cn(
+          'py-[7px] font-md-14px-medium md:px-[6px]',
+          buttonClassName
+        )}
+        type={type}
+        onClick={onClick}
+      >
+        {children}
+      </button>
+    </div>
   );
 }
