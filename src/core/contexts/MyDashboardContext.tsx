@@ -11,7 +11,7 @@ import React, {
 } from 'react';
 
 import getDashboards from '@core/api/getDashboards';
-import { INIT_MYDASHBOARDS_CONTEXT } from '@lib/constants/initialValue';
+import { INIT_MYDASHBOARDS_CONTEXT } from '@lib/constants/dashboardsInit';
 import useApi from '@lib/hooks/useApi';
 
 import type {
