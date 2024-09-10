@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import DashboardAddModal from '@components/@shared/Common/Modals/DashboardAddModal';
 import { useMyDashboard } from '@core/contexts/MyDashboardContext';
@@ -16,18 +16,23 @@ export default function JoinedDashboardList() {
 
   const itemsPerPage = 5;
 
-  const { currentPage: paginationCurrentPage, handlePageChange } =
-    usePagination({
-      totalItems: localDashboards.length,
-      itemsPerPage,
-    });
-
-  // 현재 페이지에 해당하는 대시보드 항목 계산
-  const startIndex = (paginationCurrentPage - 1) * itemsPerPage;
-  const currentDashboards = localDashboards.slice(
-    startIndex,
-    startIndex + itemsPerPage
+  const fetchDashboards = useCallback(
+    async (page: number, size: number) => {
+      const startIndex = (page - 1) * size;
+      return localDashboards.slice(startIndex, startIndex + size);
+    },
+    [localDashboards]
   );
+
+  const {
+    currentPage: paginationCurrentPage,
+    handlePageChange,
+    data: currentDashboards,
+  } = usePagination({
+    fetchData: fetchDashboards,
+    totalItems: localDashboards.length,
+    itemsPerPage,
+  });
 
   // createdByMe가 true인 대시보드, false인 대시보드 분리
   const createdByMeDashboards = currentDashboards.filter(
@@ -56,8 +61,8 @@ export default function JoinedDashboardList() {
             ))}
           </div>
           <Pagination
-            totalCount={localDashboards.length}
             currentPage={paginationCurrentPage}
+            totalItems={localDashboards.length}
             onPageChange={handlePageChange}
             itemsPerPage={itemsPerPage}
           />

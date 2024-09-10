@@ -17,7 +17,7 @@ export default function Pagination({
   itemsPerPage,
   onPageChange,
 }: PaginationProps): JSX.Element {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = totalItems > 0 ? Math.ceil(totalItems / itemsPerPage) : 1;
 
   // 이전 페이지 이동
   const handlePrePage = () => {
