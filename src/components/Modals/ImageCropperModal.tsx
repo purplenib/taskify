@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Cropper from 'react-easy-crop';
 
+import { Button } from '@mantine/core';
+
 import { postImage } from '@core/api/cardApis';
 import getCroppedImg from '@lib/utils/getCroppedImg';
 
@@ -24,15 +26,16 @@ export default function ImageCropperModal({
 }: ImageCropperModalProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedArea, setCroppedArea] = useState<Area | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   // 크롭 완료 시 호출되는 콜백 함수
-  const onCropComplete = useCallback((croppedAreaPixels: Area) => {
-    setCroppedArea(croppedAreaPixels); // 크롭된 영역 픽셀 값을 저장
+  const onCropComplete = useCallback((croppedArea: Area, AreaPixels: Area) => {
+    setCroppedAreaPixels(AreaPixels); // 크롭된 영역 픽셀 값을 저장
   }, []);
 
   const handleSave = async () => {
-    const croppedImage = await getCroppedImg(imageSrc, croppedArea!);
+    if (!croppedAreaPixels) return;
+    const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels!);
     const formData = new FormData();
     formData.append('image', croppedImage);
     const data = await postImage(columnId, formData);
@@ -53,7 +56,18 @@ export default function ImageCropperModal({
           onCropComplete={onCropComplete}
         />
       </div>
-      <button onClick={handleSave}>이미지 등록하기</button>
+      <div className="mt-5 flex h-[54px] w-full gap-2">
+        <Button
+          type="button"
+          className="h-full grow border-gray-200 bg-white text-gray-400"
+          onClick={closeCropper}
+        >
+          취소
+        </Button>
+        <Button onClick={handleSave} className="h-full grow bg-violet">
+          확인
+        </Button>
+      </div>
     </div>
   );
 }

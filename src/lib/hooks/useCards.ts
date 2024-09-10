@@ -1,23 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import dayjs from 'dayjs';
 import { useParams } from 'next/navigation';
 
-import { getCards, getMembers, postCard } from '@core/api/cardApis';
+import { postCard, putCard } from '@core/api/cardApis';
+import { DashBoardContext } from '@core/contexts/DashBoardContext';
 import {
   CardServiceResponseDto,
   CreateCardRequestDto,
+  UpdateCardRequestDto,
 } from '@core/dtos/CardsDto';
-import { MemberApplicationServiceResponseDto } from '@core/dtos/MembersDto';
 
 export default function useCards(columnId: number) {
-  const [cardList, setCardList] = useState<CardServiceResponseDto[] | null>(
-    null
-  );
-  const [members, setMembers] = useState<MemberApplicationServiceResponseDto[]>(
-    []
-  );
+  const [cards, setCards] = useState<CardServiceResponseDto[]>([]);
+  const { cardList2D, moveCard } = useContext(DashBoardContext);
   const { dashboardid } = useParams();
   const {
     register,
@@ -28,29 +25,17 @@ export default function useCards(columnId: number) {
     getValues,
     watch,
     setError,
+    reset,
+    clearErrors,
   } = useForm<CreateCardRequestDto>({
     mode: 'onSubmit',
     defaultValues: {
       dueDate: new Date().toString(),
-      imageUrl: '',
     },
   });
 
-  const loadCards = useCallback(async () => {
-    const data = await getCards(columnId);
-    const Cards: CardServiceResponseDto[] = data.cards;
-    setCardList(Cards);
-  }, [columnId]);
-
-  const loadMembers = useCallback(async () => {
-    const nextMembers = await getMembers(Number(dashboardid));
-    if (!nextMembers) {
-      return;
-    }
-    setMembers(nextMembers as MemberApplicationServiceResponseDto[]);
-  }, [dashboardid]);
-
-  const createFormValidator = (fieldData: CreateCardRequestDto) => {
+  // 카드 생성, 수정시 폼데이터 검사
+  const requestCardFormValidator = (fieldData: CreateCardRequestDto) => {
     let result = true;
     if (!fieldData.assigneeUserId) {
       setError('assigneeUserId', {
@@ -82,10 +67,11 @@ export default function useCards(columnId: number) {
     }
     return result;
   };
+  // 카드생성 submit
   const onSubmitCreateCard = async (fieldData: CreateCardRequestDto) => {
-    const result = createFormValidator(fieldData);
+    const result = requestCardFormValidator(fieldData);
     if (!result) {
-      return;
+      return false;
     }
 
     const formattedDueDate = dayjs(fieldData.dueDate).format(
@@ -103,30 +89,63 @@ export default function useCards(columnId: number) {
     };
 
     const data = await postCard(formData);
-    setCardList(prev => {
-      if (prev === null) {
-        return [data];
-      }
-      return [...prev, data];
-    });
+    setCards(prev => [...prev, data]);
+    return true;
   };
 
+  // 카드수정 submit
+  const onSubmitEditCard = async (
+    cardId: number,
+    fieldData: CreateCardRequestDto
+  ) => {
+    const result = requestCardFormValidator(fieldData);
+    if (!result) {
+      return false;
+    }
+
+    const formattedDueDate = dayjs(fieldData.dueDate).format(
+      'YYYY-MM-DD HH:mm'
+    );
+    const formData: UpdateCardRequestDto = {
+      columnId: Number(fieldData.columnId),
+      assigneeUserId: Number(fieldData.assigneeUserId),
+      title: fieldData.title,
+      description: fieldData.description,
+      dueDate: formattedDueDate,
+      tags: fieldData.tags,
+      imageUrl: fieldData.imageUrl,
+    };
+
+    const data = await putCard(Number(cardId), formData);
+    // 컬럼을 옮긴경우
+    if (data.columnId !== columnId) {
+      moveCard(columnId, data);
+    } else {
+      setCards(prev => prev.map(card => (card.id === data.id ? data : card)));
+    }
+
+    return true;
+  };
   useEffect(() => {
-    loadCards();
-    loadMembers();
-  }, [columnId, loadCards, loadMembers]);
+    const nextCards = cardList2D.find(
+      cardList => cardList.columnId === columnId
+    );
+    if (nextCards) setCards(nextCards.cardList);
+  }, [cardList2D, columnId]);
 
   return {
-    cardList,
-    loadMembers,
-    members,
+    cards,
     register,
     handleSubmit,
     errors,
     control,
     setValue,
+    setError,
     getValues,
     watch,
     onSubmitCreateCard,
+    onSubmitEditCard,
+    reset,
+    clearErrors,
   };
 }

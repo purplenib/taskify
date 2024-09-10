@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   KeyboardEventHandler,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -11,9 +12,11 @@ import {
   Control,
   Controller,
   FieldErrors,
+  UseFormClearErrors,
   UseFormGetValues,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormSetError,
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
@@ -33,63 +36,98 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 
 import ImageCropperModal from '@components/Modals/ImageCropperModal';
+import { DashBoardContext } from '@core/contexts/DashBoardContext';
 import { CreateCardRequestDto } from '@core/dtos/CardsDto';
-import { MemberApplicationServiceResponseDto } from '@core/dtos/MembersDto';
 import addPurple from '@icons/add_purple.png';
+import calendar from '@icons/calendar.png';
+import convertStringToColorHex from '@lib/utils/convertStringToColorHex';
+import convertStringToRGBA from '@lib/utils/convertStringToRGBA';
 
 interface CreateCardModalProps {
-  members: MemberApplicationServiceResponseDto[];
   columnId: number;
   register: UseFormRegister<CreateCardRequestDto>;
   handleSubmit: UseFormHandleSubmit<CreateCardRequestDto, undefined>;
   errors: FieldErrors<CreateCardRequestDto>;
+  setError: UseFormSetError<CreateCardRequestDto>;
   control: Control<CreateCardRequestDto>;
   setValue: UseFormSetValue<CreateCardRequestDto>;
   getValues: UseFormGetValues<CreateCardRequestDto>;
   watch: UseFormWatch<CreateCardRequestDto>;
-  onSubmitCreateCard: (fieldData: CreateCardRequestDto) => Promise<void>;
+  onSubmitCreateCard: (fieldData: CreateCardRequestDto) => Promise<boolean>;
   closeCreateCard: () => void;
-  isAllInputFilled: boolean;
+  reset: () => void;
+  clearErrors: UseFormClearErrors<CreateCardRequestDto>;
 }
 export default function CreateCardModal({
-  members,
   columnId,
   register,
   handleSubmit,
   control,
   setValue,
+  setError,
   getValues,
   watch,
   onSubmitCreateCard,
   closeCreateCard,
+  errors,
+  reset,
+  clearErrors,
 }: CreateCardModalProps) {
-  const tagInputRef = useRef<HTMLInputElement>(null);
-  const imgInputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
   const [selectedAssignee, setSelectedAssignee] = useState('');
   const [selectedAssigneeImg, setSelectedAssigneeImg] = useState('');
-
+  const { members } = useContext(DashBoardContext);
   // ---------태그인풋 로직
+  const tagInputRef = useRef<HTMLInputElement>(null);
   const tags = watch('tags');
+  // 태그 인풋에 value가 없을 때 백스페이스바를 누르면 이전에 등록한 태그가 하나씩 지워진다.
   const handleKeyDownTag: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (!(e.key === 'Enter' && tagInputRef.current)) {
+    if (!tagInputRef.current) {
       return;
     }
-    e.preventDefault();
-    const currentTags = getValues('tags') || [];
-    const newTags = tagInputRef.current.value;
-    setValue('tags', [...currentTags, newTags]);
-    tagInputRef.current.value = '';
+    if (tagInputRef.current.value.length > 5) {
+      setError('tags', {
+        type: 'tagValueLength',
+        message: '태그는 5자 까지 등록 가능합니다.',
+      });
+      return;
+    }
+    clearErrors('tags');
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (tags?.length > 3) {
+        setError('tags', {
+          type: 'tagsLength',
+          message: '태그는 4개 까지 등록 가능합니다.',
+        });
+        return;
+      }
+      clearErrors('tags');
+
+      const currentTags = getValues('tags') || [];
+      const newTags = tagInputRef.current.value;
+      setValue('tags', [...currentTags, newTags]);
+      tagInputRef.current.value = '';
+    } else if (
+      e.key === 'Backspace' &&
+      !tagInputRef.current.value &&
+      tags.length
+    ) {
+      const removedTag = tags.slice(0, tags.length - 1);
+      setValue('tags', removedTag);
+    }
   };
   // ---------이미지 인풋 로직(+이미지크롭 모달)
+  const imgInputRef = useRef<HTMLInputElement>(null);
   const [cropperModal, { open: openCropper, close: closeCropper }] =
     useDisclosure(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const onChangeFileInput = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) {
+    if (!e.target.files || e.target.files.length === 0) {
       return;
     }
     const image = e.target.files[0];
@@ -99,9 +137,10 @@ export default function CreateCardModal({
   };
   const handleImageUrlData = (imageUrl: string) => {
     setValue('imageUrl', imageUrl);
+    clearErrors('imageUrl');
   };
   const image = watch('imageUrl');
-
+  // 드롭다운에서 담당자 클릭시 유저 닉네임이 state에 저장되고 해당 정보로 userId를 저장, 프로필 이미지불러옴
   const handleAssigneeUserIdValue = useCallback(
     (nickname: string) => {
       const selectedUser = members.find(member => member.nickname === nickname);
@@ -110,30 +149,56 @@ export default function CreateCardModal({
     [members, setValue]
   );
 
-  // assignee가 변경되면 field value를 바꾸고 이미지 불러옴
-  useEffect(() => {
-    setSelectedAssigneeImg(() => {
-      const selectedUser = members.find(
-        member => member.nickname === selectedAssignee
-      );
+  const handleAssigneeUserImage = useCallback(
+    (nickname: string) => {
+      const selectedUser = members.find(member => member.nickname === nickname);
+
       if (!selectedUser?.profileImageUrl) {
         return '';
       }
       return selectedUser.profileImageUrl;
-    });
+    },
+    [members]
+  );
+
+  useEffect(() => {
+    clearErrors('assigneeUserId');
     handleAssigneeUserIdValue(selectedAssignee);
-  }, [selectedAssignee, handleAssigneeUserIdValue, members]);
+    const userImage = handleAssigneeUserImage(selectedAssignee);
+    setSelectedAssigneeImg(userImage);
+  }, [
+    selectedAssignee,
+    clearErrors,
+    handleAssigneeUserIdValue,
+    handleAssigneeUserImage,
+  ]);
+
+  const onSubmit = async (data: CreateCardRequestDto) => {
+    const result = await onSubmitCreateCard(data);
+    if (!result) {
+      closeCreateCard();
+      reset();
+    }
+  };
+  useEffect(() => {
+    setValue('assigneeUserId', 0);
+    setValue('title', '');
+    setValue('description', '');
+    setValue('dueDate', new Date().toString());
+    setValue('tags', []);
+    setValue('imageUrl', '');
+    setValue('columnId', 0);
+  }, [setValue]);
   return (
     <>
-      <form
-        className="flex flex-col gap-8"
-        onSubmit={handleSubmit(data => {
-          onSubmitCreateCard(data);
-          closeCreateCard();
-        })}
-      >
+      <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <span className="font-2lg-18px-medium">담당자</span>
+          <div className="flex items-center gap-1">
+            <span className="font-2lg-18px-medium">담당자</span>
+            <span className="mantine-inputWrapper-required text-[#FA5252] font-md-14px-medium">
+              *
+            </span>
+          </div>
           <Combobox
             store={combobox}
             onOptionSubmit={value => {
@@ -172,7 +237,7 @@ export default function CreateCardModal({
                 )}
               </InputBase>
             </Combobox.Target>
-
+            <p className="pt-1 text-red">{errors.assigneeUserId?.message}</p>
             <Combobox.Dropdown>
               {members.map(member => (
                 <Combobox.Option value={member.nickname} key={member.id}>
@@ -205,6 +270,7 @@ export default function CreateCardModal({
             className="pt-2.5"
             placeholder="제목을 입력해 주세요."
           />
+          <p className="pt-1 text-red">{errors.title?.message}</p>
         </Input.Wrapper>
         <Input.Wrapper
           withAsterisk
@@ -216,6 +282,7 @@ export default function CreateCardModal({
             {...register('description')}
             rows={5}
           />
+          <p className="pt-1 text-red">{errors.description?.message}</p>
         </Input.Wrapper>
         <Input.Wrapper
           label={<span className="font-2lg-18px-medium">마감일</span>}
@@ -225,6 +292,9 @@ export default function CreateCardModal({
             control={control}
             render={({ field: { value, onChange } }) => (
               <DateInput
+                leftSection={
+                  <Image src={calendar} alt="마감일" width={22} height={22} />
+                }
                 value={
                   value
                     ? dayjs(value, 'YYYY. MM. DD HH:mm').toDate()
@@ -244,8 +314,8 @@ export default function CreateCardModal({
         <div>
           <span className="font-2lg-18px-medium">태그</span>
 
-          <div className="mt-2 flex h-12 w-full items-center gap-2 whitespace-nowrap border border-[#ced4da] px-2.5">
-            <div className="max-w-[50%] overflow-hidden">
+          <div className="wrap mt-2 flex min-h-12 w-full items-center gap-2 border border-[#ced4da] px-2.5">
+            <div className="">
               {tags &&
                 tags.map((tag, index) => {
                   const keyValue = `${tag}${index}`;
@@ -253,23 +323,33 @@ export default function CreateCardModal({
                     <span
                       key={keyValue}
                       className="mr-2 border px-0.5 py-1 font-md-14px-regular"
+                      style={{
+                        color: `#${convertStringToColorHex(tag)}`,
+                        backgroundColor: `${convertStringToRGBA(tag, 0.1)}`,
+                      }}
                     >
                       {tag}
                     </span>
                   );
                 })}
+              <input
+                ref={tagInputRef}
+                onKeyDown={handleKeyDownTag}
+                placeholder="입력 후 Enter"
+                className="placeholder:text-gray-300 placeholder:font-md-14px-regular"
+              />
             </div>
-            <input
-              ref={tagInputRef}
-              onKeyDown={handleKeyDownTag}
-              placeholder="입력 후 Enter"
-              className="placeholder:text-gray-300 placeholder:font-md-14px-regular"
-            />
           </div>
+          <p className="pt-1 text-red">{errors.tags?.message}</p>
         </div>
 
         <div className="flex flex-col">
-          <span className="font-2lg-18px-medium">이미지</span>
+          <div className="flex items-center gap-1">
+            <span className="font-2lg-18px-medium">이미지</span>
+            <span className="mantine-inputWrapper-required text-[#FA5252] font-md-14px-medium">
+              *
+            </span>
+          </div>
           {image ? (
             <button
               className="max-w-[127px]"
@@ -307,8 +387,9 @@ export default function CreateCardModal({
             type="file"
             className="hidden"
           />
+          <p className="pt-1 text-red">{errors.imageUrl?.message}</p>
         </div>
-        <div className="flex h-[54px] w-full">
+        <div className="flex h-[54px] w-full gap-2">
           <Button
             type="button"
             className="h-full grow border-gray-200 bg-white text-gray-400"
@@ -321,7 +402,11 @@ export default function CreateCardModal({
           </Button>
         </div>
       </form>
-      <Modal opened={cropperModal} onClose={closeCropper}>
+      <Modal
+        title={<div className="font-2lg-18px-semibold">이미지 업로드</div>}
+        opened={cropperModal}
+        onClose={closeCropper}
+      >
         <ImageCropperModal
           closeCropper={closeCropper}
           imageSrc={imageSrc!}
