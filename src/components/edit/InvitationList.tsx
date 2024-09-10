@@ -12,8 +12,8 @@ import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
 import {
   addInvitation,
-  getInvitations,
   deleteInvitation,
+  getInvitations,
 } from '@core/api/columnApis';
 
 interface InvitationListProps {

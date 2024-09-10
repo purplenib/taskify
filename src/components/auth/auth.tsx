@@ -1,7 +1,6 @@
-/* eslint-disable import/order */
-
 'use client';
 
+import { useState, useMemo } from 'react';
 import {
   SubmitHandler,
   useForm,
@@ -9,12 +8,8 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
-
-import { useState, useMemo } from 'react';
 import Image from 'next/image';
-
-import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface AuthPageProps {
   mode: 'login' | 'signup';
@@ -124,12 +119,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
   const handleLogoClick = () => {
     router.push('/');
-  };
-
-  const handleKakaoSign = () => {
-    signIn('kakao', {
-      callbackUrl: '/mydashboard',
-    });
   };
 
   return (
@@ -266,7 +255,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
               {mode === 'login' ? '회원가입하기' : '로그인하기'}
             </button>
           </div>
-          <button onClick={handleKakaoSign}>kakao Sign In</button>
         </form>
       </div>
     </div>
