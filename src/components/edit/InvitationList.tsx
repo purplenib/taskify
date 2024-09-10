@@ -10,9 +10,9 @@ import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
 import {
   addInvitation,
-  getInvitations,
   deleteInvitation,
-} from '@core/api/dashboardApi';
+  getInvitations,
+} from '@core/api/columnApis';
 
 interface InvitationListProps {
   dashboardId: number;

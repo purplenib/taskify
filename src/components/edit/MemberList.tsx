@@ -5,11 +5,11 @@
 
 import { useState, useRef } from 'react';
 
-import { getMembers, deleteMember } from '@core/api/dashboardApi';
 import Image from 'next/image';
 
 import Pagination from '@/src/components/edit/Pagination';
 import usePagination from '@/src/lib/hooks/usePagination';
+import { deleteMember, getMembers } from '@core/api/columnApis';
 
 interface MemberListProps {
   dashboardId: number;

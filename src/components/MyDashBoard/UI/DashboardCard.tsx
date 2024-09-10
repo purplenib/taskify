@@ -19,15 +19,15 @@ const DashboardCard = ({ value }: DashboardCardProps) => {
   return (
     <LinkButton
       href={`/dashboard/${dashboardId}`}
-      className="flex justify-between rounded-lg border border-gray-200 bg-white px-5 py-[22px] font-lg-16px-semibold"
+      className="relative flex justify-between rounded-lg border border-gray-200 bg-white px-5 py-[22px] font-lg-16px-semibold"
     >
-      <div className="my-auto flex flex-1 gap-3">
+      <div className="my-auto flex w-2/5 flex-1 gap-3">
         <div
           className="my-auto h-2 w-2 rounded-full"
           style={{ backgroundColor: value.color }}
           aria-label="link button"
         />
-        <p className="text-black-600">{value.title}</p>
+        <p className="truncate text-black-600">{value.title}</p>
         {value.createdByMe && (
           <Image
             src={crown}
@@ -43,7 +43,7 @@ const DashboardCard = ({ value }: DashboardCardProps) => {
         alt="오른쪽 화살표 아이콘"
         width={18}
         height={18}
-        className="my-auto"
+        className="absolute right-4 top-1/2 -translate-y-1/2 transform"
       />
     </LinkButton>
   );
