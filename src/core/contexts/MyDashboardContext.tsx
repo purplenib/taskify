@@ -11,7 +11,10 @@ import React, {
 } from 'react';
 
 import getDashboards from '@core/api/getDashboards';
-import { INIT_MYDASHBOARDS_CONTEXT } from '@lib/constants/dashboardsInit';
+import {
+  INIT_MYDASHBOARDS_CONTEXT,
+  INIT_DASHBOARDS_REQUEST,
+} from '@lib/constants/dashboardsInit';
 import useApi from '@lib/hooks/useApi';
 
 import type {
@@ -37,11 +40,7 @@ export const MyDashboardProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const fetchData = async () => {
       const config = {
-        params: {
-          navigationMethod: 'pagination',
-          size: 100,
-          page: 1, // 초기 페이지
-        },
+        params: INIT_DASHBOARDS_REQUEST,
       };
       await callApi(undefined, config);
     };
