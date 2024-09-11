@@ -1,6 +1,9 @@
+import { Modal } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
+import CardDetailModal from '@components/Modals/CardDetailModal';
 import calendar from '@icons/calendar.png';
 import convertStringToColorHex from '@lib/utils/convertStringToColorHex';
 import convertStringToRGBA from '@lib/utils/convertStringToRGBA';
@@ -11,21 +14,27 @@ interface CardProps {
   card: CardServiceResponseDto;
   openEdit: () => void;
   onClickCard: (data: CardServiceResponseDto) => void;
+  onClickDeleteCard: (cardId: number) => void;
 }
 
-export default function Card({ card, openEdit, onClickCard }: CardProps) {
+export default function Card({
+  card,
+  openEdit,
+  onClickCard,
+  onClickDeleteCard,
+}: CardProps) {
   const formattedDueDate = dayjs(card.dueDate).format('YYYY.MM.DD');
+  const [cardDetail, { open: openDetail, close: closeDetail }] =
+    useDisclosure(false);
   return (
     <>
       <button
         onClick={() => {
-          openEdit();
           onClickCard(card);
+          openDetail();
         }}
+        className="mt-4 flex w-full flex-col gap-1 rounded-md border border-gray-200 bg-white px-3 pb-[5px] pt-3 md:flex-row md:gap-5 md:px-5 md:py-5 xl:flex-col xl:gap-4"
       >
-        수정하기
-      </button>
-      <div className="mt-4 flex flex-col gap-1 rounded-md border border-gray-200 bg-white px-3 pb-[5px] pt-3 md:flex-row md:gap-5 md:px-5 md:py-5 xl:flex-col xl:gap-4">
         <div className="relative w-full pb-[60%] md:w-[90px] md:pb-[54px] xl:w-full xl:pb-[60%]">
           {card.imageUrl && (
             <Image src={card.imageUrl} fill alt="카드 이미지" />
@@ -68,7 +77,20 @@ export default function Card({ card, openEdit, onClickCard }: CardProps) {
             </div>
           </div>
         </div>
-      </div>
+      </button>
+      <Modal
+        opened={cardDetail}
+        withCloseButton={false}
+        size="80%"
+        onClose={closeDetail}
+      >
+        <CardDetailModal
+          onClickDeleteCard={onClickDeleteCard}
+          openEdit={openEdit}
+          onClose={closeDetail}
+          card={card}
+        />
+      </Modal>
     </>
   );
 }

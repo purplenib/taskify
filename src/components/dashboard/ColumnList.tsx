@@ -24,14 +24,15 @@ export default function ColumnList() {
     setTargetColumnId,
     onClickDeleteAtEditModal,
   } = useColumns();
+  const { columnList, dashboardColor: columnColor } =
+    useContext(DashBoardContext);
   const [createColumnModal, { open: openCreate, close: closeCreate }] =
     useDisclosure(false);
   const [editColumnModal, { open: openEdit, close: closeEdit }] =
     useDisclosure(false);
   const [confirmDeleteModal, { open: openConfirm, close: closeConfirm }] =
     useDisclosure(false);
-  const { columnList, dashboardColor: columnColor } =
-    useContext(DashBoardContext);
+
   const onClickEditOpen = (id: number, defaultValue: string) => {
     setTargetColumnId(id);
     setValue('editedTitle', defaultValue);

@@ -99,6 +99,9 @@ export default function CreateCardModal({
 
     if (e.key === 'Enter') {
       e.preventDefault();
+      if (!tagInputRef.current.value.trim()) {
+        return;
+      }
       if (tags?.length > 3) {
         setError('tags', {
           type: 'tagsLength',
@@ -109,7 +112,7 @@ export default function CreateCardModal({
       clearErrors('tags');
 
       const currentTags = getValues('tags') || [];
-      const newTags = tagInputRef.current.value;
+      const newTags = tagInputRef.current.value.trim();
       setValue('tags', [...currentTags, newTags]);
       tagInputRef.current.value = '';
     } else if (

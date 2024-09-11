@@ -1,4 +1,4 @@
-import { MouseEventHandler, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useParams } from 'next/navigation';
@@ -59,9 +59,7 @@ export default function useColumns() {
     setColumnList(updatedColumnList);
   }; // 다시확인
   // 컬럼 삭제 로직
-  const onClickDeleteAtEditModal: MouseEventHandler<
-    HTMLButtonElement
-  > = async () => {
+  const onClickDeleteAtEditModal = async () => {
     await deleteColumn(targetColumnId);
     const deletedColumnList = columnList.filter(
       column => column.id !== targetColumnId

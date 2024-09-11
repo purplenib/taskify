@@ -16,6 +16,9 @@ export const getCards = async (columnId: number) => {
   return data.cards;
 };
 
+export const deleteCard = async (cardId: number) => {
+  await axios.delete<GetCardsResponseDto>(`/cards/${cardId}`);
+};
 export const postCard = async (formData: CreateCardRequestDto) => {
   const res = await axios.post<CardServiceResponseDto>('/cards', formData);
   const { data } = res;

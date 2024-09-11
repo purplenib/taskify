@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { useParams } from 'next/navigation';
 
-import { postCard, putCard } from '@core/api/cardApis';
+import { deleteCard, postCard, putCard } from '@core/api/cardApis';
 import { DashBoardContext } from '@core/contexts/DashBoardContext';
 import {
   CardServiceResponseDto,
@@ -51,7 +51,7 @@ export default function useCards(columnId: number) {
       });
       result = false;
     }
-    if (!fieldData.description) {
+    if (!fieldData.description.trim()) {
       setError('description', {
         type: 'required',
         message: '설명을 입력해 주세요.',
@@ -126,6 +126,11 @@ export default function useCards(columnId: number) {
 
     return true;
   };
+
+  const onClickDeleteCard = async (cardId: number) => {
+    await deleteCard(cardId);
+    setCards(prev => prev.filter(card => card.id !== cardId));
+  };
   useEffect(() => {
     const nextCards = cardList2D.find(
       cardList => cardList.columnId === columnId
@@ -145,6 +150,7 @@ export default function useCards(columnId: number) {
     watch,
     onSubmitCreateCard,
     onSubmitEditCard,
+    onClickDeleteCard,
     reset,
     clearErrors,
   };

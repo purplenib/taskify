@@ -56,6 +56,7 @@ export default function Column({
     reset,
     clearErrors,
     onSubmitEditCard,
+    onClickDeleteCard,
   } = useCards(column.id);
   const [selectedCard, setSelectedCard] =
     useState<CardServiceResponseDto>(INITIAL_CARD);
@@ -104,6 +105,7 @@ export default function Column({
           {cards?.length > 0 &&
             cards.map(card => (
               <Card
+                onClickDeleteCard={onClickDeleteCard}
                 openEdit={openEdit}
                 onClickCard={onClickCard}
                 key={card.id}
@@ -134,7 +136,7 @@ export default function Column({
           clearErrors={clearErrors}
         />
       </Modal>
-      <Modal opened={edit} onClose={closeEdit}>
+      <Modal opened={edit} onClose={closeEdit} zIndex={201}>
         <EditCardModal
           columnId={column.id}
           register={register}
