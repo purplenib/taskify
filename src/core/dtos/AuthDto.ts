@@ -16,3 +16,8 @@ export interface LoginResponseDto {
   user: UserServiceResponseDto;
   accessToken: string;
 }
+
+export interface ChangePasswordRequestDto {
+  password: string;
+  newPassword: string;
+}

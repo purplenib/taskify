@@ -13,7 +13,7 @@
     "plugin:prettier/recommended",
     "prettier"
   ],
-  "ignorePatterns": [".next"],
+  "ignorePatterns": [".next", "next.config.mjs"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",

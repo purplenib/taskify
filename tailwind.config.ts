@@ -166,6 +166,12 @@ const config: Config = {
           lineHeight: '32px',
           textAlign: 'left',
         },
+        '.font-2xl-22px-regular': {
+          fontSize: '22px',
+          fontWeight: '400',
+          lineHeight: '26px',
+          textAlign: 'left',
+        },
         '.font-2xl-24px-regular': {
           fontSize: '24px',
           fontWeight: '400',
@@ -200,6 +206,24 @@ const config: Config = {
           fontSize: '32px',
           fontWeight: '700',
           lineHeight: '42px',
+          textAlign: 'left',
+        },
+        '.font-4xl-36px-bold': {
+          fontSize: '36px',
+          fontWeight: '700',
+          lineHeight: '50px',
+          textAlign: 'left',
+        },
+        '.font-4xl-40px-bold': {
+          fontSize: '40px',
+          fontWeight: '700',
+          lineHeight: '48px',
+          textAlign: 'left',
+        },
+        '.font-4xl-42px-bold': {
+          fontSize: '42px',
+          fontWeight: '700',
+          lineHeight: '51px',
           textAlign: 'left',
         },
       });

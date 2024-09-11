@@ -1,4 +1,4 @@
-import instance from '@lib/api/instance';
+import instance from './instance';
 
 const getDashboards = async () => {
   const response = await instance.get('/dashboards');
