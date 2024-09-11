@@ -25,13 +25,9 @@ const MyDashboardContext = createContext<MyDashboardContextDto>(
 );
 
 export const MyDashboardProvider = ({ children }: PropsWithChildren) => {
-  const [fetchedDashboards, setFetchedDashboards] = useState<
-    DashboardApplicationServiceResponseDto[]
-  >([]);
   const [localDashboards, setLocalDashboards] = useState<
     DashboardApplicationServiceResponseDto[]
   >([]);
-
   const { data, isLoading, error, callApi } = useApi<DashboardsResponseDto>(
     '/dashboards',
     'GET'
@@ -43,6 +39,8 @@ export const MyDashboardProvider = ({ children }: PropsWithChildren) => {
       const config = {
         params: {
           navigationMethod: 'pagination',
+          size: 100,
+          page: 1, // 초기 페이지
         },
       };
       await callApi(undefined, config);
@@ -51,6 +49,13 @@ export const MyDashboardProvider = ({ children }: PropsWithChildren) => {
     fetchData();
   }, [callApi]);
 
+  // 데이터가 변경될 때 로컬 대시보드 상태 업데이트
+  useEffect(() => {
+    if (data && data.dashboards) {
+      setLocalDashboards(data.dashboards);
+    }
+  }, [data]);
+
   // 로컬 대시보드 추가
   const addDashboard = (
     newDashboard: DashboardApplicationServiceResponseDto
@@ -58,32 +63,22 @@ export const MyDashboardProvider = ({ children }: PropsWithChildren) => {
     setLocalDashboards(prev => [...prev, newDashboard]);
   };
 
-  // 대시보드 데이터가 변경될 때마다 로컬 대시보드 상태 업데이트
-  useEffect(() => {
-    if (data && data.dashboards) {
-      setFetchedDashboards(data.dashboards);
-      setLocalDashboards(data.dashboards);
-    }
-  }, [data]);
-
   // 대시보드 데이터 재패칭 함수
   const fetchDashboards = useCallback(async () => {
     const response = await getDashboards();
-    setFetchedDashboards(response.dashboards);
     setLocalDashboards(response.dashboards);
   }, []);
 
   // Context 값 메모이제이션
   const value = useMemo(
     () => ({
-      fetchedDashboards,
       localDashboards,
       loading: isLoading,
       error,
       addDashboard,
       fetchDashboards,
     }),
-    [fetchDashboards, localDashboards, isLoading, error, fetchedDashboards]
+    [localDashboards, isLoading, error, fetchDashboards]
   );
 
   return (

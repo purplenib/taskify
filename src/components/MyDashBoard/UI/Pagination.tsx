@@ -4,28 +4,29 @@ import arrowLeft from '@icons/arrow_left.png';
 import arrowRight from '@icons/arrow_right.png';
 
 interface PaginationProps {
-  totalCount: number;
   currentPage: number;
-  onPageChange: (newPage: number) => void;
+  totalItems: number;
   itemsPerPage: number;
+  onPageChange: (pageNumber: number) => void;
 }
 
 export default function Pagination({
-  totalCount,
   currentPage,
-  onPageChange,
+  totalItems,
   itemsPerPage,
-}: PaginationProps) {
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  onPageChange,
+}: PaginationProps): JSX.Element {
+  const totalPages = totalItems > 0 ? Math.ceil(totalItems / itemsPerPage) : 1;
 
-  // 페이지 이동
-  const handlePrevious = () => {
+  // 이전 페이지 이동
+  const handlePrePage = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
     }
   };
 
-  const handleNext = () => {
+  // 다음 페이지 이동
+  const handleNextPage = () => {
     if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
     }
@@ -39,13 +40,14 @@ export default function Pagination({
       <div className="flex gap-1">
         <button
           type="button"
-          onClick={handlePrevious}
+          onClick={handlePrePage}
           className="h-10 w-10 rounded-[4px] border-gray-200 bg-white text-gray-600 outline-1"
           disabled={currentPage === 1}
+          aria-label="이전 페이지로 이동"
         >
           <Image
             src={arrowLeft}
-            alt="이전 목록 버튼"
+            alt="이전 페이지 버튼"
             width={16}
             height={16}
             className="m-auto"
@@ -53,13 +55,14 @@ export default function Pagination({
         </button>
         <button
           type="button"
-          onClick={handleNext}
+          onClick={handleNextPage}
           className="h-10 w-10 rounded-[4px] border-gray-200 bg-white text-gray-600 outline-1"
           disabled={currentPage === totalPages}
+          aria-label="다음 페이지로 이동"
         >
           <Image
             src={arrowRight}
-            alt="다음 목록 버튼"
+            alt="다음 페이지 버튼"
             width={16}
             height={16}
             className="m-auto"
