@@ -1,7 +1,5 @@
 /* eslint-disable import/order */
 
-/* eslint-disable import/order */
-
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
