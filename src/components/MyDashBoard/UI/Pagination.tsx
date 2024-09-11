@@ -35,7 +35,7 @@ export default function Pagination({
   return (
     <div className="flex items-center justify-end gap-4">
       <p className="text-black-600 font-md-14px-regular">
-        {currentPage} 페이지 중 {totalPages}
+        {totalPages} 페이지 중 {currentPage}
       </p>
       <div className="flex gap-1">
         <button
