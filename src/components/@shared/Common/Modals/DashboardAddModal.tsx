@@ -2,6 +2,7 @@ import { MouseEvent, PropsWithChildren, useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Flex, Modal, Stack } from '@mantine/core';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -11,6 +12,9 @@ import postCreateDashboards from '@core/api/postDashboards';
 import { useRoot } from '@core/contexts/RootContexts';
 import COLORS from '@lib/constants/themeConst';
 import useDevice, { DEVICE } from '@lib/hooks/useDevice';
+import findAxiosErrorMessage from '@lib/utils/findAxiosErrorMessage';
+import showErrorNotification from '@lib/utils/notifications/showErrorNotification';
+import showSuccessNotification from '@lib/utils/notifications/showSuccessNotification';
 
 import Input from '../Inputs/Input';
 
@@ -36,14 +40,16 @@ const MODAL_RADIUS: DeviceKeyObject = {
   desktop: '16px',
 };
 
+interface Props {
+  opened: boolean;
+  onClose: () => void;
+}
+
 export default function DashboardAddModal({
   children,
   opened,
   onClose,
-}: PropsWithChildren<{
-  opened: boolean;
-  onClose: () => void;
-}>) {
+}: PropsWithChildren<Props>) {
   const {
     register,
     handleSubmit,
@@ -56,7 +62,7 @@ export default function DashboardAddModal({
   const device = useDevice();
   const router = useRouter();
   const [color, setColor] = useState<ColorType>(COLORS.green);
-  const { setDashboardid } = useRoot();
+  const { setDashboardid, setDashboardsFlag } = useRoot();
 
   const redirectDashboard = useCallback(
     (id: number) => {
@@ -67,14 +73,15 @@ export default function DashboardAddModal({
   );
 
   const onSubmit: SubmitHandler<Inputs> = async ({ title }) => {
-    let res;
-    try {
-      res = await postCreateDashboards({ title, color });
-      redirectDashboard(res.data.id);
-    } catch {
-      // eslint-disable-next-line no-console
-      console.log('네트워크 에러가 발생하였습니다. 잠시 후 다시 시도해주세요');
+    const res = await postCreateDashboards({ title, color });
+    if (!(res instanceof AxiosError)) {
+      setDashboardsFlag(true);
+      showSuccessNotification({
+        message: `${title} 대시보드를 생성하였습니다.`,
+      });
+      return redirectDashboard(res.data.id);
     }
+    showErrorNotification({ message: findAxiosErrorMessage(res) });
   };
 
   const handleColorClick = (e: MouseEvent<HTMLButtonElement>) => {
